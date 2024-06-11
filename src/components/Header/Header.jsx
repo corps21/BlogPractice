@@ -2,7 +2,7 @@ import { NavLink, Link } from "react-router-dom"
 import { useSelector, useDispatch} from "react-redux"
 import { useEffect, useState } from "react";
 import authService from "../../appwrite/authService";
-import { logout } from "../../store/userSlice";
+import { login,logout } from "../../store/userSlice";
 
 function Header() {
 
@@ -27,6 +27,13 @@ function Header() {
       setLinkText("Logout")
       setBtnRoute("/")
     } else {
+
+      authService.getCurrentUser().then((data) => {
+        if(data) {
+          dispatch(login({userData:data}));
+        }
+      }).catch((error) => console.log(error))
+
       setLinkText("Sign in")
       setBtnRoute("/signin")
     }

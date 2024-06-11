@@ -14,7 +14,7 @@ function Home() {
       authService.getCurrentUser()
         .then(data => data ? dispatch(login({ userData: data })) : null)
     }
-  },[])
+  },[status])
 
   return (
     <>

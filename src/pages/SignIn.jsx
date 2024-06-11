@@ -7,42 +7,80 @@ import { useDispatch } from "react-redux";
 import { login, logout } from "../store/userSlice"
 
 function SignIn() {
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const onSubmitHandler = ({ email, password }) => {
+  // const onSubmitHandler = ({ email, password }) => {
 
-    authService.getCurrentUser().then((data) => {
-      if (data) {
-        authService.logout().then(() => {
-          console.log("Active session detected and removed")
-        })
+  //   authService.getCurrentUser().then((data) => {
+  //     if (data) {
+  //       authService.logout().then(() => {
+  //         console.log("Active session detected and removed")
+  //       })
+  //     }
+
+  //     authService.login({ email, password })
+  //       .then((session) => {
+  //         if (session) {
+
+  //           authService.getCurrentUser()
+  //             .then((data) => {
+  //               dispatch(login({ userData: data }));
+  //             })
+  //             .catch((error) => {
+  //               setError(error.message)
+  //             })
+
+  //           setSuccess(true);
+  //           setError("Successfully Signed in!")
+
+  //           setTimeout(() => navigate("/"), 500)
+  //         }
+  //       })
+  //       .catch((error) => setError(error.message))
+  //   })
+  // }
+
+  const onSubmitHandler = async({email,password}) => {
+    try {
+      const isUserLoggedIn = await authService.getCurrentUser();
+      
+      if(isUserLoggedIn) {
+        try {
+          await authService.logout();
+          dispatch(logout())
+          console.log("Active session detected and removed");
+          return;          
+        } catch (error) {
+          setMessage('Error logging out: ' + error.message);
+          console.log(error)
+        }
       }
 
-      authService.login({ email, password })
-        .then((session) => {
-          if (session) {
+      try {
+        
+        await authService.login({email,password})
 
-            authService.getCurrentUser()
-              .then((data) => {
-                dispatch(login({ userData: data }));
-              })
-              .catch((error) => {
-                setError(error.message)
-              })
+        const userData = await authService.getCurrentUser();
+        dispatch(login({userData}));
+        
+        setSuccess(true);
+        setMessage("Successfully Signed in!")
+        setTimeout(() => navigate("/"),500)
 
-            setSuccess(true);
-            setError("Successfully Signed in!")
+      } catch (error) {
+        setMessage('Error logging in: ' + error.message);
+        console.log(error);
+      }
 
-            setTimeout(() => navigate("/"), 500)
-          }
-        })
-        .catch((error) => setError(error.message))
-    })
+    } catch (error) {
+      setMessage('Unexpected error: ' + error.message);
+      console.log(error);
+    }
   }
 
   return (
@@ -58,7 +96,7 @@ function SignIn() {
 
       <form onSubmit={handleSubmit(onSubmitHandler)} className="w-[50%] py-[8rem] px-[8rem]">
 
-        {error && (<div className={`w-full text-center text-xl ${success ? "text-green-400" : "text-red-400"}`}>{error}</div>)}
+        {message && (<div className={`w-full text-center text-xl ${success ? "text-green-400" : "text-red-400"}`}>{message}</div>)}
 
         <Input label="Email" placeholder="Enter your mail" {...register("email", {
           required: true,
