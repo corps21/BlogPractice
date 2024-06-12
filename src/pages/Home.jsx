@@ -1,20 +1,8 @@
 import { useSelector } from "react-redux"
 import { Container } from "../components";
-import { useEffect } from "react";
-import authService from "../appwrite/authService";
-import { login } from "../store/userSlice";
-import { useDispatch } from "react-redux";
 
 function Home() {
   const status = useSelector((state) => state.auth.isLoggedIn);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!status) {
-      authService.getCurrentUser()
-        .then(data => data ? dispatch(login({ userData: data })) : null)
-    }
-  },[status])
 
   return (
     <>

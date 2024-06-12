@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { set, useForm } from "react-hook-form";
 import authService from "../appwrite/authService";
 import { login, logout } from "../store/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function SignUp() {
   const [message, setMessage] = useState("");
@@ -13,6 +13,7 @@ function SignUp() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const status = useSelector((state) => state.auth.isLoggedIn);
 
   // const createAccount = ({ email, password, firstName, lastName }) => {
 
@@ -53,13 +54,12 @@ function SignUp() {
 
   const createAccount = async ({ email, password, firstName, lastName }) => {
     try {
-      const isUserLoggedIn = await authService.getCurrentUser();
-      if (isUserLoggedIn) {
+
+      if (status) {
         try {
           await authService.logout();
           dispatch(logout());
           console.log("Active session detected and deleted");
-          return;
         } catch (error) {
           setMessage("Error logging out: " + error.message);
           console.error(error);
@@ -81,7 +81,8 @@ function SignUp() {
 
           setSuccess(true);
           setMessage("Successfully created account!")
-          setTimeout(() => navigate("/"),500)
+
+          setTimeout(() => navigate("/"), 500)
 
         } catch (error) {
           setMessage("Error logging account: " + error.message);
@@ -112,9 +113,8 @@ function SignUp() {
       >
         {message && (
           <div
-            className={`w-full mb-[1rem] text-center text-xl ${
-              success ? "text-green-400" : "text-red-400"
-            }`}
+            className={`w-full mb-[1rem] text-center text-xl ${success ? "text-green-400" : "text-red-400"
+              }`}
           >
             {message}
           </div>

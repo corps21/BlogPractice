@@ -1,9 +1,9 @@
 import { Container, Input, Button } from "../components";
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../appwrite/authService"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "../store/userSlice"
 
 function SignIn() {
@@ -13,6 +13,7 @@ function SignIn() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const status = useSelector((state) => state.auth.isLoggedIn);
 
   // const onSubmitHandler = ({ email, password }) => {
 
@@ -47,14 +48,12 @@ function SignIn() {
 
   const onSubmitHandler = async({email,password}) => {
     try {
-      const isUserLoggedIn = await authService.getCurrentUser();
       
-      if(isUserLoggedIn) {
+      if(status) {
         try {
           await authService.logout();
           dispatch(logout())
-          console.log("Active session detected and removed");
-          return;          
+          console.log("Active session detected and removed"); 
         } catch (error) {
           setMessage('Error logging out: ' + error.message);
           console.log(error)
@@ -66,7 +65,7 @@ function SignIn() {
         await authService.login({email,password})
 
         const userData = await authService.getCurrentUser();
-        dispatch(login({userData}));
+        dispatch(login({userData}))
         
         setSuccess(true);
         setMessage("Successfully Signed in!")

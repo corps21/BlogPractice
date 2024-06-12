@@ -1,8 +1,8 @@
 import { NavLink, Link } from "react-router-dom"
-import { useSelector, useDispatch} from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react";
 import authService from "../../appwrite/authService";
-import { login,logout } from "../../store/userSlice";
+import { login, logout } from "../../store/userSlice";
 
 function Header() {
 
@@ -13,9 +13,9 @@ function Header() {
   const dispatch = useDispatch();
 
   const logOutHandler = () => {
-    if(status) {
+    if (status) {
       authService.logout().then((data) => {
-        if(data) {
+        if (data) {
           dispatch(logout())
         }
       })
@@ -27,17 +27,20 @@ function Header() {
       setLinkText("Logout")
       setBtnRoute("/")
     } else {
-
-      authService.getCurrentUser().then((data) => {
-        if(data) {
-          dispatch(login({userData:data}));
-        }
-      }).catch((error) => console.log(error))
-
       setLinkText("Sign in")
       setBtnRoute("/signin")
     }
   }, [status])
+
+  useEffect(() => {
+    if(!status) {
+      authService.getCurrentUser().then((data) => {
+        if (data) {
+          dispatch(login({ userData: data }));
+        }
+      }).catch((error) => console.log(error))
+    }
+  },[])
 
 
   const navItems = [
