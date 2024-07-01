@@ -2,15 +2,16 @@ import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import conf from "../conf/conf";
 import Label from "./Label";
+import { Controller } from "react-hook-form";
 
-function RTE({ label, initialValue, ...props }) {
-  return (
+function RTE({ name, control, label, defaultValue, ...props }) {
+  return <Controller control={control} name={name} render={({ field: { onChange } }) => (
     <div className="mt-[2.5rem] space-y-2">
     {label && <Label label={label}/>}
     <div className="h-[25rem] bg-gray-300 rounded-xl">
       <Editor
         apiKey={conf.tinymceKey}
-        initialValue={initialValue}
+        initialValue={defaultValue}
         init={{
           menubar: true,
           plugins: [
@@ -40,11 +41,13 @@ function RTE({ label, initialValue, ...props }) {
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
         }}
+
+        onEditorChange={onChange}
         {...props}
       />
     </div>
     </div>
-  );
+  )}/>;
 }
 
 export default RTE;
