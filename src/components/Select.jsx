@@ -1,4 +1,5 @@
 import React from "react";
+import Label from "./Label";
 
 function Select({
   options=[{name:"Active",value:"active"},{name:"Inactive",value:"inactive"}],
@@ -9,7 +10,7 @@ function Select({
 }) {
   return (
     <div className={`space-y-2 pt-[1rem] pb-[2rem] ${containerClass}`}>
-      {label && <label className="text-bold text-xl">{label}</label>}
+      {label && <Label label={label}/>}
 
       <select
         className={`w-full p-[.65rem] text-lg bg-gray-200 rounded-lg ${className}`}

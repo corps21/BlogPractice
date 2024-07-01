@@ -1,4 +1,4 @@
-import { Input, Button, Container, Select } from "../components/index";
+import { Input, Button, Container, Select, RTE } from "../components/index";
 import { useForm } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
 import conf from "../conf/conf";
@@ -31,18 +31,7 @@ function AddPost() {
             containerClass="mt-[1rem]"
             {...register("slug")}
           />
-          <div className="h-[25rem] bg-gray-300 rounded-xl mt-[2.5rem]">
-            <Editor
-              apiKey={conf.tinymceKey}
-              initialValue="Welcome to BlogSphere!"
-              init={{
-                plugins:
-                  "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown",
-                toolbar:
-                  "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-              }}
-            />
-          </div>
+          <RTE label="Editor" initialValue="Welcome to BlogSphere!"/>
         </div>
 
         <div className="w-[50%] px-[8rem] py-[4rem]">
