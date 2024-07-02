@@ -17,7 +17,7 @@ const Select = forwardRef(
     const id = useId();
     return (
       <div className={`space-y-2 pt-[1rem] pb-[2rem] ${containerClass}`}>
-        {label && <Label htmlfor={id} label={label} />}
+        {label && <Label htmlFor={id} label={label} />}
 
         <select
           id={id}
