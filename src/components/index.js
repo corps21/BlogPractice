@@ -6,4 +6,6 @@ import Button from "./Button";
 import Select from "./Select";
 import RTE from "./RTE";
 import Label from "./Label";
-export {Header,Footer,Input, Container, Button, Select, RTE, Label}
+import PostForm from "./PostForm";
+
+export {Header,Footer,Input, Container, Button, Select, RTE, Label, PostForm}

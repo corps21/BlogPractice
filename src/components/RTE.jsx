@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+
 import { Editor } from "@tinymce/tinymce-react";
 import conf from "../conf/conf";
 import Label from "./Label";

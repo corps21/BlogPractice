@@ -1,4 +1,4 @@
-import { Client, Databases, Query,ID} from "appwrite";
+import { Client, Databases, Query} from "appwrite";
 import conf from "../conf/conf";
 
 export class DatabaseService {
@@ -36,7 +36,6 @@ export class DatabaseService {
         } catch (error) {
             console.log("DatabaseService :: createPost :: error ", error)
         }   
-
         return false;
     }
 

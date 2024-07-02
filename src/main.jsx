@@ -2,13 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import {Home, SignIn, SignUp} from "./pages/index.js"
+import {Home, SignIn, SignUp, AddPost, AllPosts} from "./pages/index.js"
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 
 import store from './store/store.js'
 import { Provider } from 'react-redux'
-import AddPost from './pages/AddPost.jsx'
-
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<App/>}>
@@ -16,6 +14,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="/signin" element={<SignIn/>} />
       <Route path="/signup" element={<SignUp/>}/>
       <Route path='/add-post' element={<AddPost/>}/>
+      <Route path='/all-post' element={<AllPosts/>} />
   </Route>
 ))
 
