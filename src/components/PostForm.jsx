@@ -9,15 +9,24 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function PostForm({ post }) {
-  const { register, handleSubmit, control, watch, setValue } = useForm({
-    title: post?.title || "",
-    slug: post?.slug || "",
-    content: post?.content || "",
-    img: post?.featuredImage || "",
-    status: post?.status || "",
-  });
+  const { register, handleSubmit, control, watch, setValue, getValues } =
+    useForm({
+      defaultValues: {
+        title: post?.title || "",
+        slug: post?.$id || "",
+        editor: post?.content || "",
+        img: post?.featuredImage || "",
+        status: post?.status || "active",
+      },
+    });
+
+  useEffect(() => {
+    console.log("this is post", post);
+    console.log("this is watch", watch());
+  },[post,watch]);
+
   const navigate = useNavigate();
-  const userId = useSelector((state) => state.auth.userData.$id);
+  const userId = useSelector((state) => state.auth.userData?.$id);
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -36,18 +45,18 @@ function PostForm({ post }) {
     });
 
     return () => subscription.unsubscribe();
-  }, [watch, setValue, slugTransform]);
+  }, [setValue, slugTransform, watch]);
 
   return (
     <>
       <form
         className="flex"
         onSubmit={handleSubmit(async (data) => {
-
           try {
             const imgData =
               data.img.length > 0
-                ? await storageService.uploadImage(data.img[0])
+                ? (await storageService.uploadImage(data.img[0])) ||
+                  setMessage("Something went wrong")
                 : null;
 
             const result = await databaseService.createPost({
@@ -59,20 +68,16 @@ function PostForm({ post }) {
               userId: userId,
             });
 
-            if(result) {
-
+            if (result) {
               setIsSuccess(true);
               setMessage("Post Created Successfully");
-              setTimeout(() => navigate('/all-post'), 1500);
-
+              setTimeout(() => navigate("/all-post"), 1500);
             } else {
               setMessage("Something went wrong");
             }
-
           } catch (error) {
             console.log(error);
           }
-
         })}
       >
         <div className="w-[50%] p-[2rem] py-[4rem] border-r-2">
@@ -100,7 +105,7 @@ function PostForm({ post }) {
             name="editor"
             control={control}
             label="Editor"
-            defaultValue="Welcome to BlogSphere!"
+            defaultValue={getValues("editor")}
           />
         </div>
 
@@ -113,9 +118,13 @@ function PostForm({ post }) {
             })}
           />
 
-          <Button type="submit" text="Submit" className="w-full" />
+          <Button
+            type="submit"
+            text={post ? "Edit" : "Submit"}
+            className="w-full"
+          />
           <div
-            className={`mt-[1rem] w-full text-center text-lg ${
+            className={` w-full text-center text-lg ${
               isSuccess ? "text-green-600" : "text-red-600"
             }`}
           >

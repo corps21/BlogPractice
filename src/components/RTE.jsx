@@ -5,15 +5,16 @@ import conf from "../conf/conf";
 import Label from "./Label";
 import { Controller } from "react-hook-form";
 
-function RTE({ name, control, label, defaultValue, ...props }) {
+export default function RTE({ name, control, label, defaultValue="Welcome to BlogSphere", ...props }) {
   return <Controller control={control} name={name} render={({ field: { onChange } }) => (
-    <div className="mt-[2.5rem] space-y-2">
+    <div className="pt-[1rem] space-y-2">
     {label && <Label label={label}/>}
     <div className="h-[25rem] bg-gray-300 rounded-xl">
       <Editor
         apiKey={conf.tinymceKey}
         initialValue={defaultValue}
         init={{
+          initialValue: defaultValue,
           menubar: true,
           plugins: [
             "image",
@@ -51,4 +52,3 @@ function RTE({ name, control, label, defaultValue, ...props }) {
   )}/>;
 }
 
-export default RTE;
