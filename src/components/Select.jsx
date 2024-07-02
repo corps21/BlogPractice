@@ -1,4 +1,7 @@
-import React, { forwardRef, useId } from "react";
+/* eslint-disable react/display-name */
+/* eslint-disable react/prop-types */
+
+import { forwardRef, useId } from "react";
 import Label from "./Label";
 const Select = forwardRef(
   ({
@@ -14,7 +17,7 @@ const Select = forwardRef(
     const id = useId();
     return (
       <div className={`space-y-2 pt-[1rem] pb-[2rem] ${containerClass}`}>
-        {label && <Label label={label} />}
+        {label && <Label htmlfor={id} label={label} />}
 
         <select
           id={id}

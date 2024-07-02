@@ -9,15 +9,17 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function PostForm({ post }) {
-  const { register, handleSubmit, control, watch, setValue } = useForm({
-    title: post?.title || "",
-    slug: post?.slug || "",
-    content: post?.content || "",
-    img: post?.featuredImage || "",
-    status: post?.status || "",
+  const { register, handleSubmit, control, watch, setValue, getValues } = useForm({
+    defaultValues: {
+      title: post?.title || "",
+      slug: post?.$id || "",
+      editor: post?.content || "",
+      img: post?.featuredImage || "",
+      status: post?.status || "active",
+    }
   });
   const navigate = useNavigate();
-  const userId = useSelector((state) => state.auth.userData.$id);
+  const userId = useSelector((state) => state.auth.userData?.$id);
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -47,7 +49,7 @@ function PostForm({ post }) {
           try {
             const imgData =
               data.img.length > 0
-                ? await storageService.uploadImage(data.img[0])
+                ? await storageService.uploadImage(data.img[0]) || setMessage("Something went wrong")
                 : null;
 
             const result = await databaseService.createPost({
@@ -100,20 +102,21 @@ function PostForm({ post }) {
             name="editor"
             control={control}
             label="Editor"
-            defaultValue="Welcome to BlogSphere!"
+            defaultValue={getValues("editor")}
           />
         </div>
 
         <div className="w-[50%] px-[8rem] py-[4rem]">
           <Input label="Featured Image" type="file" {...register("img")} />
           <Select
+            autofocus={getValues("status")}
             label="Post Status"
             {...register("status", {
               required: true,
             })}
           />
 
-          <Button type="submit" text="Submit" className="w-full" />
+          <Button type="submit" text={post ? "Edit" : "Submit"} className="w-full" />
           <div
             className={`mt-[1rem] w-full text-center text-lg ${
               isSuccess ? "text-green-600" : "text-red-600"

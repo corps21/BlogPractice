@@ -5,7 +5,7 @@ import conf from "../conf/conf";
 import Label from "./Label";
 import { Controller } from "react-hook-form";
 
-function RTE({ name, control, label, defaultValue, ...props }) {
+export default function RTE({ name, control, label, defaultValue="Welcome to BlogSphere!", ...props }) {
   return <Controller control={control} name={name} render={({ field: { onChange } }) => (
     <div className="mt-[2.5rem] space-y-2">
     {label && <Label label={label}/>}
@@ -15,6 +15,7 @@ function RTE({ name, control, label, defaultValue, ...props }) {
         initialValue={defaultValue}
         init={{
           menubar: true,
+          initialValue: defaultValue,
           plugins: [
             "image",
             "advlist",
@@ -51,4 +52,3 @@ function RTE({ name, control, label, defaultValue, ...props }) {
   )}/>;
 }
 
-export default RTE;
