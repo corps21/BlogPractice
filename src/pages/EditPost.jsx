@@ -13,11 +13,11 @@ function EditPost() {
     })
   }, [setPost]);
 
-  return (
+  return post ? (
     <Container className="border-2 rounded-lg p-5">
       <PostForm post={post}/>
     </Container>
-  );
+  ): null;
 }
 
 export default EditPost;

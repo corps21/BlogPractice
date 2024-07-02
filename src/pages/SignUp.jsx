@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container, Input, Button } from "../components";
 import { Link, useNavigate } from "react-router-dom";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import authService from "../appwrite/authService";
 import { login, logout } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,43 +14,6 @@ function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const status = useSelector((state) => state.auth.isLoggedIn);
-
-  // const createAccount = ({ email, password, firstName, lastName }) => {
-
-  //     authService.getCurrentUser()
-  //     .then((data) => {
-  //         if (data) {
-  //             authService.logout()
-  //                 .then(() => {
-  //                     console.log("Active session detected and deleted")
-  //                 })
-  //                 .catch(error => console.log(error))
-  //         }
-  //     })
-  //     .catch(error => console.log(error))
-
-  //     authService.createAccount({ email, password, firstName, lastName })
-  //         .then((action) => {
-  //             if (action) {
-  //                 authService.login({ email, password })
-  //                     .then((session) => {
-  //                         if (session) {
-  //                             authService.getCurrentUser()
-  //                                 .then((data) => {
-  //                                     dispatch(login({userData: data}));
-  //                                 })
-  //                                 .catch((error) => setMessage(error.message))
-  //                             setSuccess(true)
-  //                             setMessage("Successfully created Account!")
-  //                             setTimeout(() => navigate("/"), 500)
-  //                         }
-  //                     })
-  //                     .catch((error) => setMessage(error.message))
-
-  //             }
-  //         })
-  //         .catch((error) => setMessage(error.message))
-  // }
 
   const createAccount = async ({ email, password, firstName, lastName }) => {
     try {
@@ -82,7 +45,7 @@ function SignUp() {
           setSuccess(true);
           setMessage("Successfully created account!")
 
-          setTimeout(() => navigate("/"), 500)
+          setTimeout(() => navigate("/"), 1000)
 
         } catch (error) {
           setMessage("Error logging account: " + error.message);

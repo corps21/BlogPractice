@@ -20,11 +20,6 @@ function PostForm({ post }) {
       },
     });
 
-  useEffect(() => {
-    console.log("this is post", post);
-    console.log("this is watch", watch());
-  },[post,watch]);
-
   const navigate = useNavigate();
   const userId = useSelector((state) => state.auth.userData?.$id);
   const [message, setMessage] = useState("");
@@ -71,7 +66,7 @@ function PostForm({ post }) {
             if (result) {
               setIsSuccess(true);
               setMessage("Post Created Successfully");
-              setTimeout(() => navigate("/all-post"), 1500);
+              setTimeout(() => navigate("/"), 1000);
             } else {
               setMessage("Something went wrong");
             }

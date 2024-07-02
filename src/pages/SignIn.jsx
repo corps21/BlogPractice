@@ -41,7 +41,7 @@ function SignIn() {
           if(userData) {
             setSuccess(true);
             setMessage("Successfully Signed in!");
-            setTimeout(() => navigate("/"), 1500);
+            setTimeout(() => navigate("/"), 1000);
           } else {
             setMessage("Something went wrong");
           }

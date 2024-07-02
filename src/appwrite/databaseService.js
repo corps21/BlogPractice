@@ -11,12 +11,25 @@ export class DatabaseService {
         this.databases = new Databases(this.client);
     }
 
-    async getAllPosts(query = [Query.equal("status", ["Active"])]) {
+    async getAllActivePosts(query = [Query.equal("status", ["Active"])]) {
         try {
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 [...query]
+            )
+        } catch (error) {
+            console.log("DatabaseService :: getAllActivePosts :: error ", error)
+        }   
+
+        return false;
+    }
+
+    async getAllPosts() {
+        try {
+            return await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionId,
             )
         } catch (error) {
             console.log("DatabaseService :: getAllPosts :: error ", error)

@@ -25,6 +25,15 @@ export class StorageService {
         return false;
     }
 
+    getImagePreview(fileId) {
+        try {
+            return this.storage.getFilePreview(conf.appwriteStorageId,fileId);
+        } catch (error) {
+            console.log("StorageService :: getImagePreview :: error ", error);
+        }
+        return false;
+    }
+
 }
 
 const storageService = new StorageService();

@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import {Home, SignIn, SignUp, AddPost, AllPosts, EditPost} from "./pages/index.js"
+import {Home, SignIn, SignUp, AddPost, AllPosts, EditPost, PostPage} from "./pages/index.js"
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 
 import store from './store/store.js'
@@ -16,6 +16,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path='/add-post' element={<AddPost/>}/>
       <Route path='/all-post' element={<AllPosts/>} />
       <Route path='/edit-post' element={<EditPost/>} />
+      <Route path='/post' element={<PostPage/>} />
   </Route>
 ))
 
