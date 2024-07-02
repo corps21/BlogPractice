@@ -107,6 +107,7 @@ function PostForm({ post }) {
         <div className="w-[50%] px-[8rem] py-[4rem]">
           <Input label="Featured Image" type="file" {...register("img")} />
           <Select
+            autoFocus={getValues("status")}
             label="Post Status"
             {...register("status", {
               required: true,
