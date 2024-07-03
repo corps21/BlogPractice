@@ -6,7 +6,7 @@ function EditPost() {
     const[post,setPost] = useState(null);
 
   useEffect(() => {
-    databaseService.getPost('test').then((data) => {
+    databaseService.getPost('hello').then((data) => {
         if(data) {
             setPost(data);
         } 

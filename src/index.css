@@ -11,6 +11,6 @@ html,body, #root{
 img{
     height:100%;
     width: 100%;
-    aspect-ratio: 16/8;
     display: block;
+    aspect-ratio: 16/9;
 }
