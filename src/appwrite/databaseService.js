@@ -25,11 +25,12 @@ export class DatabaseService {
         return false;
     }
 
-    async getAllPosts() {
+    async getAllPosts(userId) {
         try {
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
+                [Query.equal("userId", [userId])]
             )
         } catch (error) {
             console.log("DatabaseService :: getAllPosts :: error ", error)
