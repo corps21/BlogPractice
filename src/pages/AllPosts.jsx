@@ -4,19 +4,24 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import storageService from "../appwrite/storageService";
 function AllPosts() {
+  
+  const [isLoading, setIsLoading] = useState(true);
   const [files, setFiles] = useState([]);
   const status = useSelector((state) => state.auth.isLoggedIn);
   const userId = useSelector((state) => state.auth.userData)?.$id;
+
   useEffect(() => {
+    setIsLoading(true);
     if (status) {
       databaseService.getAllPosts(userId).then((data) => {
         if (data) setFiles(data.documents);
+        setIsLoading(false);
       });
     }
   }, [userId, status]);
 
-  return (
-    <Container className={`flex ${!status ? 'justify-end' : ""}`}>
+  return !isLoading ? (
+    <Container className={`flex ${!status ? "justify-end" : ""}`}>
       {!status && (
         <div className="text-9xl uppercase py-10 text-right flex flex-col justify-center">
           <div>This is</div>
@@ -28,6 +33,7 @@ function AllPosts() {
           {files &&
             files.map((file) => (
               <PostCard
+                url="/post"
                 key={file.$id}
                 href={storageService.getImagePreview(file.featuredImage)?.href}
                 title={file.title}
@@ -37,7 +43,7 @@ function AllPosts() {
         </div>
       )}
     </Container>
-  );
+  ): <Container className="text-9xl flex items-center justify-center">Loading...</Container>
 }
 
 export default AllPosts;

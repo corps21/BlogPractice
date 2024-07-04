@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Container , Button} from "../components";
+import { Container, Button } from "../components";
 import databaseService from "../appwrite/databaseService";
 import storageService from "../appwrite/storageService";
 import { useNavigate } from "react-router-dom";
 
 function PostPage() {
-  const postId = "hello";
+  const postId = "hostile";
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [info, setInfo] = useState({});
@@ -28,25 +28,40 @@ function PostPage() {
     setIsLoading(false);
   }, []);
 
-  return (
+  return !isLoading ? (
     <Container>
       {!isLoading && (
         <div>
+          <div className="flex justify-between mb-[2rem]">
+            <Button
+              className="w-[48%] bg-green-600 hover:text-green-600"
+              text="Edit"
+              onClick={() => navigate("/edit-post")}
+            />
+            <Button
+              className=" w-[48%] bg-red-600 hover:text-red-600"
+              text="Delete"
+              onClick={() =>
+                databaseService.removePost(info.$id) && navigate("/")
+              }
+            />
+          </div>
           <div>
             <figure>
-              <img src={info.src} alt="" className="aspect-auto"/>
+              <img src={info.src} alt="" className="aspect-auto" />
             </figure>
           </div>
-          <Button text="Edit" onClick={() => navigate("/edit-post")}/>
-          <Button text="Delete" onClick={() => databaseService.removePost(info.$id)}/>
-          <div>
-            {info.title}  By <span>{info.author}</span>
+          <div className="text-6xl text-center mt-[2rem]">
+            {info.title} <br />
           </div>
-          <div>{info.content}</div>
+          <div className="text-center text-2xl mb-[5rem]">
+              By {info.author}
+          </div>
+          <div className="text-2xl">{info.content}</div>
         </div>
       )}
     </Container>
-  );
+  ) : <Container className="text-9xl flex items-center justify-center">Loading...</Container>
 }
 
 export default PostPage;
