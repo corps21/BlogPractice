@@ -38,7 +38,7 @@ function SignIn() {
         } else {
           const userData = await authService.getCurrentUser();
           dispatch(login({ userData }));
-          if(userData) {
+          if (userData) {
             setSuccess(true);
             setMessage("Successfully Signed in!");
             setTimeout(() => navigate("/"), 500);
@@ -70,16 +70,6 @@ function SignIn() {
         onSubmit={handleSubmit(onSubmitHandler)}
         className="w-[50%] py-[8rem] px-[8rem]"
       >
-        {message && (
-          <div
-            className={`w-full text-center text-xl ${
-              success ? "text-green-600" : "text-red-600"
-            }`}
-          >
-            {message}
-          </div>
-        )}
-
         <Input
           label="Email"
           placeholder="Enter your mail"
@@ -106,7 +96,14 @@ function SignIn() {
           className="w-full space-y-20"
           text="Sign in to account"
         />
-
+        {message && (
+          <div
+            className={`w-full mt-[1.5rem] text-center text-xl ${success ? "text-green-600" : "text-red-600"
+              }`}
+          >
+            {message}
+          </div>
+        )}
         <a className="inline-block text-[1.35rem] text-gray-400 text-center mt-[1.5rem] cursor-pointer w-full hover:text-gray-500">
           Forgot your password?{" "}
         </a>
