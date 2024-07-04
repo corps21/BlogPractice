@@ -4,22 +4,20 @@ import databaseService from "../appwrite/databaseService";
 import { useParams } from "react-router-dom";
 
 function EditPost() {
-    const[post,setPost] = useState(null);
-    const {slug} = useParams();
+  const [post, setPost] = useState(null);
+  const { slug } = useParams();
 
   useEffect(() => {
     databaseService.getPost(slug).then((data) => {
-        if(data) {
-            setPost(data);
-        } 
+      if (data) setPost(data);
     })
   }, [slug]);
 
   return post ? (
     <Container className="border-2 rounded-lg p-5">
-      <PostForm post={post}/>
+      <PostForm post={post} />
     </Container>
-  ): <Loader/>
+  ) : <Loader />
 }
 
 export default EditPost;

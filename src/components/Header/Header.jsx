@@ -1,46 +1,38 @@
-import { NavLink, Link } from "react-router-dom"
+import { NavLink, Link , useNavigate} from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react";
 import authService from "../../appwrite/authService";
 import { login, logout } from "../../store/userSlice";
+import Button from "../Button";
 
 function Header() {
 
-  const [linkTest, setLinkText] = useState("Sign in")
-  const [btnroute, setBtnRoute] = useState("/signin")
-
+  const [buttonInfo,setButtonInfo] = useState({text:"Sign in", route:"/signin"})
+  const navigate = useNavigate();
   const status = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
 
-  const logOutHandler = () => {
+  const clickHandler = async () => {
     if (status) {
-      authService.logout().then((data) => {
-        if (data) {
-          dispatch(logout())
-        }
-      })
-    }
+      const result = await authService.logout()
+      if (result) dispatch(logout())
+      }
+      navigate(buttonInfo.route)
   }
 
   useEffect(() => {
-    if (status) {
-      setLinkText("Logout")
-      setBtnRoute("/")
-    } else {
-      setLinkText("Sign in")
-      setBtnRoute("/signin")
-    }
+    status ? setButtonInfo({text:"Logout", route:"/"}) : setButtonInfo({text:"Sign in", route:"/signin"})
   }, [status])
 
   useEffect(() => {
-    if(!status) {
+    if (!status) {
       authService.getCurrentUser().then((data) => {
         if (data) {
           dispatch(login({ userData: data }));
         }
       }).catch((error) => console.log(error))
     }
-  },[])
+  }, [dispatch, status])
 
 
   const navItems = [
@@ -71,8 +63,7 @@ function Header() {
           <NavLink key={item.name} className={({ isActive }) => `text-xl hover:underline underline-offset-8 ${isActive ? "text-blue-600 font-semibold underline decoration-2" : ""} ${!status ? "invisible" : ""}`} to={item.url}>{item.name}</NavLink>
         ))}
 
-        <Link onClick={logOutHandler} className="rounded-lg text-lg px-4 py-1 text-white bg-blue-600 hover:bg-white hover:text-blue-600" to={btnroute}>{linkTest}</Link>
-
+        <Button text={buttonInfo.text} onClick={clickHandler} className="rounded-lg text-lg px-4 py-1 text-white bg-blue-600 hover:bg-white hover:text-blue-600" />
       </div>
     </div>
   )

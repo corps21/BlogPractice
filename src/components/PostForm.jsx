@@ -120,7 +120,7 @@ function PostForm({ post }) {
             className="w-full"
           />
           <div
-            className={` w-full text-center text-lg ${
+            className={` w-full text-center text-xl mt-[2rem] ${
               isSuccess ? "text-green-600" : "text-red-600"
             }`}
           >

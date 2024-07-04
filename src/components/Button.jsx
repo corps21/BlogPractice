@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 
 function Button({text="Button", className="", ...props}) {
   return (

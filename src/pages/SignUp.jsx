@@ -71,17 +71,9 @@ function SignUp() {
       </div>
 
       <form
-        className="w-[50%] py-[8rem] px-[8rem]"
+        className="w-[50%] py-[7rem] px-[8rem]"
         onSubmit={handleSubmit(createAccount)}
       >
-        {message && (
-          <div
-            className={`w-full mb-[1rem] text-center text-xl ${success ? "text-green-400" : "text-red-400"
-              }`}
-          >
-            {message}
-          </div>
-        )}
 
         <div className="w-full flex justify-between">
           <Input
@@ -118,6 +110,15 @@ function SignUp() {
         />
 
         <Button type="submit" className="w-full mt-[2.5rem]" text="Sign up" />
+
+        {message && (
+          <div
+            className={`w-full mt-[1.5rem] text-center text-xl ${success ? "text-green-600" : "text-red-600"
+              }`}
+          >
+            {message}
+          </div>
+        )}
 
         <div className="w-full text-center mt-[1.5rem] flex flex-col ">
           <div className="block border-2 w-[45%] relative top-[1rem]"></div>

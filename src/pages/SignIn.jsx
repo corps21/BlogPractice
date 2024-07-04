@@ -41,7 +41,7 @@ function SignIn() {
           if(userData) {
             setSuccess(true);
             setMessage("Successfully Signed in!");
-            setTimeout(() => navigate("/"), 1000);
+            setTimeout(() => navigate("/"), 500);
           } else {
             setMessage("Something went wrong");
           }
@@ -73,7 +73,7 @@ function SignIn() {
         {message && (
           <div
             className={`w-full text-center text-xl ${
-              success ? "text-green-400" : "text-red-400"
+              success ? "text-green-600" : "text-red-600"
             }`}
           >
             {message}

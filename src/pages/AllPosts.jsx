@@ -26,7 +26,7 @@ function AllPosts() {
         <div className="pt-[5rem] w-full h-full grid grid-cols-4 grid-rows-[20rem] gap-4">
           {files.map((file) => (
             <PostCard
-              url="/"
+              url={`/post/${file.$id}`}
               key={file.$id}
               href={storageService.getImagePreview(file.featuredImage)?.href}
               title={file.title}

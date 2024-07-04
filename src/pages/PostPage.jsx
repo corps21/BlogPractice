@@ -12,21 +12,22 @@ function PostPage() {
 
   useEffect(() => {
     setIsLoading(true);
+
     databaseService.getPost(slug).then((data) => {
       if (data) {
         setInfo(() => {
-          const info = {};
-          info.$id = data.$id;
-          info.title = data.title;
-          info.author = data.userId;
-          info.content = data.content;
-          info.src = storageService.getImagePreview(data.featuredImage).href;
           setIsLoading(false);
-          return info;
+          return {
+            $id : data.$id,
+            title : data.title,
+            author : data.userId,
+            content : data.content,
+            src : storageService.getImagePreview(data.featuredImage).href
+          };
         });
       }
     });
-  }, []);
+  }, [slug]);
 
   return !isLoading ? (
     <Container>
