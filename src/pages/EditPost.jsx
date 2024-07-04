@@ -1,23 +1,25 @@
-import { Container, PostForm } from "../components";
+import { Container, Loader, PostForm } from "../components";
 import { useEffect, useState } from "react";
 import databaseService from "../appwrite/databaseService";
+import { useParams } from "react-router-dom";
 
 function EditPost() {
     const[post,setPost] = useState(null);
+    const {slug} = useParams();
 
   useEffect(() => {
-    databaseService.getPost('hello').then((data) => {
+    databaseService.getPost(slug).then((data) => {
         if(data) {
             setPost(data);
         } 
     })
-  }, [setPost]);
+  }, [slug]);
 
   return post ? (
     <Container className="border-2 rounded-lg p-5">
       <PostForm post={post}/>
     </Container>
-  ): null;
+  ): <Loader/>
 }
 
 export default EditPost;

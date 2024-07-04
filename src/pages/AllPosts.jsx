@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import storageService from "../appwrite/storageService";
 function AllPosts() {
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [files, setFiles] = useState([]);
   const status = useSelector((state) => state.auth.isLoggedIn);
@@ -21,29 +21,22 @@ function AllPosts() {
   }, [userId, status]);
 
   return !isLoading ? (
-    <Container className={`flex ${!status ? "justify-end" : ""}`}>
-      {!status && (
-        <div className="text-9xl uppercase py-10 text-right flex flex-col justify-center">
-          <div>This is</div>
-          <div>All Posts</div>
-        </div>
-      )}
+    <Container className={`flex justify-end `}>
       {status && (
         <div className="pt-[5rem] w-full h-full grid grid-cols-4 grid-rows-[20rem] gap-4">
-          {files &&
-            files.map((file) => (
-              <PostCard
-                url="/post"
-                key={file.$id}
-                href={storageService.getImagePreview(file.featuredImage)?.href}
-                title={file.title}
-                author={file.userId}
-              />
-            ))}
+          {files.map((file) => (
+            <PostCard
+              url="/"
+              key={file.$id}
+              href={storageService.getImagePreview(file.featuredImage)?.href}
+              title={file.title}
+              author={file.userId}
+            />
+          ))}
         </div>
       )}
     </Container>
-  ): <Container className="text-9xl flex items-center justify-center">Loading...</Container>
+  ) : <Container className="text-9xl flex items-center justify-center">Loading...</Container>
 }
 
 export default AllPosts;

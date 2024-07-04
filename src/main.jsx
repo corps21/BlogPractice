@@ -15,8 +15,8 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="/signup" element={<SignUp/>}/>
       <Route path='/add-post' element={<AddPost/>}/>
       <Route path='/all-post' element={<AllPosts/>} />
-      <Route path='/edit-post' element={<EditPost/>} />
-      <Route path='/post' element={<PostPage/>} />
+      <Route path='/edit-post/:slug' element={<EditPost/>} />
+      <Route path='/post/:slug' element={<PostPage/>} />
   </Route>
 ))
 

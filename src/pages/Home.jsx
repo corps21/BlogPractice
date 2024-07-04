@@ -1,49 +1,51 @@
 import { useSelector } from "react-redux";
-import { Container, PostCard } from "../components";
-import { useEffect, useState } from "react";
+import { Container, Loader, PostCard } from "../components";
+import { useCallback, useEffect, useState } from "react";
 import storageService from "../appwrite/storageService";
 import databaseService from "../appwrite/databaseService";
 
 function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const status = useSelector((state) => state.auth.isLoggedIn);
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
-    databaseService
-      .getAllActivePosts()
-      .then((data) => (data ? setFiles(data.documents) : null));
-  }, []);
+    setIsLoading(true);
 
-  return (
-    <>
-      <Container className={`flex ${!status ? "justify-end" : "items-start"}`}>
-        {!status && (
-          <div className="text-9xl uppercase py-10 text-right flex flex-col justify-center">
-            <div>Sign Up</div>
-            <div>To See Posts</div>
-          </div>
-        )}
+    if (status) {
+      databaseService.getAllActivePosts().then(data => {
+        if (data) setFiles(data.documents);
+        setIsLoading(false)
+      })
+    }
+  }, [status]);
 
-        {status && (
-          <div className="pt-[5rem] w-full h-full grid grid-cols-4 grid-rows-[20rem] gap-4">
-            {files &&  
-              files.map((file) => (
-                <PostCard
-                  url="/post"
-                  key={file.$id}
-                  href={
-                    storageService.getImagePreview(file.featuredImage).href
-                  }
-                  title={file.title}
-                  author={file.userId}
-                />
-              ))
+  const loadCard = useCallback(() => {
+    return isLoading ? <Loader className="w-full" /> : (
+      <Container>
+        <div className="pt-[5rem] w-full h-full grid grid-cols-4 grid-rows-[20rem] gap-4">
+          {files.map((file) => {
+            return <PostCard
+              url={`/post/${file.$id}`}
+              key={file.$id}
+              href={
+                storageService.getImagePreview(file.featuredImage).href
               }
-          </div>
-        )}
+              title={file.title}
+              author={file.userId}
+            />
+          })}
+        </div>
       </Container>
-    </>
-  );
+    )
+  }, [isLoading,files])
+
+  return status ? loadCard() : (
+    <Container className={`flex text-9xl uppercase py-10 text-right flex-col justify-center`}>
+      <div>Sign Up</div>
+      <div>To See Posts</div>
+    </Container>
+  )
 }
 
 export default Home;

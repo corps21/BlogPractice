@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { Container, Button } from "../components";
+import { Container, Button, Loader } from "../components";
 import databaseService from "../appwrite/databaseService";
 import storageService from "../appwrite/storageService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function PostPage() {
-  const postId = "hostile";
+  const {slug} = useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [info, setInfo] = useState({});
 
   useEffect(() => {
     setIsLoading(true);
-    databaseService.getPost(postId).then((data) => {
+    databaseService.getPost(slug).then((data) => {
       if (data) {
         setInfo(() => {
           const info = {};
@@ -21,11 +21,11 @@ function PostPage() {
           info.author = data.userId;
           info.content = data.content;
           info.src = storageService.getImagePreview(data.featuredImage).href;
+          setIsLoading(false);
           return info;
         });
       }
     });
-    setIsLoading(false);
   }, []);
 
   return !isLoading ? (
@@ -36,13 +36,13 @@ function PostPage() {
             <Button
               className="w-[48%] bg-green-600 hover:text-green-600"
               text="Edit"
-              onClick={() => navigate("/edit-post")}
+              onClick={() => navigate(`/edit-post/${slug}`)}
             />
             <Button
               className=" w-[48%] bg-red-600 hover:text-red-600"
               text="Delete"
               onClick={() =>
-                databaseService.removePost(info.$id) && navigate("/")
+                databaseService.removePost(info.$id) && navigate(`/all-post`)
               }
             />
           </div>
@@ -61,7 +61,7 @@ function PostPage() {
         </div>
       )}
     </Container>
-  ) : <Container className="text-9xl flex items-center justify-center">Loading...</Container>
+  ) : <Loader/>
 }
 
 export default PostPage;

@@ -8,5 +8,6 @@ import RTE from "./RTE";
 import Label from "./Label";
 import PostForm from "./PostForm";
 import PostCard from "./PostCard";
+import Loader from "./Loader";
 
-export {Header,Footer,Input, Container, Button, Select, RTE, Label, PostForm, PostCard}
+export {Header,Footer,Input, Container, Button, Select, RTE, Label, PostForm, PostCard, Loader}
