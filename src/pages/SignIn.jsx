@@ -16,6 +16,8 @@ function SignIn() {
   const status = useSelector((state) => state.auth.isLoggedIn);
 
   const onSubmitHandler = async ({ email, password }) => {
+    setMessage("");
+    setSuccess(false);
     try {
       if (status) {
         try {
@@ -70,6 +72,16 @@ function SignIn() {
         onSubmit={handleSubmit(onSubmitHandler)}
         className="w-[50%] py-[8rem] px-[8rem]"
       >
+
+        {message && (
+          <div
+            className={`w-full mt-[1.5rem] text-center text-xl ${success ? "text-green-600" : "text-red-600"
+              }`}
+          >
+            {message}
+          </div>
+        )}
+
         <Input
           label="Email"
           placeholder="Enter your mail"
@@ -96,14 +108,7 @@ function SignIn() {
           className="w-full space-y-20"
           text="Sign in to account"
         />
-        {message && (
-          <div
-            className={`w-full mt-[1.5rem] text-center text-xl ${success ? "text-green-600" : "text-red-600"
-              }`}
-          >
-            {message}
-          </div>
-        )}
+
         <a className="inline-block text-[1.35rem] text-gray-400 text-center mt-[1.5rem] cursor-pointer w-full hover:text-gray-500">
           Forgot your password?{" "}
         </a>

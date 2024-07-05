@@ -28,37 +28,82 @@ function PostForm({ post }) {
 
   const clickHandler = async (data) => {
     try {
-      const imgData =
-        data.img.length > 0
-          ? (await storageService.uploadImage(data.img[0])) ||
-          setMessage("Something went wrong")
-          : null;
+      // const imgData =
+      //   data.img.length > 0
+      //     ? (await storageService.uploadImage(data.img[0])) ||
+      //     setMessage("Something went wrong")
+      //     : null;
 
-      const result = post ? await databaseService.updatePost(
-        {
-          title: data.title,
-          content: data.editor,
-          status: data.status,
-          featuredImage: imgData?.$id || data.featuredImage,
-        }, data.slug
-      ) :
-        await databaseService.createPost(
-          {
-            title: data.title,
-            slug: data.slug,
-            content: data.editor,
-            status: data.status,
-            featuredImage: imgData?.$id || "",
-            userId: userId,
-          }
-        );
+      let imgData = null;
+
+      if (data.img.length > 0) {
+        try {
+          const result = await storageService.uploadImage(data.img[0])
+          if (result) imgData = result;
+        } catch (error) {
+          setMessage("Something went wrong")
+          console.log(error);
+        }
+      }
+
+      // const result = post ? await databaseService.updatePost(
+      //   {
+      //     title: data.title,
+      //     content: data.editor,
+      //     status: data.status,
+      //     featuredImage: imgData?.$id || data.featuredImage,
+      //   }, data.slug
+      // ) :
+      //   await databaseService.createPost(
+      //     {
+      //       title: data.title,
+      //       slug: data.slug,
+      //       content: data.editor,
+      //       status: data.status,
+      //       featuredImage: imgData?.$id || "",
+      //       userId: userId,
+      //     }
+      //   );
+
+      let result = null;
+
+      if (post) {
+        try {
+          const answer = await databaseService.updatePost(
+            {
+              title: data.title,
+              content: data.editor,
+              status: data.status,
+              featuredImage: imgData?.id || data.featuredImage,
+            }, data.slug
+          )
+          if (answer) result = answer
+        } catch (error) {
+          setMessage("Something went wrong");
+          console.log(error);
+        }
+      } else {
+        try {
+          const answer = await databaseService.createPost(
+            {
+              title: data.title,
+              slug: data.slug,
+              content: data.editor,
+              status: data.status,
+              featuredImage: imgData?.id || "",
+              userId: userId
+            }
+          )
+          if (answer) result = answer
+        } catch (error) {
+          setMessage("Something went wrong");
+          console.log(error);
+        }
+      }
 
       if (result) {
         setIsSuccess(true);
-
-        if (post) setMessage("Post Updated Successfully");
-        else setMessage("Post Created Successfully");
-
+        post ? setMessage("Post Updated Successfully") : setMessage("Post Created Successfully")
         setTimeout(() => navigate(`/post/${data.slug}`), 500);
       } else {
         setMessage("Something went wrong");
@@ -79,12 +124,12 @@ function PostForm({ post }) {
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name === "title")
+      if (name === "title" && !post)
         setValue("slug", slugTransform(value.title), { shouldValidate: true });
     });
 
     return () => subscription.unsubscribe();
-  }, [setValue, slugTransform, watch]);
+  }, [setValue, slugTransform, watch, post]);
 
   return (
     <form
@@ -102,6 +147,7 @@ function PostForm({ post }) {
         <Input
           label="Slug"
           containerClass="mt-[1rem]"
+          readOnly={post}
           {...register("slug", {
             required: true,
           })}
