@@ -11,6 +11,7 @@ function PostPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [info, setInfo] = useState({});
   const userId = useSelector(state => state.auth.userData?.$id);
+  
   useEffect(() => {
     setIsLoading(true);
 

@@ -14,10 +14,6 @@ function AuthLayout({children,authentication = true}) {
     const location = useLocation();
 
     useEffect(() => {
-        console.log(status);
-    },[status])
-
-    useEffect(() => {
         if(status.checkStatus) {
             if(authentication && status.isLoggedIn !== authentication) {
                 navigate("/signin");

@@ -34,18 +34,6 @@ function PostForm({ post }) {
       //     setMessage("Something went wrong")
       //     : null;
 
-      let imgData = null;
-
-      if (data.img.length > 0) {
-        try {
-          const result = await storageService.uploadImage(data.img[0])
-          if (result) imgData = result;
-        } catch (error) {
-          setMessage("Something went wrong")
-          console.log(error);
-        }
-      }
-
       // const result = post ? await databaseService.updatePost(
       //   {
       //     title: data.title,
@@ -65,51 +53,71 @@ function PostForm({ post }) {
       //     }
       //   );
 
-      let result = null;
+      let imgData = { $id: data.featuredImage };
+      let postResult = null;
+
+      if (data.img.length > 0) {
+        try {
+          const imageResult = await storageService.uploadImage(data.img[0])
+          if (imageResult) imgData = imageResult;
+        } catch (error) {
+          setMessage("Something went wrong")
+          console.log(error);
+        }
+      }
 
       if (post) {
         try {
-          const answer = await databaseService.updatePost(
+          const updateResult = await databaseService.updatePost(
             {
               title: data.title,
               content: data.editor,
               status: data.status,
-              featuredImage: imgData?.id || data.featuredImage,
+              featuredImage: imgData.$id,
             }, data.slug
           )
-          if (answer) result = answer
-        } catch (error) {
+          if (updateResult) postResult = updateResult
+        }
+
+        catch (error) {
           setMessage("Something went wrong");
           console.log(error);
         }
-      } else {
+      }
+      else {
         try {
-          const answer = await databaseService.createPost(
+          const createResult = await databaseService.createPost(
             {
               title: data.title,
               slug: data.slug,
               content: data.editor,
               status: data.status,
-              featuredImage: imgData?.id || "",
+              featuredImage: imgData?.$id || "",
               userId: userId
             }
           )
-          if (answer) result = answer
-        } catch (error) {
+          if (createResult) postResult = createResult
+        }
+
+        catch (error) {
           setMessage("Something went wrong");
           console.log(error);
         }
       }
 
-      if (result) {
+      if (postResult) {
         setIsSuccess(true);
         post ? setMessage("Post Updated Successfully") : setMessage("Post Created Successfully")
         setTimeout(() => navigate(`/post/${data.slug}`), 500);
-      } else {
+      }
+
+      else {
         setMessage("Something went wrong");
       }
 
-    } catch (error) {
+    }
+
+    catch (error) {
       console.log(error);
     }
   }
