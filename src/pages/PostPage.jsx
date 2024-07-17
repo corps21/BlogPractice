@@ -4,6 +4,7 @@ import databaseService from "../appwrite/databaseService";
 import storageService from "../appwrite/storageService";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import parse from "html-react-parser";
 
 function PostPage() {
   const { slug } = useParams();
@@ -11,7 +12,7 @@ function PostPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [info, setInfo] = useState({});
   const userId = useSelector(state => state.auth.userData?.$id);
-  
+
   useEffect(() => {
     setIsLoading(true);
 
@@ -63,7 +64,7 @@ function PostPage() {
           <div className="text-center text-2xl mb-[5rem]">
             By {info.author}
           </div>
-          <div className="text-2xl">{info.content}</div>
+          <div className="text-2xl">{parse(info.content)}</div>
         </div>
       )}
     </Container>

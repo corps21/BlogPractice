@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { Input, Button, Select, RTE } from "../components/index";
+import { Input, Button, Select, RTE , ImagePreview} from "../components/index";
 import { useForm } from "react-hook-form";
 import databaseService from "../appwrite/databaseService";
 import storageService from "../appwrite/storageService";
@@ -175,6 +175,7 @@ function PostForm({ post }) {
       </div>
 
       <div className="w-[50%] px-[8rem] py-[4rem]">
+        {post && post.featuredImage !== "" && <ImagePreview src={storageService.getImagePreview(post.featuredImage).href}/>}
         <Input label="Featured Image" type="file" {...register("img")} />
         <Select
           autoFocus={getValues("status")}

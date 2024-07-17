@@ -10,5 +10,6 @@ import PostForm from "./PostForm";
 import PostCard from "./PostCard";
 import Loader from "./Loader";
 import AuthLayout from "./AuthLayout";
+import ImagePreview from "./ImagePreview";
 
-export {Header,Footer,Input, Container, Button, Select, RTE, Label, PostForm, PostCard, Loader, AuthLayout}
+export {Header,Footer,Input, Container, Button, Select, RTE, Label, PostForm, PostCard, Loader, AuthLayout, ImagePreview}
