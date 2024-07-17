@@ -9,5 +9,6 @@ import Label from "./Label";
 import PostForm from "./PostForm";
 import PostCard from "./PostCard";
 import Loader from "./Loader";
+import AuthLayout from "./AuthLayout";
 
-export {Header,Footer,Input, Container, Button, Select, RTE, Label, PostForm, PostCard, Loader}
+export {Header,Footer,Input, Container, Button, Select, RTE, Label, PostForm, PostCard, Loader, AuthLayout}

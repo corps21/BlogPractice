@@ -6,7 +6,6 @@ import { login, logout } from "../../store/userSlice";
 import Button from "../Button";
 
 function Header() {
-
   const [buttonInfo,setButtonInfo] = useState({text:"Sign in", route:"/signin"})
   const navigate = useNavigate();
   const status = useSelector((state) => state.auth.isLoggedIn);
