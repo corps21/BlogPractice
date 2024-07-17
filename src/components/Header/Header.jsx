@@ -2,7 +2,7 @@ import { NavLink, Link , useNavigate} from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react";
 import authService from "../../appwrite/authService";
-import { login, logout } from "../../store/userSlice";
+import { login, logout, updateCheckStatus} from "../../store/userSlice";
 import Button from "../Button";
 
 function Header() {
@@ -14,7 +14,10 @@ function Header() {
   const clickHandler = async () => {
     if (status) {
       const result = await authService.logout()
-      if (result) dispatch(logout())
+      if (result) {
+        dispatch(logout())
+        dispatch(updateCheckStatus(false));
+      }
       }
       navigate(buttonInfo.route)
   }
@@ -29,6 +32,7 @@ function Header() {
         if (data) {
           dispatch(login({ userData: data }));
         }
+        dispatch(updateCheckStatus(true));
       }).catch((error) => console.log(error))
     }
   }, [dispatch, status])
