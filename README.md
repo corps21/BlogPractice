@@ -3,4 +3,4 @@
 * auth layout 
 * use html parser
 * now working model, fix ui
-* edit post image not working
+* Found a bug in edit post for images
