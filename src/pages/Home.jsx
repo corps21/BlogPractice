@@ -21,9 +21,9 @@ function Home() {
   }, [status]);
 
   const loadCard = useCallback(() => {
-    return isLoading ? <Loader className="w-full" /> : (
-      <Container>
-        <div className="pt-[5rem] w-full h-full grid grid-cols-4 grid-rows-[20rem] gap-4">
+    return isLoading ? <Loader/> : (
+      <Container className="mt-[2rem] mb-[12rem]">
+        <div className="space-y-[2rem]">
           {files.map((file) => {
             return <PostCard
               url={`/post/${file.$id}`}
@@ -41,7 +41,7 @@ function Home() {
   }, [isLoading,files])
 
   return status ? loadCard() : (
-    <Container className={`flex text-9xl uppercase py-10 text-right flex-col justify-center`}>
+    <Container className={`text-[4rem] font-bold uppercase leading-tight text-center my-[12rem]`}>
       <div>Sign Up</div>
       <div>To See Posts</div>
     </Container>

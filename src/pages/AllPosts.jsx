@@ -3,6 +3,7 @@ import databaseService from "../appwrite/databaseService";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import storageService from "../appwrite/storageService";
+import {Loader} from "../components";
 function AllPosts() {
 
   const [isLoading, setIsLoading] = useState(true);
@@ -21,9 +22,9 @@ function AllPosts() {
   }, [userId, status]);
 
   return !isLoading ? (
-    <Container className={`flex justify-end `}>
+    <Container className="mt-[2rem] mb-[12rem]">
       {status && (
-        <div className="pt-[5rem] w-full h-full grid grid-cols-4 grid-rows-[20rem] gap-4">
+        <div className="space-y-[2rem]">
           {files.map((file) => (
             <PostCard
               url={`/post/${file.$id}`}
@@ -36,7 +37,7 @@ function AllPosts() {
         </div>
       )}
     </Container>
-  ) : <Container className="text-9xl flex items-center justify-center">Loading...</Container>
+  ) : <Loader/>
 }
 
 export default AllPosts;

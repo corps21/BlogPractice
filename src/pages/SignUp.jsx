@@ -63,8 +63,8 @@ function SignUp() {
   };
 
   return (
-    <Container className="border-2 rounded-lg p-5 flex">
-      <div className="w-[50%] space-y-4 p-[2rem] py-[4rem] border-r-2">
+    <Container className="border-2 rounded-lg p-5 mt-[6rem] mb-[12rem] ">
+      <div className="hidden space-y-4 p-[2rem] py-[4rem] sm:block">
         <h2 className="text-[3.5rem]">Create your account</h2>
         <h3 className="max-w-[28rem] text-xl">
           Sign up to start managing your files and gain access to resources.
@@ -72,20 +72,20 @@ function SignUp() {
       </div>
 
       <form
-        className="w-[50%] py-[6rem] px-[8rem]"
+        className=""
         onSubmit={handleSubmit(createAccount)}
       >
 
         {message && (
           <div
-            className={`w-full mb-[1.5rem] text-center text-xl ${success ? "text-green-600" : "text-red-600"
+            className={`w-full my-[2rem] text-center text-[1.25rem] ${success ? "text-green-600" : "text-red-600"
               }`}
           >
             {message}
           </div>
         )}
 
-        <div className="w-full flex justify-between">
+        <div className="space-y-[1rem]">
           <Input
             placeholder="First Name"
             label="First Name"
@@ -93,7 +93,7 @@ function SignUp() {
           />
           <Input
             placeholder="Last Name"
-            label="Second Name"
+            label="Last Name"
             {...register("lastName", { required: true })}
           />
         </div>
