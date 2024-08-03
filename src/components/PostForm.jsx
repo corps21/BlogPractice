@@ -141,10 +141,10 @@ function PostForm({ post }) {
 
   return (
     <form
-      className="flex"
+      className="space-y-[2rem]"
       onSubmit={handleSubmit(clickHandler)}
     >
-      <div className="w-[50%] p-[2rem] py-[4rem] border-r-2">
+      <div className="">
         <Input
           label="Title"
           {...register("title", {
@@ -174,7 +174,7 @@ function PostForm({ post }) {
         />
       </div>
 
-      <div className="w-[50%] px-[8rem] py-[4rem]">
+      <div className="">
         {post && post.featuredImage !== "" && <ImagePreview src={storageService.getImagePreview(post.featuredImage).href}/>}
         <Input label="Featured Image" type="file" {...register("img")} />
         <Select
@@ -191,7 +191,7 @@ function PostForm({ post }) {
           className="w-full"
         />
         <div
-          className={` w-full text-center text-xl mt-[2rem] ${isSuccess ? "text-green-600" : "text-red-600"
+          className={`w-full text-center text-xl mt-[2rem] ${isSuccess ? "text-green-600" : "text-red-600"
             }`}
         >
           {message}
