@@ -14,7 +14,7 @@ function EditPost() {
   }, [slug]);
 
   return post ? (
-    <Container className="border-2 rounded-lg p-5">
+    <Container className="border-2 rounded-lg p-5 mb-[8rem]">
       <PostForm post={post} />
     </Container>
   ) : <Loader />
