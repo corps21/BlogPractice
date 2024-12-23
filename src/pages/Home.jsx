@@ -22,10 +22,11 @@ function Home() {
 
 
   return status ? (
-    <Container className="flex flex-col items-center">
-      <Header />
-      <PostList isLoading={isLoading} files={files} />
-    </Container>
+    // <Container className="flex flex-col items-center">
+    //   <Header />
+    //   <PostList isLoading={isLoading} files={files} />
+    // </Container>
+    <CTA />
   ) : (
     <CTA />
   );
