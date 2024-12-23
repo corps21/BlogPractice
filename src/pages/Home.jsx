@@ -14,19 +14,17 @@ function Home() {
     if (status) {
       databaseService.getAllActivePosts().then((data) => {
         if (data) setFiles(data.documents);
+        console.log(data)
         setIsLoading(false);
       });
     }
   }, [status]);
 
-
-
   return status ? (
-    // <Container className="flex flex-col items-center">
-    //   <Header />
-    //   <PostList isLoading={isLoading} files={files} />
-    // </Container>
-    <CTA />
+    <Container className="flex flex-col items-center">
+      <Header />
+      <PostList isLoading={isLoading} files={files} />
+    </Container>
   ) : (
     <CTA />
   );

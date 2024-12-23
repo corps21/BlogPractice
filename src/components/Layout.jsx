@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import authService from "../appwrite/authService";
 import { login, updateCheckStatus } from "../store/userSlice";
 
-
 export default function Layout({ children }) {
   const status = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
