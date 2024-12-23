@@ -1,14 +1,16 @@
-import { Outlet } from "react-router-dom"
-import { Header,Footer } from "./components"
+/* eslint-disable react/no-children-prop */
+import { Outlet } from "react-router-dom";
+import Layout from "./components/Layout";
 function App() {
-
   return (
-    < div>
-    <Header/>
-    <Outlet />
-    <Footer/>
-    </div>
-  )
+    <>
+      {/* <Header /> */}
+      <Layout>
+        <Outlet />
+      </Layout>
+      {/* <Footer /> */}
+    </>
+  );
 }
 
-export default App
+export default App;

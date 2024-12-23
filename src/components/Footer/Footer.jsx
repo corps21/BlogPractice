@@ -1,31 +1,40 @@
-
 function Footer() {
-    return (
-      <div className="w-5/6 mx-auto space-y-[2rem] text-center pb-[2rem]">
-          <div className="flex flex-col space-y-1">
-              <h3 className="text-3xl">The Project</h3>
-              <a className="cursor-pointer hover:underline text-lg text-[#999999]">About</a>
-              <a className="cursor-pointer hover:underline text-lg text-[#999999]">Blog</a>
-              <a className="cursor-pointer hover:underline text-lg text-[#999999]">Press Kit</a>
-          </div>
-          <div className="flex flex-col space-y-1" >
-            <h3 className="text-3xl">Learn More</h3>
-            <a className="cursor-pointer hover:underline text-lg text-[#999999]">Pricing</a>
-            <a className="cursor-pointer hover:underline text-lg text-[#999999]">Mac App</a>
-            <a className="cursor-pointer hover:underline text-lg text-[#999999]">Teams</a>
-            <a className="cursor-pointer hover:underline text-lg text-[#999999]">Creators</a>
-          </div>
-          <div className="flex flex-col space-y-1">
-            <h3 className="text-3xl">Support</h3>
-            <a className="cursor-pointer hover:underline text-lg text-[#999999]">Contact</a>
-            <a className="cursor-pointer hover:underline text-lg text-[#999999]">FAQ</a>
-            <a className="cursor-pointer hover:underline text-lg text-[#999999]">Creators Handbook</a>
-            <a className="cursor-pointer hover:underline text-lg text-[#999999]">Terms of Use</a>
-            <a className="cursor-pointer hover:underline text-lg text-[#999999]">Privacy Policy</a>
-            <a className="cursor-pointer hover:underline text-lg text-[#999999]">Creator Terms</a>
-          </div>
+  return (
+    <div className="w-5/6 mx-auto pb-[2rem] text-[#999999] font-[0.875rem] flex flex-col">
+      <div>
       </div>
-    )
-  }
-  
-  export default Footer
+      <div className="space-y-6">
+        <div className="flex flex-col">
+          <h3 className="text-[1rem] font-bold text-black mb-[.5rem]">
+            The Project
+          </h3>
+          <a className="cursor-pointer hover:underline ">About</a>
+          <a className="cursor-pointer hover:underline ">Blog</a>
+          <a className="cursor-pointer hover:underline ">Press Kit</a>
+        </div>
+        <div className="flex flex-col">
+          <h3 className="text-[1rem] font-bold text-black mb-[.5rem]">
+            Learn More
+          </h3>
+          <a className="cursor-pointer hover:underline ">Pricing</a>
+          <a className="cursor-pointer hover:underline ">Mac App</a>
+          <a className="cursor-pointer hover:underline ">Teams</a>
+          <a className="cursor-pointer hover:underline ">Creators</a>
+        </div>
+        <div className="flex flex-col">
+          <h3 className="text-[1rem] font-bold text-black mb-[.5rem]">
+            Support
+          </h3>
+          <a className="cursor-pointer hover:underline ">Contact</a>
+          <a className="cursor-pointer hover:underline ">FAQ</a>
+          <a className="cursor-pointer hover:underline ">Creators Handbook</a>
+          <a className="cursor-pointer hover:underline ">Terms of Use</a>
+          <a className="cursor-pointer hover:underline ">Privacy Policy</a>
+          <a className="cursor-pointer hover:underline ">Creator Terms</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Footer;

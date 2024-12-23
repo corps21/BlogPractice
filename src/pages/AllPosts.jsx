@@ -1,9 +1,8 @@
-import { Container, PostCard } from "../components";
+import { Container } from "../components";
 import databaseService from "../appwrite/databaseService";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import storageService from "../appwrite/storageService";
-import {Loader} from "../components";
+import { Header, PostList} from "../components";
 function AllPosts() {
 
   const [isLoading, setIsLoading] = useState(true);
@@ -21,23 +20,12 @@ function AllPosts() {
     }
   }, [userId, status]);
 
-  return !isLoading ? (
-    <Container className="mt-[2rem] mb-[12rem]">
-      {status && (
-        <div className="space-y-[2rem]">
-          {files.map((file) => (
-            <PostCard
-              url={`/post/${file.$id}`}
-              key={file.$id}
-              href={storageService.getImagePreview(file.featuredImage)?.href}
-              title={file.title}
-              author={file.userId}
-            />
-          ))}
-        </div>
-      )}
+  return (
+    <Container className="flex flex-col items-center">
+      <Header pageTitle="All Posts"/>
+      <PostList isLoading={isLoading} files={files} />
     </Container>
-  ) : <Loader/>
+  )
 }
 
 export default AllPosts;

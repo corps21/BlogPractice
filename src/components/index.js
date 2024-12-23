@@ -5,11 +5,14 @@ import Container from "./Container";
 import Button from "./Button";
 import Select from "./Select";
 import RTE from "./RTE";
-import Label from "./Label";
+import Label from "./Label"; 
 import PostForm from "./PostForm";
 import PostCard from "./PostCard";
 import Loader from "./Loader";
 import AuthLayout from "./AuthLayout";
 import ImagePreview from "./ImagePreview";
+import PostList from "./PostList";
+import CTA from "./CTA";
+import AvatarCard from "./AvatarCard";
 
-export {Header,Footer,Input, Container, Button, Select, RTE, Label, PostForm, PostCard, Loader, AuthLayout, ImagePreview}
+export {Header,Footer,Input, Container, Button, Select, RTE, Label, PostForm, PostCard, Loader, AuthLayout, ImagePreview, PostList,CTA,AvatarCard}

@@ -1,8 +1,9 @@
 import { useSelector } from "react-redux";
-import { Container, Loader, PostCard } from "../components";
-import { useCallback, useEffect, useState } from "react";
-import storageService from "../appwrite/storageService";
+import { PostList, CTA } from "../components";
+import { useEffect, useState } from "react";
 import databaseService from "../appwrite/databaseService";
+import { Container } from "../components";
+import { Header } from "../components";
 
 function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -10,42 +11,24 @@ function Home() {
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
-
     if (status) {
-      databaseService.getAllActivePosts().then(data => {
+      databaseService.getAllActivePosts().then((data) => {
         if (data) setFiles(data.documents);
-        setIsLoading(false)
-      })
+        setIsLoading(false);
+      });
     }
   }, [status]);
 
-  const loadCard = useCallback(() => {
-    return isLoading ? <Loader/> : (
-      <Container className="mt-[2rem] mb-[12rem]">
-        <div className="space-y-[2rem]">
-          {files.map((file) => {
-            return <PostCard
-              url={`/post/${file.$id}`}
-              key={file.$id}
-              href={
-                storageService.getImagePreview(file.featuredImage).href
-              }
-              title={file.title}
-              author={file.userId}
-            />
-          })}
-        </div>
-      </Container>
-    )
-  }, [isLoading,files])
 
-  return status ? loadCard() : (
-    <Container className={`text-[4rem] font-bold uppercase leading-tight text-center my-[12rem]`}>
-      <div>Sign Up</div>
-      <div>To See Posts</div>
+
+  return status ? (
+    <Container className="flex flex-col items-center">
+      <Header />
+      <PostList isLoading={isLoading} files={files} />
     </Container>
-  )
+  ) : (
+    <CTA />
+  );
 }
 
 export default Home;
