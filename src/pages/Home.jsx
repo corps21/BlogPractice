@@ -14,7 +14,6 @@ function Home() {
     if (status) {
       databaseService.getAllActivePosts().then((data) => {
         if (data) setFiles(data.documents);
-        console.log(data)
         setIsLoading(false);
       });
     }
@@ -23,7 +22,7 @@ function Home() {
   return status ? (
     <Container className="flex flex-col items-center">
       <Header />
-      <PostList isLoading={isLoading} files={files} />
+      <PostList isLoading={isLoading} files={files} className="mt-6"/>
     </Container>
   ) : (
     <CTA />

@@ -9,7 +9,7 @@ function Header({pageTitle="Home"}) {
 
 
   return (
-    <header className="flex flex-col w-full mb-6 gap-3">
+    <header className="flex flex-col w-full gap-3">
       <BreadcrumbsWrapper />
       <div className="flex justify-between items-center w-full">
         <h1 className="text-2xl font-semibold">{pageTitle}</h1>

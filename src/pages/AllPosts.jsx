@@ -27,7 +27,7 @@ function AllPosts() {
     <Container className="flex flex-col items-center">
       <Header pageTitle="All Posts" />
       <div className="flex justify-start w-full mb-6">
-        <Button variant="ghost" className="text-left" asChild>
+        <Button variant="icon" className="pl-0" asChild>
           <Link to="/all-post/add-post">
             <SquarePenIcon />
             Create

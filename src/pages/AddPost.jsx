@@ -1,8 +1,9 @@
-import {Container,PostForm } from "../components/index";
+import { Container, PostForm, Header } from "../components/index";
 
 function AddPost() {
   return (
-    <Container className="border-2 rounded-lg p-5 mb-[8rem]">
+    <Container className="">
+      <Header pageTitle="Create Post"/>
       <PostForm />
     </Container>
   );

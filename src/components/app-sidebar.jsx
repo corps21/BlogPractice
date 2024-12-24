@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, SquarePen, Search, Settings, FolderLock } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   Sidebar,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import BrandIcon from "./BrandIcon";
+import { useEffect, useState } from "react";
 
 const items = [
   {
@@ -21,14 +22,14 @@ const items = [
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
+    title: "All Posts",
+    url: "/all-post",
+    icon: FolderLock,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Create Post",
+    url: "/all-post/add-post",
+    icon: SquarePen,
   },
   {
     title: "Search",
@@ -43,13 +44,29 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const { setOpen } = useSidebar();
+  const { open, setOpen } = useSidebar();
+  const [mouseHovering, setMouseHovering] = useState(false);
+
+  useEffect(() => {
+    if (open && !mouseHovering) {
+      let timeout = setTimeout(() => {
+        setOpen(false);
+      }, 1500);
+      return () => clearTimeout(timeout);
+    }
+  }, [open, setOpen, mouseHovering]);
 
   return (
     <Sidebar
       collapsible="icon"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseEnter={() => {
+        setOpen(true);
+        setMouseHovering(true);
+      }}
+      onMouseLeave={() => {
+        setOpen(false);
+        setMouseHovering(false);
+      }}
     >
       <SidebarHeader>
         <SidebarMenu>
@@ -58,7 +75,7 @@ export function AppSidebar() {
               <Link to="/">
                 <BrandIcon />
                 <span>BlogSphere</span>
-              </Link> 
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
