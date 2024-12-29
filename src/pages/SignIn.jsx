@@ -10,7 +10,7 @@ function SignIn() {
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: {errors} } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const status = useSelector((state) => state.auth.isLoggedIn);
@@ -47,7 +47,6 @@ function SignIn() {
           } else {
             setMessage("Something went wrong");
           }
-
         }
       } catch (error) {
         setMessage("Error logging in: " + error.message);
@@ -60,74 +59,71 @@ function SignIn() {
   };
 
   return (
-    <Container className="border-2 rounded-lg p-5 mt-[6rem] mb-[12rem]">
-      <div className="hidden space-y-4 p-[2rem] py-[4rem] sm:block">
-        <h2 className="text-[3.5rem]">Login to your account</h2>
-        <h3 className="max-w-[28rem] text-xl">
-          Please login to access your files and get access to resources.
-        </h3>
-      </div>
-
-      <form
-        onSubmit={handleSubmit(onSubmitHandler)}
-        className=""
-      >
-
-        {message && (
-          <div
-            className={`w-full my-[2rem] text-center text-[1.25rem] ${success ? "text-green-600" : "text-red-600"
-              }`}
-          >
-            {message}
-          </div>
-        )}
-
-        <Input
-          label="Email"
-          placeholder="Enter your mail"
-          {...register("email", {
-            required: true,
-            validate: {
-              matchPattern: (value) =>
-                /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                "Email address must be a valid address",
-            },
-          })}
-        />
-
-        <Input
-          label="Password"
-          type="password"
-          placeholder="Enter your password"
-          containerClass="mt-[1.5rem] mb-[2.5rem]"
-          {...register("password", { required: true, minLength: 8 })}
-        />
-
-        <Button
-          type="submit"
-          className="w-full space-y-20"
-          text="Sign in to account"
-        />
-
-        <a className="inline-block text-[1.35rem] text-gray-400 text-center mt-[1.5rem] cursor-pointer w-full hover:text-gray-500">
-          Forgot your password?{" "}
-        </a>
-
-        <div className="w-full text-center mt-[1.5rem] flex flex-col ">
-          <div className="block border-2 w-[45%] relative top-[1rem]"></div>
-          <div className="text-xl text-gray-400">Or</div>
-          <div className="block border-2 w-[45%] relative left-[55%] bottom-[0.95rem]"></div>
+    <section className="flex justify-center items-center h-5/6">
+      <Container className="border-[1px] border-gray-700 p-8 rounded-xl w-[24rem]">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold">Login</h2>
+          <h3 className="text-base text-gray-500 ">
+            Enter your email to login to your account
+          </h3>
         </div>
 
-        <Link
-          to="/signup"
-          className=" text-gray-400 w-full block text-xl text-center mt-[1.5rem]"
+        <form
+          onSubmit={handleSubmit(onSubmitHandler)}
+          className="flex flex-col gap-4"
         >
-          Don&apos;t have an account? <></>
-          <span className="text-black ">Sign Up Now!</span>
-        </Link>
-      </form>
-    </Container>
+          <Input
+            label="Email"
+            errors={errors}
+            registerId="email"
+            placeholder="Enter your mail"
+            {...register("email", {
+              required: true,
+              validate: {
+                matchPattern: (value) =>
+                  /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                  "Email address must be a valid address",
+              },
+            })}
+          />
+          <div className="relative">
+            <a className="cursor-pointer hover:underline absolute right-0 top-0 mt-1 text-sm text-neutral-500 font-medium hover:underline-offset-1">
+              Forgot your password?
+            </a>
+            <Input
+              errors={errors}
+              registerId="password"
+              label="Password"
+              type="password"
+              placeholder="Enter your password"
+              {...register("password", { required: true, minLength: 8 })}
+            />
+          </div>
+          <Button
+            type="submit"
+            className="block text-base px-3 py-2 rounded-[6px] mt-2 font-medium"
+            text="Login"
+          />
+          {message && (
+            <p
+              className={`text-center font-medium text-base ${
+                success ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {message}
+            </p>
+          )}
+          <div className="text-center text-neutral-500 font-normal text-base">
+            Don&apos;t have an account?{" "}
+            <span className="hover:underline">
+              <Link to="/signup">
+                Sign up
+              </Link>
+            </span>
+          </div>
+        </form>
+      </Container>
+    </section>
   );
 }
 
