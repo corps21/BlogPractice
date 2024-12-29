@@ -6,7 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -51,20 +51,20 @@ export default function BreadcrumbsWrapper() {
         <BreadcrumbList>
           {parsePathIntoBreadCrumbs(routes).map(({ name, path }, idx, arr) => {
             return (
-              <>
-                {idx !== 0 ? <BreadcrumbSeparator /> : <></>}
+              <Fragment key={idx}>
+                {idx !== 0 ? <BreadcrumbSeparator/> : <></>}
                 <BreadcrumbItem>
                   {idx < arr.length - 1 ? (
-                    <BreadcrumbLink asChild>
+                    <BreadcrumbLink asChild={true}>
                       <Link to={path}>{name}</Link>
                     </BreadcrumbLink>
                   ) : (
-                    <BreadcrumbPage asChild>
+                    <BreadcrumbPage asChild={true}>
                       <Link to={path}>{name}</Link>
                     </BreadcrumbPage>
                   )}
                 </BreadcrumbItem>
-              </>
+              </Fragment>
             );
           })}
         </BreadcrumbList>

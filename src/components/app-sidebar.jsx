@@ -1,4 +1,4 @@
-import { Calendar, Home, SquarePen, Search, Settings, FolderLock } from "lucide-react";
+import { Home, SquarePen, Search, Settings, FolderLock } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   Sidebar,
@@ -14,6 +14,7 @@ import {
 
 import BrandIcon from "./BrandIcon";
 import { useEffect, useState } from "react";
+import useDebounce  from "@/hooks/use-debounce";
 
 const items = [
   {
@@ -44,27 +45,26 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const { open, setOpen } = useSidebar();
+  const { setOpen } = useSidebar();
   const [mouseHovering, setMouseHovering] = useState(false);
+  const debouncedMouseHovering = useDebounce(mouseHovering,250);
 
   useEffect(() => {
-    if (open && !mouseHovering) {
-      let timeout = setTimeout(() => {
-        setOpen(false);
-      }, 1500);
-      return () => clearTimeout(timeout);
+    if (!debouncedMouseHovering) {
+      setOpen(false);
     }
-  }, [open, setOpen, mouseHovering]);
+    else {
+      setOpen(true);
+    }    
+  })
 
   return (
     <Sidebar
       collapsible="icon"
       onMouseEnter={() => {
-        setOpen(true);
         setMouseHovering(true);
       }}
       onMouseLeave={() => {
-        setOpen(false);
         setMouseHovering(false);
       }}
     >
