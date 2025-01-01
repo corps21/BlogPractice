@@ -15,7 +15,7 @@ function EditPost() {
   }, [slug]);
 
   return post ? (
-    <Container className="border-2 rounded-lg p-5 mb-[8rem]">
+    <Container className="space-y-4">
       <Header pageTitle="Edit Post"/>
       <PostForm post={post} />
     </Container>
