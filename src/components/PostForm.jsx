@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { Input, Button, Select, RTE , ImagePreview} from "../components/index";
+import { Input, Button, RTE , ImagePreview, Message, SelectWrapper} from "../components/index";
 import { useForm } from "react-hook-form";
 import databaseService from "../appwrite/databaseService";
 import storageService from "../appwrite/storageService";
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 function PostForm({ post }) {
 
-  const { register, handleSubmit, control, watch, setValue, getValues } =
+  const { register, handleSubmit, control, watch, setValue, getValues, formState: {errors} } =
     useForm({
       defaultValues: {
         title: post?.title || "",
@@ -141,11 +141,13 @@ function PostForm({ post }) {
 
   return (
     <form
-      className="space-y-[2rem]"
+      className="grid md:grid-cols-2 gap-8 md:max-w-6xl"
       onSubmit={handleSubmit(clickHandler)}
     >
-      <div className="">
+      <section>
         <Input
+          errors={errors}
+          registerId="title"
           label="Title"
           {...register("title", {
             required: true,
@@ -153,6 +155,8 @@ function PostForm({ post }) {
         />
 
         <Input
+          errors={errors}
+          registerId="slug"
           label="Slug"
           containerClass="mt-[1rem]"
           readOnly={post}
@@ -172,12 +176,14 @@ function PostForm({ post }) {
           label="Editor"
           defaultValue={getValues("editor")}
         />
-      </div>
+      </section>
 
-      <div className="">
+      <section>
         {post && post.featuredImage !== "" && <ImagePreview src={storageService.getImagePreview(post.featuredImage).href}/>}
-        <Input label="Featured Image" type="file" {...register("img")} />
-        <Select
+
+        <Input errors={errors} registerId={"img"} label="Featured Image" type="file" {...register("img")} className="text-sm file:py-0 file:my-0" />
+
+        <SelectWrapper
           autoFocus={getValues("status")}
           label="Post Status"
           {...register("status", {
@@ -188,15 +194,10 @@ function PostForm({ post }) {
         <Button
           type="submit"
           text={post ? "Edit" : "Submit"}
-          className="w-full"
+          className="w-full text-base px-3 py-2 rounded-[6px] font-medium mt-4"
         />
-        <div
-          className={`w-full text-center text-xl mt-[2rem] ${isSuccess ? "text-green-600" : "text-red-600"
-            }`}
-        >
-          {message}
-        </div>
-      </div>
+        <Message isSuccess={isSuccess} message={message}/>
+      </section>
     </form>
   );
 }

@@ -27,7 +27,6 @@ const Input = forwardRef(
           readOnly={readOnly}
           className={`text-base border-[1px] px-3 py-2 rounded-[4px] 
             ${errors[registerId] ? "border-red-500" : "border-gray-700"}
-            
             ${className}`}
           type={type}
           placeholder={placeholder}

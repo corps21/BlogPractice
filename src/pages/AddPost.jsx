@@ -2,7 +2,7 @@ import { Container, PostForm, Header } from "../components/index";
 
 function AddPost() {
   return (
-    <Container className="">
+    <Container className="space-y-4">
       <Header pageTitle="Create Post"/>
       <PostForm />
     </Container>

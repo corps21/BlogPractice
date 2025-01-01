@@ -1,4 +1,4 @@
-import { Container, Input, Button } from "../components";
+import { Container, Input, Button, Message} from "../components";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -105,13 +105,7 @@ function SignIn() {
             text="Login"
           />
           {message && (
-            <p
-              className={`text-center font-medium text-base ${
-                success ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {message}
-            </p>
+            <Message isSuccess={success} message={message}/>
           )}
           <div className="text-center text-neutral-500 font-normal text-base">
             Don&apos;t have an account?{" "}

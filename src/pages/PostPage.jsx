@@ -57,7 +57,7 @@ function PostPage() {
                 <Button
                   className="w-[48%] bg-green-600 hover:text-green-600"
                   text="Edit"
-                  onClick={() => navigate(`/edit-post/${slug}`)}
+                  onClick={() => navigate(`/all-post/edit-post/${slug}`)}
                 />
                 <Button
                   className=" w-[48%] bg-red-600 hover:text-red-600"

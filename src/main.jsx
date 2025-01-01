@@ -18,8 +18,8 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="" element={<AuthLayout authentication={true}><AllPosts/></AuthLayout>}/>
         <Route path='add-post' element={<AuthLayout authentication={true}><AddPost/></AuthLayout>}/>
         <Route path='edit-post/:slug' element={<AuthLayout authentication={true}><EditPost/></AuthLayout>} />
-        <Route path='post/:slug' element={<AuthLayout authentication={true}><PostPage/></AuthLayout>} />
       </Route>
+        <Route path='post/:slug' element={<AuthLayout authentication={true}><PostPage/></AuthLayout>} />
   </Route>
 ))
 
