@@ -21,13 +21,14 @@ const SelectWrapper = forwardRef(
     label = "",
     className = "",
     containerClass = "",
+    isDisabled=false,
     ...props
   },ref) => {
     const id = useId();
     return (
-      <div className={`mt-4 ${containerClass}`}>
+      <div ref={ref} className={`mt-4 ${containerClass}`}>
         {label && <Label htmlFor={id} label={label} />}
-        <Select id={id} ref={ref} defaultValue={defaultValue}>
+        <Select id={id} defaultValue={defaultValue} disabled={isDisabled}>
           <SelectTrigger className={`border-black border-[1px] px-3 py-2 rounded-[4px] ${className}`} {...props} >
             <SelectValue placeholder="Select a status"/>
           </SelectTrigger>

@@ -10,6 +10,17 @@ export class StorageService {
         this.storage = new Storage(this.client)
     }
 
+    async deleteImage(fileId) {
+        try {
+            return await this.storage.deleteFile(
+                conf.appwriteStorageId,
+                fileId
+            )
+        } catch (error) {
+            console.log("StorageService :: uploadImage :: error ", error)
+        }
+    }
+
     async uploadImage(file) {
         
         try {

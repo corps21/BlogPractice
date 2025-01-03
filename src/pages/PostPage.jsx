@@ -25,6 +25,7 @@ function PostPage() {
             title: data.title,
             author: data.userId,
             content: data.content,
+            fileId: data.featuredImage,
             src: storageService.getImagePreview(data.featuredImage).href,
           };
         });
@@ -62,9 +63,11 @@ function PostPage() {
                 <Button
                   className=" w-[48%] bg-red-600 hover:text-red-600"
                   text="Delete"
-                  onClick={() =>
-                    databaseService.removePost(info.$id) &&
+                  onClick={() => {
+                    databaseService.removePost(info.$id)
+                    storageService.deleteImage(info.fileId)
                     navigate(`/all-post`)
+                  }
                   }
                 />
               </div>

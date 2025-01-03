@@ -26,99 +26,56 @@ function PostForm({ post }) {
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const clickHandler = async (data) => {
-    try {
-      // const imgData =
-      //   data.img.length > 0
-      //     ? (await storageService.uploadImage(data.img[0])) ||
-      //     setMessage("Something went wrong")
-      //     : null;
+  const submitHandler = async (data) => {
 
-      // const result = post ? await databaseService.updatePost(
-      //   {
-      //     title: data.title,
-      //     content: data.editor,
-      //     status: data.status,
-      //     featuredImage: imgData?.$id || data.featuredImage,
-      //   }, data.slug
-      // ) :
-      //   await databaseService.createPost(
-      //     {
-      //       title: data.title,
-      //       slug: data.slug,
-      //       content: data.editor,
-      //       status: data.status,
-      //       featuredImage: imgData?.$id || "",
-      //       userId: userId,
-      //     }
-      //   );
-
-      let imgData = { $id: data.featuredImage };
-      let postResult = null;
-
-      if (data.img.length > 0) {
-        try {
-          const imageResult = await storageService.uploadImage(data.img[0])
-          if (imageResult) imgData = imageResult;
-        } catch (error) {
-          setMessage("Something went wrong")
-          console.log(error);
-        }
+    if(post) {
+      // edit mode
+      const {title,slug,editor:content,featuredImage,status} = data
+      
+      let image = featuredImage;
+      
+      if(data.img.length > 0) {
+        const imageStatus = await storageService.uploadImage(data.img[0]);
+        if(imageStatus) image = imageStatus.$id
       }
 
-      if (post) {
-        try {
-          const updateResult = await databaseService.updatePost(
-            {
-              title: data.title,
-              content: data.editor,
-              status: data.status,
-              featuredImage: imgData.$id,
-            }, data.slug
-          )
-          if (updateResult) postResult = updateResult
-        }
+      const updateStatus = await databaseService.updatePost({
+        title,
+        content,
+        featuredImage: image,
+        status:status
+      },slug)
 
-        catch (error) {
-          setMessage("Something went wrong");
-          console.log(error);
-        }
-      }
-      else {
-        try {
-          const createResult = await databaseService.createPost(
-            {
-              title: data.title,
-              slug: data.slug,
-              content: data.editor,
-              status: data.status,
-              featuredImage: imgData?.$id || "",
-              userId: userId
-            }
-          )
-          if (createResult) postResult = createResult
-        }
-
-        catch (error) {
-          setMessage("Something went wrong");
-          console.log(error);
-        }
-      }
-
-      if (postResult) {
+      if(updateStatus) {
         setIsSuccess(true);
-        post ? setMessage("Post Updated Successfully") : setMessage("Post Created Successfully")
-        setTimeout(() => navigate(`/post/${data.slug}`), 500);
+        setMessage("Post Updated Successfully")
+        setTimeout(() => navigate(`/post/${slug}`), 500);
       }
+    } else {
+      // create mode
+      let image;
 
-      else {
-        setMessage("Something went wrong");
+      if(data.img.length > 0) {
+        const imageStatus = await storageService.uploadImage(data.img[0]);
+        if(imageStatus) image = imageStatus?.$id
       }
+      
+      const {title,slug,editor:content,featuredImage,status} = data
 
-    }
+      const createStatus = await databaseService.createPost({
+        title,
+        slug,
+        content,
+        featuredImage:image || featuredImage,
+        status,
+        userId
+      })
 
-    catch (error) {
-      console.log(error);
+      if(createStatus) {
+        setIsSuccess(true);
+        setMessage("Post Created Successfully")
+        setTimeout(() => navigate(`/post/${slug}`), 500);
+      }
     }
   }
 
@@ -139,10 +96,12 @@ function PostForm({ post }) {
     return () => subscription.unsubscribe();
   }, [setValue, slugTransform, watch, post]);
 
+  const errorHandler = (err) => console.log(err)
+
   return (
     <form
       className="grid md:grid-cols-2 gap-8 md:max-w-6xl"
-      onSubmit={handleSubmit(clickHandler)}
+      onSubmit={handleSubmit(submitHandler,errorHandler)}
     >
       <section>
         <Input
@@ -186,9 +145,7 @@ function PostForm({ post }) {
         <SelectWrapper
           autoFocus={getValues("status")}
           label="Post Status"
-          {...register("status", {
-            required: true,
-          })}
+          {...register("status")}
         />
 
         <Button
