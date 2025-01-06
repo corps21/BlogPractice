@@ -10,16 +10,17 @@ import { useNavigate } from "react-router-dom";
 
 function PostForm({ post }) {
 
-  const { register, handleSubmit, control, watch, setValue, getValues, formState: {errors} } =
-    useForm({
-      defaultValues: {
+  const { register, handleSubmit, control, watch, setValue, getValues, formState: {errors},reset} = useForm();
+
+    useEffect(() => {
+      reset({
         title: post?.title || "",
         slug: post?.$id || "",
         editor: post?.content || "",
         img: post?.featuredImage || "",
         status: post?.status || "active",
-      },
-    });
+      })
+    },[reset,post])
 
   const navigate = useNavigate();
   const userId = useSelector((state) => state.auth.userData?.$id);
@@ -30,11 +31,12 @@ function PostForm({ post }) {
 
     if(post) {
       // edit mode
+      console.log(data);
       const {title,slug,editor:content,featuredImage,status} = data
       
       let image = featuredImage;
       
-      if(data.img.length > 0) {
+      if(data.img && typeof data.img === "object" && data.img.length > 0) {
         const imageStatus = await storageService.uploadImage(data.img[0]);
         if(imageStatus) image = imageStatus.$id
       }
@@ -55,7 +57,7 @@ function PostForm({ post }) {
       // create mode
       let image;
 
-      if(data.img.length > 0) {
+      if(data.img && typeof data.img === "object"  && data.img.length > 0) {
         const imageStatus = await storageService.uploadImage(data.img[0]);
         if(imageStatus) image = imageStatus?.$id
       }
@@ -66,7 +68,7 @@ function PostForm({ post }) {
         title,
         slug,
         content,
-        featuredImage:image || featuredImage,
+        featuredImage: image || featuredImage,
         status,
         userId
       })
@@ -146,6 +148,7 @@ function PostForm({ post }) {
           autoFocus={getValues("status")}
           label="Post Status"
           {...register("status")}
+          defaultValue={post?.status || "active"}
         />
 
         <Button
