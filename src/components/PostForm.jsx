@@ -31,7 +31,6 @@ function PostForm({ post }) {
 
     if(post) {
       // edit mode
-      console.log(data);
       const {title,slug,editor:content,featuredImage,status} = data
       
       let image = featuredImage;
