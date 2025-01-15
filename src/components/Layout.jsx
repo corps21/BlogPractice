@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
-import { SidebarProvider} from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset, SidebarTrigger, } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import authService from "../appwrite/authService";
 import { login, updateCheckStatus } from "../store/userSlice";
-
+import { Separator } from "@/components/ui/separator"
+import BreadcrumbsWrapper from "@/components/BreadcrumbsWrapper";
 export default function Layout({ children }) {
   const status = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
@@ -27,9 +28,18 @@ export default function Layout({ children }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="w-full flex my-4">
-        <div className="w-full flex flex-col">{children}</div>
-      </main>
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+            <BreadcrumbsWrapper />
+          </div>
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          {children}
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

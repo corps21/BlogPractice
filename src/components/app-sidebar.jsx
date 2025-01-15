@@ -9,13 +9,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
-  useSidebar,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
-
-import BrandIcon from "./BrandIcon";
-import { useEffect, useState } from "react";
-import useDebounce  from "@/hooks/use-debounce";
-
+import SidebarFooterWrapper from "./sidebar/SidebarFooter";
+import SidebarHeaderWrapper from "./sidebar/SidebarHeader";
 const items = [
   {
     title: "Home",
@@ -45,40 +42,12 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const { setOpen } = useSidebar();
-  const [mouseHovering, setMouseHovering] = useState(false);
-  const debouncedMouseHovering = useDebounce(mouseHovering,250);
-
-  useEffect(() => {
-    if (!debouncedMouseHovering) {
-      setOpen(false);
-    }
-    else {
-      setOpen(true);
-    }    
-  })
-
   return (
     <Sidebar
       collapsible="icon"
-      onMouseEnter={() => {
-        setMouseHovering(true);
-      }}
-      onMouseLeave={() => {
-        setMouseHovering(false);
-      }}
     >
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link to="/">
-                <BrandIcon />
-                <span>BlogSphere</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <SidebarHeaderWrapper />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -98,6 +67,9 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+       <SidebarFooterWrapper />
+      </SidebarFooter>
     </Sidebar>
   );
 }
