@@ -20,28 +20,34 @@ export default function BreadcrumbsWrapper() {
 
   function parsePathIntoBreadCrumbs(path) {
     let result = [];
-
-    path.split("/").reduce((acc, curr, idx) => {
-      
+    let isPost = false;
+    path.split("/").reduce((acc, curr, idx, arr) => {
       if (idx === 0) {
         result.push({ name: "Home", path: "/" });
         return "";
       } 
-      
       else if (!curr) return "";
-      
       else {
-        let name = curr
-          .split("-")
-          .map((str) => str[0].toUpperCase() + str.slice(1))
-          .join(" ");
+        let name = curr;
         let path = acc + "/" + curr;
+        
+        if (curr === "edit-post" || curr === "post") {
+          isPost = true;
+          if (curr === "post") return path
+          else path = "#"
+        }
+
+        if (idx !== arr.length - 1 || !isPost) {
+          name = name
+            .split("-")
+            .map((str) => str[0].toUpperCase() + str.slice(1))
+            .join(" ");
+        }
+        
         result.push({ name, path });
         return path;
       }
-
     }, "");
-
     return result;
   }
 
@@ -52,7 +58,7 @@ export default function BreadcrumbsWrapper() {
           {parsePathIntoBreadCrumbs(routes).map(({ name, path }, idx, arr) => {
             return (
               <Fragment key={idx}>
-                {idx !== 0 ? <BreadcrumbSeparator/> : <></>}
+                {idx !== 0 ? <BreadcrumbSeparator /> : <></>}
                 <BreadcrumbItem>
                   {idx < arr.length - 1 ? (
                     <BreadcrumbLink asChild={true}>

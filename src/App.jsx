@@ -4,11 +4,9 @@ import Layout from "./components/Layout";
 function App() {
   return (
     <>
-      {/* <Header /> */}
       <Layout>
         <Outlet />
       </Layout>
-      {/* <Footer /> */}
     </>
   );
 }
