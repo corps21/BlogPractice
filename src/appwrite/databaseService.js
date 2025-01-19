@@ -1,4 +1,4 @@
-import { Client, Databases, Query} from "appwrite";
+import { Client, Databases, Query, Avatars} from "appwrite";
 import conf from "../conf/conf";
 
 export class DatabaseService {
@@ -7,8 +7,8 @@ export class DatabaseService {
 
     constructor() {
         this.client = new Client().setEndpoint(conf.appwriteUrl).setProject(conf.appwriteProjectId);
-
         this.databases = new Databases(this.client);
+        this.avatars = new Avatars(this.client);
     }
 
     async getAllActivePosts(query = [Query.equal("status", ["Active"])]) {
@@ -39,13 +39,13 @@ export class DatabaseService {
         return false;
     }
 
-    async createPost({title,slug,content,featuredImage,status,userId}) {
+    async createPost({title,slug,content,featuredImage,status,userId,authorName}) {
         try {
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug,
-                {title,content,featuredImage,status,userId}
+                {title,content,featuredImage,status,userId,authorName}
             )
         } catch (error) {
             console.log("DatabaseService :: createPost :: error ", error)
@@ -93,6 +93,10 @@ export class DatabaseService {
         }
 
         return false;
+    }
+    
+    getUserAvatar(fullName="John Doe") {
+        return this.avatars.getInitials(fullName)
     }
 }
 

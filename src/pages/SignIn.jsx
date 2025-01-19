@@ -1,4 +1,4 @@
-import { Container, Input, Button, Message} from "../components";
+import { Container, Input, Button, Message } from "../components";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,7 +10,11 @@ function SignIn() {
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const { register, handleSubmit, formState: {errors} } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const status = useSelector((state) => state.auth.isLoggedIn);
@@ -18,43 +22,28 @@ function SignIn() {
   const onSubmitHandler = async ({ email, password }) => {
     setMessage("");
     setSuccess(false);
-    try {
-      if (status) {
-        try {
-          const result = await authService.logout();
-          if (result) {
-            dispatch(logout());
-            console.log("Active session detected and removed");
-          } else setMessage("Something went wrong");
-        } catch (error) {
-          console.log(error);
-        }
-      }
 
-      try {
-        const result = await authService.login({ email, password });
+    if (status) {
+      const result = await authService.logout();
+      if (result) {
+        dispatch(logout());
+        console.log("Active session detected and removed");
+      } else setMessage("Something went wrong");
+    }
 
-        if (!result) {
-          setMessage("Something went wrong");
-          return;
-        } else {
-          const userData = await authService.getCurrentUser();
-          dispatch(login({ userData }));
-          if (userData) {
-            setSuccess(true);
-            setMessage("Successfully Signed in!");
-            setTimeout(() => navigate("/"), 500);
-          } else {
-            setMessage("Something went wrong");
-          }
-        }
-      } catch (error) {
-        setMessage("Error logging in: " + error.message);
-        console.log(error);
+    const result = await authService.login({ email, password });
+
+    if (!result) setMessage("Something went wrong");
+     else {
+      const userData = await authService.getCurrentUser();
+      if (userData) {
+        dispatch(login({ userData }));
+        setSuccess(true);
+        setMessage("Successfully Signed in!");
+        setTimeout(() => navigate("/"), 500);
+      } else {
+        setMessage("Something went wrong");
       }
-    } catch (error) {
-      setMessage("Unexpected error: " + error.message);
-      console.log(error);
     }
   };
 
@@ -104,15 +93,11 @@ function SignIn() {
             className="block text-base px-3 py-2 rounded-[6px] mt-2 font-medium"
             text="Login"
           />
-          {message && (
-            <Message isSuccess={success} message={message}/>
-          )}
+          {message && <Message isSuccess={success} message={message} />}
           <div className="text-center text-neutral-500 font-normal text-base">
             Don&apos;t have an account?{" "}
             <span className="hover:underline">
-              <Link to="/signup">
-                Sign up
-              </Link>
+              <Link to="/signup">Sign up</Link>
             </span>
           </div>
         </form>

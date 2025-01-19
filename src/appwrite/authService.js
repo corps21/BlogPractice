@@ -1,6 +1,6 @@
 import conf from "../conf/conf";
 import { Client, Account, ID } from "appwrite";
-import userDatabaseService from "./userDatabaseService";
+
 export class AuthService {
   client;
   account;
@@ -18,7 +18,6 @@ export class AuthService {
       const name = `${firstName} ${lastName}`;
 
       await this.account.create(userId, email, password, name);
-      await userDatabaseService.createUserInfo(userId, name);
 
       return true;
     } catch (error) {
@@ -29,6 +28,7 @@ export class AuthService {
 
   async logout() {
     try {
+
       return await this.account.deleteSessions();
     } catch (error) {
       console.log("AuthService :: logout :: error ", error);

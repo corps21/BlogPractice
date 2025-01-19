@@ -23,7 +23,7 @@ function PostForm({ post }) {
     },[reset,post])
 
   const navigate = useNavigate();
-  const userId = useSelector((state) => state.auth.userData?.$id);
+  const userData = useSelector((state) => state.auth?.userData);
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -69,7 +69,8 @@ function PostForm({ post }) {
         content,
         featuredImage: image || featuredImage,
         status,
-        userId
+        userId:userData.$id,
+        authorName:userData.name
       })
 
       if(createStatus) {

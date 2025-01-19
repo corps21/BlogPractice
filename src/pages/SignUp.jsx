@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Input, Button, Message} from "../components";
+import { Container, Input, Button, Message } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import authService from "../appwrite/authService";
@@ -22,47 +22,27 @@ function SignUp() {
   const createAccount = async ({ email, password, firstName, lastName }) => {
     setMessage("");
     setSuccess(false);
-    try {
-      if (status) {
-        try {
-          await authService.logout();
-          dispatch(logout());
-          console.log("Active session detected and deleted");
-        } catch (error) {
-          setMessage("Error logging out: " + error.message);
-          console.error(error);
-        }
-      }
 
-      try {
-        await authService.createAccount({
-          email,
-          password,
-          firstName,
-          lastName,
-        });
-
-        try {
-          await authService.login({ email, password });
-          const userData = await authService.getCurrentUser();
-          dispatch(login(userData));
-
-          setSuccess(true);
-          setMessage("Successfully created account!");
-
-          setTimeout(() => navigate("/"), 1000);
-        } catch (error) {
-          setMessage("Error logging account: " + error.message);
-          console.log(error);
-        }
-      } catch (error) {
-        setMessage("Error creating account: " + error.message);
-        console.error(error);
-      }
-    } catch (error) {
-      setMessage("Unexpected error: " + error.message);
-      console.log(error);
+    if (status) {
+      await authService.logout();
+      dispatch(logout());
+      console.log("Active session detected and deleted");
     }
+
+    await authService.createAccount({
+      email,
+      password,
+      firstName,
+      lastName,
+    });
+
+    await authService.login({ email, password });
+    const userData = await authService.getCurrentUser();
+    dispatch(login(userData));
+
+    setSuccess(true);
+    setMessage("Successfully created account!");
+    setTimeout(() => navigate("/"), 500);
   };
 
   return (
@@ -126,9 +106,7 @@ function SignUp() {
             text="Sign up"
           />
 
-          {message && (
-            <Message isSuccess={success} message={message}/>
-          )}
+          {message && <Message isSuccess={success} message={message} />}
 
           <div className="text-center text-neutral-500 font-normal text-base">
             Already have an account?{" "}

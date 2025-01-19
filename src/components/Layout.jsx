@@ -4,7 +4,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import authService from "../appwrite/authService";
-import { login, updateCheckStatus } from "../store/userSlice";
+import { login } from "../store/userSlice";
 import { Separator } from "@/components/ui/separator"
 import BreadcrumbsWrapper from "@/components/BreadcrumbsWrapper";
 export default function Layout({ children }) {
@@ -13,13 +13,11 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     if (!status) {
-      authService
-        .getCurrentUser()
+      authService.getCurrentUser()
         .then((data) => {
           if (data) {
             dispatch(login({ userData: data }));
           }
-          dispatch(updateCheckStatus(true));
         })
         .catch((error) => console.log(error));
     }
