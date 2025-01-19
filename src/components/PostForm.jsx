@@ -32,12 +32,15 @@ function PostForm({ post }) {
     if(post) {
       // edit mode
       const {title,slug,editor:content,featuredImage,status} = data
-      
+
       let image = featuredImage;
       
       if(data.img && typeof data.img === "object" && data.img.length > 0) {
         const imageStatus = await storageService.uploadImage(data.img[0]);
-        if(imageStatus) image = imageStatus.$id
+        if(imageStatus) {
+          image = imageStatus.$id
+          await storageService.deleteImage(post.featuredImage);
+        }
       }
 
       const updateStatus = await databaseService.updatePost({
@@ -55,22 +58,21 @@ function PostForm({ post }) {
     } else {
       // create mode
       let image;
-
-      if(data.img && typeof data.img === "object"  && data.img.length > 0) {
-        const imageStatus = await storageService.uploadImage(data.img[0]);
-        if(imageStatus) image = imageStatus?.$id
-      }
+      const {$id:userId,name:authorName} = userData
       
-      const {title,slug,editor:content,featuredImage,status} = data
+      const imageStatus = await storageService.uploadImage(data.img[0]);
+      if(imageStatus) image = imageStatus?.$id
+      
+      const {title,slug,editor:content,status} = data
 
       const createStatus = await databaseService.createPost({
         title,
         slug,
         content,
-        featuredImage: image || featuredImage,
+        featuredImage: image,
         status,
-        userId:userData.$id,
-        authorName:userData.name
+        userId,
+        authorName
       })
 
       if(createStatus) {

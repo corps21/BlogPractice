@@ -20,7 +20,7 @@ function AllPosts() {
         if (data) setFiles(data.documents);
         setIsLoading(false);
       });
-    }
+    } else setIsLoading(false)
   }, [userId, status]);
 
   return (

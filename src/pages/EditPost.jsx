@@ -14,6 +14,8 @@ function EditPost() {
     })
   }, [slug]);
 
+  console.log(post)
+
   return post ? (
     <Container className="space-y-4">
       <Header pageTitle="Edit Post"/>
