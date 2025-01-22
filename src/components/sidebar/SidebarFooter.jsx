@@ -43,9 +43,9 @@ export default function SidebarFooterWrapper() {
   useEffect(() => {
     if (userData)
       setUser({
-        name: userData.name,
-        email: userData.email,
-        avatar: databaseService.getUserAvatar(userData.name),
+        name: userData.name || defaultUser.name,
+        email: userData.email || defaultUser.email,
+        avatar: databaseService.getUserAvatar(userData.name || defaultUser.name),
       });
     else setUser(defaultUser);
   }, [userData, defaultUser]);

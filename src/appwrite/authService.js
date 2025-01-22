@@ -56,6 +56,15 @@ export class AuthService {
 
     return false;
   }
+
+  async createAnonUser() {
+    try {
+      return await this.account.createAnonymousSession();
+    } catch (error) {
+      console.log("AuthService :: setAnonUser :: error ", error);
+    }
+    return false;
+  }
 }
 const authService = new AuthService();
 
