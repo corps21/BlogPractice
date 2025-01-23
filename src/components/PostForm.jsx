@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
 
-import { Input, Button, RTE , ImagePreview, Message, SelectWrapper} from "../components/index";
+import { Input, Button, RTE , ImagePreview, SelectWrapper} from "../components/index";
 import { useForm } from "react-hook-form";
 import databaseService from "../appwrite/databaseService";
 import storageService from "../appwrite/storageService";
 import { useSelector } from "react-redux";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+import { Toaster } from "./ui/sonner";
+import { toast } from "sonner";
+import { Response } from "@/lib/response";
 
 function PostForm({ post }) {
 
@@ -24,8 +27,6 @@ function PostForm({ post }) {
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth?.userData);
-  const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
 
   const submitHandler = async (data) => {
 
@@ -39,7 +40,10 @@ function PostForm({ post }) {
         const imageStatus = await storageService.uploadImage(data.img[0]);
         if(imageStatus) {
           image = imageStatus.$id
-          await storageService.deleteImage(post.featuredImage);
+          const isImageDeleted = await storageService.deleteImage(post.featuredImage);
+          if(!isImageDeleted) return new Response(false,"Image Delete Failed")   
+        } else {
+          return new Response(false,"Image Upload Failed")
         }
       }
 
@@ -51,10 +55,10 @@ function PostForm({ post }) {
       },slug)
 
       if(updateStatus) {
-        setIsSuccess(true);
-        setMessage("Post Updated Successfully")
         setTimeout(() => navigate(`/post/${slug}`), 500);
+        return new Response(true,"Post Updated Successfully")
       }
+      return new Response(false,"Post Update Failed")
     } else {
       // create mode
       let image;
@@ -62,7 +66,8 @@ function PostForm({ post }) {
       
       const imageStatus = await storageService.uploadImage(data.img[0]);
       if(imageStatus) image = imageStatus?.$id
-      
+      else return new Response(false,"Image Upload Failed")
+
       const {title,slug,editor:content,status} = data
 
       const createStatus = await databaseService.createPost({
@@ -76,13 +81,31 @@ function PostForm({ post }) {
       })
 
       if(createStatus) {
-        setIsSuccess(true);
-        setMessage("Post Created Successfully")
         setTimeout(() => navigate(`/post/${slug}`), 500);
+        return new Response(true,"Post Created Successfully")
       }
+      else return new Response(false,"Post Creation Failed")
     }
   }
 
+  const toastWrapper = (data) => {
+    const toastPromise = new Promise((resolve, reject) => {
+      submitHandler(data).then(({ isSuccess, message }) => {
+        if (isSuccess) {
+          resolve(message);
+        } else {
+          reject(message);
+        }
+      });
+    })
+    toast.promise(toastPromise, {
+      loading: post ? "Updating..." : "Creating...",
+      success: (message) => message,
+      error: (error) => error,
+      richColors:true
+    })
+  }
+  
   const slugTransform = useCallback((val) => {
     return val
       .trim()
@@ -100,12 +123,11 @@ function PostForm({ post }) {
     return () => subscription.unsubscribe();
   }, [setValue, slugTransform, watch, post]);
 
-  const errorHandler = (err) => console.log(err)
 
   return (
     <form
       className="grid md:grid-cols-2 gap-8 md:max-w-6xl"
-      onSubmit={handleSubmit(submitHandler,errorHandler)}
+      onSubmit={handleSubmit(toastWrapper)}
     >
       <section>
         <Input
@@ -158,7 +180,7 @@ function PostForm({ post }) {
           text={post ? "Edit" : "Submit"}
           className="w-full text-base px-3 py-2 rounded-[6px] font-medium mt-4"
         />
-        <Message isSuccess={isSuccess} message={message}/>
+      <Toaster richColors theme="light" />
       </section>
     </form>
   );

@@ -23,7 +23,6 @@ function SignIn() {
       const result = await authService.logout();
       if (result) {
         dispatch(logout());
-        console.log("Active session detected and removed");
       } else {
         return new Response(false, "Error while removing active session");
       }
@@ -91,7 +90,7 @@ function SignIn() {
             })}
           />
           <div className="relative">
-            <a className="cursor-pointer hover:underline absolute right-0 top-0 mt-1 text-sm text-neutral-500 font-medium hover:underline-offset-1">
+            <a className="cursor-pointer hover:underline absolute right-0 top-0 mt-1 text-sm text-neutral-500 font-medium hover:underline-offset-1 hover:text-neutral-600 hover:font-medium">
               Forgot your password?
             </a>
             <Input
@@ -111,7 +110,7 @@ function SignIn() {
           <Toaster richColors theme="light" />
           <div className="text-center text-neutral-500 font-normal text-base">
             Don&apos;t have an account?{" "}
-            <span className="hover:underline">
+            <span className="hover:underline hover:text-neutral-600 hover:font-medium">
               <Link to="/signup">Sign up</Link>
             </span>
           </div>

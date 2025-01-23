@@ -24,12 +24,37 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { logout } from "@/store/userSlice";
+import { Toaster } from "../ui/sonner";
+import { toast } from "sonner";
+import { Response } from "@/lib/response";
 
 export default function SidebarFooterWrapper() {
   const userData = useSelector((state) => state.auth?.userData);
   const dispatch = useDispatch();
   const { isMobile } = useSidebar();
   const navigate = useNavigate();
+  const logoutHandler = async () => {
+    const isUserLoggedOut = await authService.logout();
+    if (!isUserLoggedOut) return new Response(false, "Failed to logout user");
+    dispatch(logout());
+    setTimeout(() => navigate("/signin"), 500);
+    return new Response(true, "User logged out successfully");
+  };
+  const toastHandler = () => {
+    const toastPromise = new Promise((resolve,reject) => {
+      logoutHandler().then(({isSuccess,message}) => {
+        if(isSuccess) resolve(message)
+        else reject(message)
+      })
+    })
+
+    toast.promise(toastPromise, {
+      loading: "Logging out...",
+      success: "Logged out successfully",
+      error: "Failed to logout user",
+      richColors:true
+    })
+  }
   const defaultUser = useMemo(
     () => ({
       name: "John Doe",
@@ -45,7 +70,9 @@ export default function SidebarFooterWrapper() {
       setUser({
         name: userData.name || defaultUser.name,
         email: userData.email || defaultUser.email,
-        avatar: databaseService.getUserAvatar(userData.name || defaultUser.name),
+        avatar: databaseService.getUserAvatar(
+          userData.name || defaultUser.name
+        ),
       });
     else setUser(defaultUser);
   }, [userData, defaultUser]);
@@ -104,20 +131,14 @@ export default function SidebarFooterWrapper() {
               <Button
                 variant="ghost"
                 className="h-6 cursor-pointer"
-                onClick={() => {
-                  authService.logout().then((data) => {
-                    if (data) {
-                      dispatch(logout());
-                      navigate("/signin");
-                    }
-                  });
-                }}
+                onClick={toastHandler}
               >
                 <LogOut />
                 Log out
               </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
+          <Toaster richColors theme="light"/>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>

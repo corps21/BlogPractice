@@ -5,6 +5,9 @@ import storageService from "../appwrite/storageService";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import parse from "html-react-parser";
+import { Response } from "@/lib/response";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 function PostPage() {
   const { slug } = useParams();
@@ -12,6 +15,32 @@ function PostPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [info, setInfo] = useState({});
   const userId = useSelector((state) => state.auth.userData?.$id);
+
+  const toastHandler = () => {
+    const toastPromise = new Promise((resolve, reject) => {
+      deleteHandler().then(({ isSuccess, message }) => {
+        if (isSuccess) {
+          resolve(message);
+        } else {
+          reject(message);
+        }
+      })
+    })
+    toast.promise(toastPromise, {
+      loading: "Deleting post...",
+      success: (message) => message,
+      error: (error) => error
+    })
+  };
+
+  const deleteHandler = async () => {
+    const isPostDeleted = await databaseService.removePost(info.$id);
+    if(!isPostDeleted) new Response("error", "Error while deleting post");
+    const isImageDeleted = await storageService.deleteImage(info.fileId);
+    if(!isImageDeleted) new Response("error", "Error while deleting image");
+    setTimeout(() => navigate(`/all-post`), 500)
+    return new Response("success", "Post deleted successfully");
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -50,7 +79,7 @@ function PostPage() {
               By {info.author}
             </div>
             <div className="text-2xl border-2 bg-gray-200 rounded-lg border-black min-h-[16rem] my-[5rem] p-[1rem]">
-            {parse(info.content)}
+              {parse(info.content)}
             </div>
 
             {userId === info.author && (
@@ -63,18 +92,14 @@ function PostPage() {
                 <Button
                   className=" w-[48%] bg-red-600 hover:text-red-600"
                   text="Delete"
-                  onClick={() => {
-                    databaseService.removePost(info.$id)
-                    storageService.deleteImage(info.fileId)
-                    navigate(`/all-post`)
-                  }
-                  }
+                  onClick={toastHandler}
                 />
               </div>
             )}
           </div>
         </div>
       )}
+      <Toaster richColors theme="light"/>
     </Container>
   ) : (
     <Loader />

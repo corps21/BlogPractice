@@ -1,15 +1,14 @@
-import { useState } from "react";
-import { Container, Input, Button, Message } from "../components";
+import { Container, Input, Button } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import authService from "../appwrite/authService";
 import { login, logout } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Response } from "@/lib/response";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 function SignUp() {
-  const [message, setMessage] = useState("");
-  const [success, setSuccess] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -20,30 +19,48 @@ function SignUp() {
   const status = useSelector((state) => state.auth.isLoggedIn);
 
   const createAccount = async ({ email, password, firstName, lastName }) => {
-    setMessage("");
-    setSuccess(false);
-
     if (status) {
-      await authService.logout();
-      dispatch(logout());
-      console.log("Active session detected and deleted");
+      const result = await authService.logout();
+      if(result) dispatch(logout());
+      else return new Response(false, "Error while removing active session");
     }
 
-    await authService.createAccount({
+    const isAccountCreated = await authService.createAccount({
       email,
       password,
       firstName,
       lastName,
     });
 
-    await authService.login({ email, password });
-    const userData = await authService.getCurrentUser();
-    dispatch(login(userData));
+    if (!isAccountCreated) return new Response(false, "Error while creating account");
 
-    setSuccess(true);
-    setMessage("Successfully created account!");
-    setTimeout(() => navigate("/"), 500);
+    const isAccountLoggedIn = await authService.login({ email, password });
+    if(!isAccountLoggedIn) return new Response(false, "Error while logging in");
+
+    const userData = await authService.getCurrentUser();
+    if(userData) {
+      dispatch(login(userData));
+      setTimeout(() => navigate("/"), 500);
+      return new Response(true, "Account created successfully");
+    }
+    else return new Response(false, "Error while fetching user data");
   };
+
+  const toastWrapper = async ({ email, password, firstName, lastName }) => {
+    const toastPromise = new Promise((resolve, reject) => {
+      createAccount({ email, password, firstName, lastName }).then(({ isSuccess, message }) => {
+        if(isSuccess) resolve(message);
+        else reject(message);
+      });
+    });
+
+    toast.promise(toastPromise, {
+      loading: "Creating account...",
+      success: (message) => message,
+      error: (error) => error,
+      richColors: true,
+    });
+  }
 
   return (
     <section className="flex justify-center items-center h-5/6">
@@ -57,7 +74,7 @@ function SignUp() {
 
         <form
           className="flex flex-col gap-4"
-          onSubmit={handleSubmit(createAccount)}
+          onSubmit={handleSubmit(toastWrapper)}
         >
           <div className="flex gap-4 md:flex-row flex-col">
             <Input
@@ -106,7 +123,7 @@ function SignUp() {
             text="Sign up"
           />
 
-          {message && <Message isSuccess={success} message={message} />}
+          <Toaster richColors theme="light"/>
 
           <div className="text-center text-neutral-500 font-normal text-base">
             Already have an account?{" "}
