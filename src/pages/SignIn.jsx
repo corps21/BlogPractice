@@ -1,15 +1,14 @@
-import { Container, Input, Button, Message } from "../components";
-import { useState } from "react";
+import { Container, Input, Button } from "../components";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../appwrite/authService";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "../store/userSlice";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
+import { Response } from "@/lib/response";
 
 function SignIn() {
-  const [message, setMessage] = useState("");
-  const [success, setSuccess] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -20,31 +19,47 @@ function SignIn() {
   const status = useSelector((state) => state.auth.isLoggedIn);
 
   const onSubmitHandler = async ({ email, password }) => {
-    setMessage("");
-    setSuccess(false);
-
     if (status) {
       const result = await authService.logout();
       if (result) {
         dispatch(logout());
         console.log("Active session detected and removed");
-      } else setMessage("Something went wrong");
+      } else {
+        return new Response(false, "Error while removing active session");
+      }
     }
 
     const result = await authService.login({ email, password });
 
-    if (!result) setMessage("Something went wrong");
-     else {
+    if (!result) {
+      return new Response(false, "Invalid credentials or user not found");
+    } else {
       const userData = await authService.getCurrentUser();
       if (userData) {
         dispatch(login({ userData }));
-        setSuccess(true);
-        setMessage("Successfully Signed in!");
         setTimeout(() => navigate("/"), 500);
+        return new Response(true, "Login successful");
       } else {
-        setMessage("Something went wrong");
+        return new Response(false, "Error while fetching user data");
       }
     }
+  };
+
+  const toastWrapper = async ({ email, password }) => {
+    const toastPromise = new Promise((resolve, reject) => {
+      onSubmitHandler({ email, password }).then(({ isSuccess, message }) => {
+        if (isSuccess) {
+          resolve(message);
+        } else {
+          reject(message);
+        }
+      });
+    });
+    toast.promise(toastPromise, {
+      loading: "Logging in...",
+      success: (message) => message,
+      error: (error) => error,
+    });
   };
 
   return (
@@ -58,7 +73,7 @@ function SignIn() {
         </div>
 
         <form
-          onSubmit={handleSubmit(onSubmitHandler)}
+          onSubmit={handleSubmit(toastWrapper)}
           className="flex flex-col gap-4"
         >
           <Input
@@ -93,7 +108,7 @@ function SignIn() {
             className="block text-base px-3 py-2 rounded-[6px] mt-2 font-medium"
             text="Login"
           />
-          {message && <Message isSuccess={success} message={message} />}
+          <Toaster richColors theme="light" />
           <div className="text-center text-neutral-500 font-normal text-base">
             Don&apos;t have an account?{" "}
             <span className="hover:underline">
