@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import SidebarFooterWrapper from "./sidebar/SidebarFooter";
 import SidebarHeaderWrapper from "./sidebar/SidebarHeader";
@@ -42,6 +43,7 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const {setOpenMobile} = useSidebar() 
   return (
     <Sidebar
       collapsible="icon"
@@ -56,7 +58,9 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link to={item.url}>
+                    <Link to={item.url} onClick={() => {
+                      setOpenMobile(false)
+                    }}>
                       <item.icon className="size-8" />
                       <span>{item.title}</span>
                     </Link>
