@@ -6,12 +6,14 @@ import { Header, PostList } from "../components";
 import { SquarePenIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useTheme } from "@/components/theme-provider";
 
 function AllPosts() {
   const [isLoading, setIsLoading] = useState(true);
   const [files, setFiles] = useState([]);
   const status = useSelector((state) => state.auth.isLoggedIn);
   const userId = useSelector((state) => state.auth.userData)?.$id;
+  const {theme} = useTheme()
 
   useEffect(() => {
     setIsLoading(true);
@@ -28,8 +30,8 @@ function AllPosts() {
       <Header pageTitle="All Posts" />
       <div className="flex justify-start w-full mb-6">
         <Button variant="icon" className="pl-0" asChild>
-          <Link to="/all-post/add-post">
-            <SquarePenIcon />
+          <Link to="/all-post/add-post" className="dark:text-white ">
+            <SquarePenIcon color={theme === "dark" ? "white" : "#000"} />
             Create
           </Link>
         </Button>

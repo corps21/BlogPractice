@@ -2,7 +2,7 @@
 
 function Label({label, className="", ...props}) {
   return (
-    <label className={`font-semibold ${className}`} {...props}>{label}</label>
+    <label className={`mb-1 ${className}`} {...props}>{label}</label>
   )
 }
 

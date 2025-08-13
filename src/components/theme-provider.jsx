@@ -56,5 +56,11 @@ export const useTheme = () => {
   if (context === undefined)
     throw new Error("useTheme must be used within a ThemeProvider")
 
+  if (context.theme === "system") {
+    context.theme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
+      ? "dark"
+      : "light"
+  }
   return context
 }
