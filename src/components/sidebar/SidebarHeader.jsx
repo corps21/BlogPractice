@@ -1,18 +1,20 @@
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "../ui/sidebar";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import BrandIcon from "../BrandIcon";
 
 export default function SidebarHeaderWrapper() {
+  const navigate = useNavigate()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton asChild>
-          <Link to="/" className="flex items-center">
-            <div className="">
-              <BrandIcon />
-            </div>
-            <span className="text-lg font-medium">BlogSphere</span>
-          </Link>
+        <SidebarMenuButton
+          onClick={() => {navigate("/")}}
+          size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        >
+          <div className="bg-primary text-sidebar-primary-foreground flex aspect-square size-7 items-center justify-center rounded-lg">
+            <BrandIcon />
+          </div>
+          <span className="text-base font-medium">BlogSphere</span>
         </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>

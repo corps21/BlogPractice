@@ -52,6 +52,7 @@ export function AppSidebar() {
         <SidebarHeaderWrapper />
       </SidebarHeader>
       <SidebarContent>
+        
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
