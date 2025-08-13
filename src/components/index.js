@@ -14,5 +14,7 @@ import PostList from "./PostList";
 import CTA from "./CTA";
 import AvatarCard from "./AvatarCard";
 import Message from "./Message";
+import { ThemeProvider } from "./theme-provider";
+import { ModeToggle } from "./ToggleThemeBtn";
 
-export {Header,Input, Container, Button, SelectWrapper, RTE, Label, PostForm, PostCard, Loader, AuthLayout, ImagePreview, PostList,CTA,AvatarCard,Message}
+export {Header,Input, Container, Button, SelectWrapper, RTE, Label, PostForm, PostCard, Loader, AuthLayout, ImagePreview, PostList,CTA,AvatarCard,Message, ThemeProvider, ModeToggle}
