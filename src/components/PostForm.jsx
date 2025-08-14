@@ -166,7 +166,7 @@ function PostForm({ post }) {
       <section>
         {post && post.featuredImage !== "" && <ImagePreview src={storageService.getImagePreview(post.featuredImage).href}/>}
 
-        <Input errors={errors} registerId={"img"} label="Featured Image" type="file" {...register("img")} />
+        <Input errors={errors} registerId={"img"} label="Featured Image" type="file" {...register("img")} className="hover:cursor-pointer file:hover:cursor-pointer text-sm"/>
 
         <SelectWrapper
           autoFocus={getValues("status")}

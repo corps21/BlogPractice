@@ -1,6 +1,7 @@
 import { forwardRef, useId } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { cn } from "@/lib/utils"
 
 const InputWrapper = forwardRef(
   (
@@ -19,8 +20,8 @@ const InputWrapper = forwardRef(
   ) => {
     const id = useId();
     return (
-      <div className={`flex flex-col ${containerClass}`}>
-        {label && <Label htmlFor={id} className={`${errors[registerId] ? "text-red-500 dark:text-red-500" : ""}`}>{label}</Label>}
+      <div className={cn('flex flex-col',containerClass)}>
+        {label && <Label htmlFor={id} className={`text-xs md:text-base ${errors[registerId] ? "text-red-500 dark:text-red-500" : ""}`}>{label}</Label>}
         <Input
           readOnly={readOnly}
           className={`mt-1

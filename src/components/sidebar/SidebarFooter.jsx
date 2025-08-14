@@ -31,7 +31,7 @@ import { Response } from "@/lib/response";
 export default function SidebarFooterWrapper() {
   const userData = useSelector((state) => state.auth?.userData);
   const dispatch = useDispatch();
-  const { isMobile } = useSidebar();
+  const { isMobile,setOpenMobile } = useSidebar();
   const navigate = useNavigate();
   const logoutHandler = async () => {
     const isUserLoggedOut = await authService.logout();
@@ -41,6 +41,7 @@ export default function SidebarFooterWrapper() {
     return new Response(true, "User logged out successfully");
   };
   const toastHandler = () => {
+    setOpenMobile(false)
     const toastPromise = new Promise((resolve,reject) => {
       logoutHandler().then(({isSuccess,message}) => {
         if(isSuccess) resolve(message)

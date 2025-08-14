@@ -63,11 +63,11 @@ function SignUp() {
   }
 
   return (
-    <section className="flex justify-center items-center h-5/6">
-      <Container className="border-[1px] border-gray-700 p-10 rounded-xl md:w-[32rem] w-[24rem]">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold">Create your account</h2>
-          <h3 className="text-base text-gray-500 ">
+    <section className="flex justify-center items-center my-[3rem] md:my-auto">
+      <Container className="border-[1px] border-border p-10 rounded-xl md:w-[28rem] shadow-md">
+        <div className="mb-6 dark:text-white space-y-2">
+          <h2 className="text-xl font-bold">Create your account</h2>
+          <h3 className="text-sm text-muted-foreground ">
             Fill in your details to create your account.
           </h3>
         </div>
@@ -83,6 +83,7 @@ function SignUp() {
               placeholder="First Name"
               label="First Name"
               {...register("firstName", { required: true })}
+              className="text-sm"
             />
             <Input
               errors={errors}
@@ -90,6 +91,7 @@ function SignUp() {
               placeholder="Last Name"
               label="Last Name"
               {...register("lastName", { required: true })}
+              className="text-sm"
             />
           </div>
 
@@ -106,6 +108,7 @@ function SignUp() {
                   "Email address must be a valid address",
               },
             })}
+            className="text-sm"
           />
 
           <Input
@@ -115,6 +118,7 @@ function SignUp() {
             label="Password"
             type="password"
             {...register("password", { required: true, minLength: 8 })}
+            className="text-sm"
           />
 
           <Button
@@ -125,10 +129,11 @@ function SignUp() {
 
           <Toaster richColors theme="light"/>
 
-          <div className="text-center text-neutral-500 font-normal text-base">
+          <div className="text-center text-muted-foreground text-sm">
             Already have an account?{" "}
+            <br />
             <span className="hover:underline">
-              <Link to="/signin">Sign in</Link>
+               <Link to="/signin" className="underline font-semibold">Sign in</Link>
             </span>
           </div>
         </form>

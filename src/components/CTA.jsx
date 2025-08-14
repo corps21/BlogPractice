@@ -13,7 +13,7 @@ export default function CTA({ text = "To See Posts" }) {
   const dispatch = useDispatch();
   return (
     <Container className={`h-5/6 flex flex-col justify-center items-center`}>
-      <div className=" text-center text-4xl font-bold uppercase leading-[1.125] mb-4">
+      <div className=" text-center text-4xl font-bold uppercase leading-[1.125] mb-4 dark:text-white">
         <div>Sign Up</div>
         <div>{text}</div>
       </div>
