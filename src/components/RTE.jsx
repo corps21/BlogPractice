@@ -2,7 +2,7 @@
 
 import { Editor } from "@tinymce/tinymce-react";
 import conf from "../conf/conf";
-import Label from "./Label";
+import { Label } from "./ui/label";
 import { Controller } from "react-hook-form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
@@ -20,8 +20,9 @@ export default function RTE({
       control={control}
       name={name}
       render={({ field: { onChange } }) => (
-        <div className="mt-[1rem] w-full">
-          {label && <Label label={label} className="" />}
+        <div className="mt-[1rem] w-full space-y-1">
+          {label && <Label>{label}</Label>}
+          {/* TODO: Remove skeleton */}
           <Skeleton className={`h-[25rem] rounded-[8px] border-black ${!isLoading && "animate-none"}`}>
           <Editor
                 onInit={() => setIsLoading(false)}

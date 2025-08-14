@@ -1,9 +1,6 @@
-/* eslint-disable react/display-name */
-/* eslint-disable react/prop-types */
-
 import { forwardRef, useId } from "react";
 import { Input } from "./ui/input";
-import Label from "./Label";
+import { Label } from "./ui/label";
 
 const InputWrapper = forwardRef(
   (
@@ -23,11 +20,11 @@ const InputWrapper = forwardRef(
     const id = useId();
     return (
       <div className={`flex flex-col ${containerClass}`}>
-        {label && <Label htmlFor={id} label={label} className={`${errors[registerId] ? "text-red-500" : ""}`}/>}
+        {label && <Label htmlFor={id} className={`${errors[registerId] ? "text-red-500 dark:text-red-500" : ""}`}>{label}</Label>}
         <Input
           readOnly={readOnly}
-          className={`text-base border-[1px] px-3 py-2 rounded-[4px] placeholder:text-red-500
-            ${errors[registerId] ? "border-red-500" : "border-gray-700"}
+          className={`mt-1
+            ${errors[registerId] ? "border-red-500 dark:border-red-500" : ""}
             ${className}`}
           type={type}
           placeholder={placeholder}

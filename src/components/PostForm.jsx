@@ -126,7 +126,7 @@ function PostForm({ post }) {
 
   return (
     <form
-      className="grid md:grid-cols-2 gap-8 md:max-w-6xl"
+      className="grid md:grid-cols-2 gap-8 md:max-w-6xl bg-card"
       onSubmit={handleSubmit(toastWrapper)}
     >
       <section>

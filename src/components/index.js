@@ -4,7 +4,6 @@ import Container from "./Container";
 import Button from "./Button";
 import SelectWrapper from "./SelectWrapper";
 import RTE from "./RTE";
-import Label from "./Label"; 
 import PostForm from "./PostForm";
 import PostCard from "./PostCard";
 import Loader from "./Loader";
@@ -17,4 +16,4 @@ import Message from "./Message";
 import { ThemeProvider } from "./theme-provider";
 import { ModeToggle } from "./ToggleThemeBtn";
 
-export {Header,InputWrapper as Input, Container, Button, SelectWrapper, RTE, Label, PostForm, PostCard, Loader, AuthLayout, ImagePreview, PostList,CTA,AvatarCard,Message, ThemeProvider, ModeToggle}
+export {Header,InputWrapper as Input, Container, Button, SelectWrapper, RTE, PostForm, PostCard, Loader, AuthLayout, ImagePreview, PostList,CTA,AvatarCard,Message, ThemeProvider, ModeToggle}

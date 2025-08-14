@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import Label from "./Label"
+import { Label } from "./ui/label"
 
 function ImagePreview({src="", className="", ...props}) {
   return (
