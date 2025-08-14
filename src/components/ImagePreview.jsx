@@ -1,13 +1,18 @@
 /* eslint-disable react/prop-types */
-import { Label } from "./ui/label"
+import { Label } from "./ui/label";
 
-function ImagePreview({src="", className="", ...props}) {
-  return (
-    <div className={`${className} mb-[2rem]`}>
-        <Label label="Current Image"/>
-        <img src={src} alt="" className={`rounded-[8px] min-w-[14rem] md:max-w-[20.5rem] aspect-square ${className}`} {...props}/>
-    </div>
-  )
+function ImagePreview({ src = "", className = "", ...props }) {
+	return (
+		<div className={`${className} mb-[2rem]`}>
+			<Label label="Current Image" />
+			<img
+				src={src}
+				alt=""
+				className={`rounded-[8px] min-w-[14rem] md:max-w-[20.5rem] aspect-square ${className}`}
+				{...props}
+			/>
+		</div>
+	);
 }
 
-export default ImagePreview
+export default ImagePreview;
