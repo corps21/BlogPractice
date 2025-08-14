@@ -1,10 +1,8 @@
-/* eslint-disable react/prop-types */
-
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import Loader from "./Loader";
+import { Loader } from ".";
 
 function AuthLayout({children,authentication = true}) {
 
