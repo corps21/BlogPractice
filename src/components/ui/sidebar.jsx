@@ -216,7 +216,7 @@ const Sidebar = React.forwardRef((
 })
 Sidebar.displayName = "Sidebar"
 
-const SidebarTrigger = React.forwardRef(({ className, onClick, darkMode, ...props }, ref) => {
+const SidebarTrigger = React.forwardRef(({ className, onClick, ...props }, ref) => {
   const { toggleSidebar } = useSidebar()
 
   return (
@@ -231,7 +231,7 @@ const SidebarTrigger = React.forwardRef(({ className, onClick, darkMode, ...prop
         toggleSidebar()
       }}
       {...props}>
-      <PanelLeft color={`${darkMode ? "white" : "black"}`}/>
+      <PanelLeft className="dark:stroke-white"/>
       <span className="sr-only">Toggle Sidebar</span>
     </Button>)
   );

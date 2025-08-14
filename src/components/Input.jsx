@@ -2,9 +2,10 @@
 /* eslint-disable react/prop-types */
 
 import { forwardRef, useId } from "react";
+import { Input } from "./ui/input";
 import Label from "./Label";
 
-const Input = forwardRef(
+const InputWrapper = forwardRef(
   (
     {
       errors,
@@ -23,9 +24,9 @@ const Input = forwardRef(
     return (
       <div className={`flex flex-col ${containerClass}`}>
         {label && <Label htmlFor={id} label={label} className={`${errors[registerId] ? "text-red-500" : ""}`}/>}
-        <input
+        <Input
           readOnly={readOnly}
-          className={`text-base border-[1px] px-3 py-2 rounded-[4px] 
+          className={`text-base border-[1px] px-3 py-2 rounded-[4px] placeholder:text-red-500
             ${errors[registerId] ? "border-red-500" : "border-gray-700"}
             ${className}`}
           type={type}
@@ -34,7 +35,7 @@ const Input = forwardRef(
           id={id}
           {...props}
           aria-invalid={errors[registerId] ? "true" : "false"}
-        ></input>
+        ></Input>
         {errors[registerId]?.type === "required" && (
           <p role="alert" className="text-sm text-red-500 font-medium">{label} is required</p>
         )}
@@ -43,4 +44,4 @@ const Input = forwardRef(
   }
 );
 
-export default Input;
+export default InputWrapper;

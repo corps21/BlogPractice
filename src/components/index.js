@@ -1,5 +1,5 @@
 import Header from "./Header/Header";
-import Input from "./Input";
+import InputWrapper from "./Input";
 import Container from "./Container";
 import Button from "./Button";
 import SelectWrapper from "./SelectWrapper";
@@ -17,4 +17,4 @@ import Message from "./Message";
 import { ThemeProvider } from "./theme-provider";
 import { ModeToggle } from "./ToggleThemeBtn";
 
-export {Header,Input, Container, Button, SelectWrapper, RTE, Label, PostForm, PostCard, Loader, AuthLayout, ImagePreview, PostList,CTA,AvatarCard,Message, ThemeProvider, ModeToggle}
+export {Header,InputWrapper as Input, Container, Button, SelectWrapper, RTE, Label, PostForm, PostCard, Loader, AuthLayout, ImagePreview, PostList,CTA,AvatarCard,Message, ThemeProvider, ModeToggle}

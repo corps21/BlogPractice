@@ -126,7 +126,7 @@ function PostForm({ post }) {
 
   return (
     <form
-      className="grid md:grid-cols-2 gap-8 md:max-w-6xl dark:text-white"
+      className="grid md:grid-cols-2 gap-8 md:max-w-6xl"
       onSubmit={handleSubmit(toastWrapper)}
     >
       <section>
@@ -166,7 +166,7 @@ function PostForm({ post }) {
       <section>
         {post && post.featuredImage !== "" && <ImagePreview src={storageService.getImagePreview(post.featuredImage).href}/>}
 
-        <Input errors={errors} registerId={"img"} label="Featured Image" type="file" {...register("img")} className="text-sm file:py-0 file:my-0" />
+        <Input errors={errors} registerId={"img"} label="Featured Image" type="file" {...register("img")} />
 
         <SelectWrapper
           autoFocus={getValues("status")}

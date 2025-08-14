@@ -12,7 +12,6 @@ import { useTheme } from "./theme-provider";
 export default function Layout({ children }) {
   const status = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
-  const {theme,setTheme} = useTheme()
 
   useEffect(() => {
     if (!status) {
@@ -33,11 +32,11 @@ export default function Layout({ children }) {
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex w-4/5 mx-auto justify-between">
             <div className="flex items-center">
-              <SidebarTrigger className="-ml-1" darkMode={theme === "dark"} />
+              <SidebarTrigger className="-ml-1"/>
               <Separator orientation="vertical" className="mr-2 h-4" />
               <BreadcrumbsWrapper />
             </div>
-            <ModeToggle setTheme={setTheme}/>
+            <ModeToggle/>
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

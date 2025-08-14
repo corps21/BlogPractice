@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useTheme } from "./theme-provider";
 
 const SelectWrapper = forwardRef(
   ({

@@ -11,7 +11,7 @@ export default function SidebarHeaderWrapper() {
           onClick={() => {navigate("/")}}
           size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
-          <div className="bg-primary text-sidebar-primary-foreground flex aspect-square size-7 items-center justify-center rounded-lg">
+          <div className="ml-[2px] bg-primary text-sidebar-primary-foreground flex aspect-square size-7 items-center justify-center rounded-lg">
             <BrandIcon />
           </div>
           <span className="text-base font-medium">BlogSphere</span>
