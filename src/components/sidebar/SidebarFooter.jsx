@@ -21,7 +21,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { Response } from "@/lib/response";
+import { ApiResponse } from "@/lib/response";
 import { logout } from "@/store/userSlice";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/sonner";
@@ -33,10 +33,10 @@ export default function SidebarFooterWrapper() {
 	const navigate = useNavigate();
 	const logoutHandler = async () => {
 		const isUserLoggedOut = await authService.logout();
-		if (!isUserLoggedOut) return new Response(false, "Failed to logout user");
+		if (!isUserLoggedOut) return new ApiResponse(false, "Failed to logout user");
 		dispatch(logout());
 		setTimeout(() => navigate("/signin"), 500);
-		return new Response(true, "User logged out successfully");
+		return new ApiResponse(true, "User logged out successfully");
 	};
 	const toastHandler = () => {
 		setOpenMobile(false);

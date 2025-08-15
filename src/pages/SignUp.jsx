@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { Response } from "@/lib/response";
 import authService from "../appwrite/authService";
+import { userService } from "@/appwrite/userService";
 import { Button, Container, Input } from "../components";
 import { login, logout } from "../store/userSlice";
+import { asyncHandler } from "@/lib/utils";
 
 function SignUp() {
 	const {
@@ -18,52 +19,94 @@ function SignUp() {
 	const dispatch = useDispatch();
 	const status = useSelector((state) => state.auth.isLoggedIn);
 
-	const createAccount = async ({ email, password, firstName, lastName }) => {
-		if (status) {
-			const result = await authService.logout();
-			if (result) dispatch(logout());
-			else return new Response(false, "Error while removing active session");
-		}
+	// 	if (status) {
+	// 		const result = await authService.logout();
+	// 		if (result) dispatch(logout());
+	// 		else return new Response(false, "Error while removing active session");
+	// 	}
 
-		const isAccountCreated = await authService.createAccount({
-			email,
-			password,
-			firstName,
-			lastName,
-		});
+	// 	const isAccountCreated = await authService.createAccount({
+	// 		email,
+	// 		password,
+	// 		firstName,
+	// 		lastName,
+	// 	});
 
-		if (!isAccountCreated)
-			return new Response(false, "Error while creating account");
+	// 	if (!isAccountCreated)
+	// 		return new Response(false, "Error while creating account");
 
-		const isAccountLoggedIn = await authService.login({ email, password });
-		if (!isAccountLoggedIn)
-			return new Response(false, "Error while logging in");
+	// 	const isAccountLoggedIn = await authService.login({ email, password });
+	// 	if (!isAccountLoggedIn)
+	// 		return new Response(false, "Error while logging in");
 
-		const userData = await authService.getCurrentUser();
-		if (userData) {
-			dispatch(login(userData));
-			setTimeout(() => navigate("/"), 500);
-			return new Response(true, "Account created successfully");
-		} else return new Response(false, "Error while fetching user data");
-	};
+	// 	const userData = await authService.getCurrentUser();
+	// 	if (userData) {
+	// 		dispatch(login(userData));
+	// 		setTimeout(() => navigate("/"), 500);
+	// 		return new Response(true, "Account created successfully");
+	// 	} else return new Response(false, "Error while fetching user data");
+	// };
 
-	const toastWrapper = async ({ email, password, firstName, lastName }) => {
-		const toastPromise = new Promise((resolve, reject) => {
-			createAccount({ email, password, firstName, lastName }).then(
-				({ isSuccess, message }) => {
-					if (isSuccess) resolve(message);
-					else reject(message);
-				},
-			);
-		});
+	// const toastWrapper = async ({ email, password, firstName, lastName }) => {
+	// 	const toastPromise = new Promise((resolve, reject) => {
+	// 		createAccount({ email, password, firstName, lastName }).then(
+	// 			({ isSuccess, message }) => {
+	// 				if (isSuccess) resolve(message);
+	// 				else reject(message);
+	// 			},
+	// 		);
+	// 	});
 
-		toast.promise(toastPromise, {
-			loading: "Creating account...",
-			success: (message) => message,
-			error: (error) => error,
-			richColors: true,
-		});
-	};
+	// 	toast.promise(toastPromise, {
+	// 		loading: "Creating account...",
+	// 		success: (message) => message,
+	// 		error: (error) => error,
+	// 		richColors: true,
+	// 	});
+	// };
+
+
+	// TODO: Make a toastWrapper function
+	const toastWrapper = ({ email, password, userName, firstName, lastName }) => {
+		const toastPromise = new Promise(asyncHandler(async (resolve, reject) => {
+			const result = await userService.registerUser({ email, password, userName, fullName: `${firstName} ${lastName}` });
+
+			if (result.success) {
+				resolve()
+				// login user
+				const toastPromise = new Promise(asyncHandler(async (resolve, reject) => {
+					const result = await userService.loginUser({ email, userName, password });
+					console.log(result);
+					if (result.success) {
+						resolve()
+					} else {
+						reject(result.data)
+					}
+				}))
+
+				toast.promise(toastPromise, {
+					loading: "Logging into account...",
+					success: () => `Logged into the account`,
+					error: (err) => err,
+					richColors: true
+				})
+			} else {
+				reject(result.data)
+			}
+		}))
+		toast.promise(
+			toastPromise,
+			{
+				loading: "Creating account...",
+				success: () => `Created the account`,
+				error: (err) => err,
+				richColors: true
+			}
+
+		)
+
+	}
+
 
 	return (
 		<section className="flex justify-center items-center my-[3rem] md:my-auto">
@@ -79,7 +122,7 @@ function SignUp() {
 					className="flex flex-col gap-4"
 					onSubmit={handleSubmit(toastWrapper)}
 				>
-					<div className="flex gap-4 md:flex-row flex-col">
+					<div className=" grid grid-cols-2 gap-4">
 						<Input
 							errors={errors}
 							registerId="firstName"
@@ -110,6 +153,17 @@ function SignUp() {
 									/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
 									"Email address must be a valid address",
 							},
+						})}
+						className="text-sm"
+					/>
+
+					<Input
+						errors={errors}
+						registerId="userName"
+						placeholder="Enter your username"
+						label="Username"
+						{...register("userName", {
+							required: true,
 						})}
 						className="text-sm"
 					/>

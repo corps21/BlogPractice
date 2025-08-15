@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { Response } from "@/lib/response";
+import { ApiResponse } from "@/lib/response";
 import databaseService from "../appwrite/databaseService";
 import storageService from "../appwrite/storageService";
 import {
@@ -57,9 +57,9 @@ function PostForm({ post }) {
 						post.featuredImage,
 					);
 					if (!isImageDeleted)
-						return new Response(false, "Image Delete Failed");
+						return new ApiResponse(false, "Image Delete Failed");
 				} else {
-					return new Response(false, "Image Upload Failed");
+					return new ApiResponse(false, "Image Upload Failed");
 				}
 			}
 
@@ -75,9 +75,9 @@ function PostForm({ post }) {
 
 			if (updateStatus) {
 				setTimeout(() => navigate(`/post/${slug}`), 500);
-				return new Response(true, "Post Updated Successfully");
+				return new ApiResponse(true, "Post Updated Successfully");
 			}
-			return new Response(false, "Post Update Failed");
+			return new ApiResponse(false, "Post Update Failed");
 		} else {
 			// create mode
 			let image;
@@ -85,7 +85,7 @@ function PostForm({ post }) {
 
 			const imageStatus = await storageService.uploadImage(data.img[0]);
 			if (imageStatus) image = imageStatus?.$id;
-			else return new Response(false, "Image Upload Failed");
+			else return new ApiResponse(false, "Image Upload Failed");
 
 			const { title, slug, editor: content, status } = data;
 
@@ -101,8 +101,8 @@ function PostForm({ post }) {
 
 			if (createStatus) {
 				setTimeout(() => navigate(`/post/${slug}`), 500);
-				return new Response(true, "Post Created Successfully");
-			} else return new Response(false, "Post Creation Failed");
+				return new ApiResponse(true, "Post Created Successfully");
+			} else return new ApiResponse(false, "Post Creation Failed");
 		}
 	};
 

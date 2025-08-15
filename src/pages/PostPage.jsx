@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { Response } from "@/lib/response";
+import { ApiResponse } from "@/lib/response";
 import databaseService from "../appwrite/databaseService";
 import storageService from "../appwrite/storageService";
 import { Button, Container, Loader } from "../components";
@@ -35,11 +35,11 @@ function PostPage() {
 
 	const deleteHandler = async () => {
 		const isPostDeleted = await databaseService.removePost(info.$id);
-		if (!isPostDeleted) new Response("error", "Error while deleting post");
+		if (!isPostDeleted) new ApiResponse("error", "Error while deleting post");
 		const isImageDeleted = await storageService.deleteImage(info.fileId);
-		if (!isImageDeleted) new Response("error", "Error while deleting image");
+		if (!isImageDeleted) new ApiResponse("error", "Error while deleting image");
 		setTimeout(() => navigate(`/all-post`), 500);
-		return new Response("success", "Post deleted successfully");
+		return new ApiResponse("success", "Post deleted successfully");
 	};
 
 	useEffect(() => {

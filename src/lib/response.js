@@ -1,6 +1,6 @@
-export class Response {
-	constructor(isSuccess, message) {
-		this.isSuccess = isSuccess;
-		this.message = message;
+export class ApiResponse {
+	constructor(success,data) {
+		this.success = success
+		this.data = data
 	}
 }
