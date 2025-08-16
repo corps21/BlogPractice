@@ -27,7 +27,7 @@ export default function BreadcrumbsWrapper() {
 			} else if (!curr) return "";
 			else {
 				let name = curr;
-				let path = acc + "/" + curr;
+				let path = `${acc}/${curr}`;
 
 				if (curr === "edit-post" || curr === "post") {
 					isPost = true;
@@ -56,7 +56,7 @@ export default function BreadcrumbsWrapper() {
 					{parsePathIntoBreadCrumbs(routes).map(({ name, path }, idx, arr) => {
 						return (
 							<Fragment key={name}>
-								{idx !== 0 ? <BreadcrumbSeparator /> : <></>}
+								{idx !== 0 ? <BreadcrumbSeparator /> : null}
 								<BreadcrumbItem>
 									{idx < arr.length - 1 ? (
 										<BreadcrumbLink asChild={true}>

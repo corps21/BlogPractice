@@ -1,6 +1,7 @@
 export class ApiResponse {
-	constructor(success,data) {
-		this.success = success
-		this.data = data
+	constructor(success, message, data = undefined) {
+		this.success = success;
+		this.message = message;
+		this.data = data;
 	}
 }

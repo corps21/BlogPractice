@@ -2,13 +2,14 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { userService } from "@/appwrite/userService";
 import { Toaster } from "@/components/ui/sonner";
 import { ApiResponse } from "@/lib/response";
-import { cn,asyncHandler } from "@/lib/utils";
+import { asyncHandler, cn } from "@/lib/utils";
 import authService from "../appwrite/authService";
 import { Button, Container, Input } from "../components";
 import { login, logout } from "../store/userSlice";
-import { userService } from "@/appwrite/userService";
+import { toastPromiseWrapper } from "@/lib/utils";
 
 function SignIn() {
 	const {
@@ -20,72 +21,31 @@ function SignIn() {
 	const dispatch = useDispatch();
 	const status = useSelector((state) => state.auth.isLoggedIn);
 
-	// const onSubmitHandler = async ({ email, password }) => {
-	// 	if (status) {
-	// 		const result = await authService.logout();
-	// 		if (result) {
-	// 			dispatch(logout());
-	// 		} else {
-	// 			return new ApiResponse(false, "Error while removing active session");
-	// 		}
-	// 	}
+	const toastWrapper = ({ email, password }) => {
+		toastPromiseWrapper((resolve, reject) => {
+			loginUser(resolve, reject, email, password)
+		},toastOptions)
+	}
 
-	// 	const result = await authService.login({ email, password });
-
-	// 	if (!result) {
-	// 		return new ApiResponse(false, "Invalid credentials or user not found");
-	// 	} else {
-	// 		const userData = await authService.getCurrentUser();
-	// 		if (userData) {
-	// 			dispatch(login({ userData }));
-	// 			setTimeout(() => navigate("/"), 500);
-	// 			return new ApiResponse(true, "Login successful");
-	// 		} else {
-	// 			return new ApiResponse(false, "Error while fetching user data");
-	// 		}
-	// 	}
-	// };
-
-	// const toastWrapper = async ({ email, password }) => {
-	// 	const toastPromise = new Promise((resolve, reject) => {
-	// 		onSubmitHandler({ email, password }).then(({ isSuccess, message }) => {
-	// 			if (isSuccess) {
-	// 				resolve(message);
-	// 			} else {
-	// 				reject(message);
-	// 			}
-	// 		});
-	// 	});
-	// 	toast.promise(toastPromise, {
-	// 		loading: "Logging in...",
-	// 		success: (message) => message,
-	// 		error: (error) => error,
-	// 	});
-	// };
-
-	const toastWrapper = ({ email, password, userName, firstName, lastName }) => {
-			const toastPromise = new Promise(asyncHandler(async (resolve, reject) => {
-				const result = await userService.loginUser({ email, password});
-				if (result.success) {
-					resolve()
-
-				} else {
-					reject(result.data)
-				}
-			}))
-			toast.promise(
-				toastPromise,
-				{
-					loading: "Logging into account...",
-					success: () => `Logged into the account`,
-					error: (err) => err,
-					richColors: true
-				}
-	
-			)
-	
+	const loginUser = asyncHandler(async (resolve, reject, email, password) => {
+		const result = await userService.loginUser({ email, password });
+		console.log(result);
+		if (result.success) {
+			dispatch(login({isLoggedIn: true, userData: result.data}))
+			navigate("/")
+			resolve()
+		} else {
+			reject(result.message)
 		}
-	 
+	})
+
+	const toastOptions = {
+		loading: "Logging into your account",
+		success: `Succesfully Logged in`,
+		error: (err) => `Something went wrong ( ${err} )`,
+		richColors: true,
+	}
+
 	return (
 		<section className="my-[3rem] md:my-auto">
 			<Container className="border-[1px] border-border p-8 rounded-xl md:w-[28rem] shadow-md">

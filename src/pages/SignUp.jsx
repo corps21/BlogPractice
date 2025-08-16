@@ -2,12 +2,12 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
-import authService from "../appwrite/authService";
 import { userService } from "@/appwrite/userService";
+import { Toaster } from "@/components/ui/sonner";
+import { asyncHandler } from "@/lib/utils";
+import authService from "../appwrite/authService";
 import { Button, Container, Input } from "../components";
 import { login, logout } from "../store/userSlice";
-import { asyncHandler } from "@/lib/utils";
 
 function SignUp() {
 	const {
@@ -65,48 +65,54 @@ function SignUp() {
 	// 	});
 	// };
 
-
 	// TODO: Make a toastWrapper function
 	const toastWrapper = ({ email, password, userName, firstName, lastName }) => {
-		const toastPromise = new Promise(asyncHandler(async (resolve, reject) => {
-			const result = await userService.registerUser({ email, password, userName, fullName: `${firstName} ${lastName}` });
+		const toastPromise = new Promise(
+			asyncHandler(async (resolve, reject) => {
+				const result = await userService.registerUser({
+					email,
+					password,
+					userName,
+					fullName: `${firstName} ${lastName}`,
+				});
 
-			if (result.success) {
-				resolve()
-				// login user
-				const toastPromise = new Promise(asyncHandler(async (resolve, reject) => {
-					const result = await userService.loginUser({ email, userName, password });
-					console.log(result);
-					if (result.success) {
-						resolve()
-					} else {
-						reject(result.data)
-					}
-				}))
+				if (result.success) {
+					resolve();
+					// login user
+					const toastPromise = new Promise(
+						asyncHandler(async (resolve, reject) => {
+							const result = await userService.loginUser({
+								email,
+								userName,
+								password,
+							});
+							console.log(result);
+							if (result.success) {
+								resolve();
+							} else {
+								reject(result.data);
+							}
+						}),
+					);
 
-				toast.promise(toastPromise, {
-					loading: "Logging into account...",
-					success: () => `Logged into the account`,
-					error: (err) => err,
-					richColors: true
-				})
-			} else {
-				reject(result.data)
-			}
-		}))
-		toast.promise(
-			toastPromise,
-			{
-				loading: "Creating account...",
-				success: () => `Created the account`,
-				error: (err) => err,
-				richColors: true
-			}
-
-		)
-
-	}
-
+					toast.promise(toastPromise, {
+						loading: "Logging into account...",
+						success: () => `Logged into the account`,
+						error: (err) => err,
+						richColors: true,
+					});
+				} else {
+					reject(result.data);
+				}
+			}),
+		);
+		toast.promise(toastPromise, {
+			loading: "Creating account...",
+			success: () => `Created the account`,
+			error: (err) => err,
+			richColors: true,
+		});
+	};
 
 	return (
 		<section className="flex justify-center items-center my-[3rem] md:my-auto">

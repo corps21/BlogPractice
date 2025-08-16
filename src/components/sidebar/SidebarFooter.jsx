@@ -33,7 +33,8 @@ export default function SidebarFooterWrapper() {
 	const navigate = useNavigate();
 	const logoutHandler = async () => {
 		const isUserLoggedOut = await authService.logout();
-		if (!isUserLoggedOut) return new ApiResponse(false, "Failed to logout user");
+		if (!isUserLoggedOut)
+			return new ApiResponse(false, "Failed to logout user");
 		dispatch(logout());
 		setTimeout(() => navigate("/signin"), 500);
 		return new ApiResponse(true, "User logged out successfully");
