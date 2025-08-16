@@ -10,25 +10,27 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
-import authService from "../appwrite/authService";
+import { userService } from "@/appwrite/userService";
 import { login } from "../store/userSlice";
 import { ModeToggle } from ".";
+
 export default function Layout({ children }) {
 	const status = useSelector((state) => state.auth.isLoggedIn);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		if (!status) {
-			authService
-				.getCurrentUser()
-				.then((data) => {
-					if (data) {
-						dispatch(login({ userData: data }));
-					}
-				})
-				.catch((error) => console.log(error));
+			userService.getCurrentUser().then(res => {
+				if (res.success) {
+					dispatch(login({ isLoggedIn: true, userData: res.data }))
+				} else {
+					throw Error("User logged out")
+				}
+			}).catch((err) => {
+				console.log(err.message)
+			})
 		}
-	}, [dispatch, status]);
+	}), [dispatch, status];
 
 	return (
 		<SidebarProvider>

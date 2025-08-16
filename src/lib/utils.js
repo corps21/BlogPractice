@@ -22,7 +22,7 @@ export function toastPromiseWrapper(fn, options = {
 	richColors: true,
 }) {
 	const toastPromise = new Promise((resolve, reject) => {
-		fn(resolve, reject);
+		Promise.resolve(fn(resolve, reject));
 	})
 	toast.promise(toastPromise, options)
 }

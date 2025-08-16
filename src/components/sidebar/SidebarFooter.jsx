@@ -21,40 +21,66 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { ApiResponse } from "@/lib/response";
+
 import { logout } from "@/store/userSlice";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/sonner";
+import { asyncHandler, toastPromiseWrapper } from "@/lib/utils";
+import { userService } from "@/appwrite/userService";
 
 export default function SidebarFooterWrapper() {
 	const userData = useSelector((state) => state.auth?.userData);
 	const dispatch = useDispatch();
 	const { isMobile, setOpenMobile } = useSidebar();
 	const navigate = useNavigate();
-	const logoutHandler = async () => {
-		const isUserLoggedOut = await authService.logout();
-		if (!isUserLoggedOut)
-			return new ApiResponse(false, "Failed to logout user");
-		dispatch(logout());
-		setTimeout(() => navigate("/signin"), 500);
-		return new ApiResponse(true, "User logged out successfully");
-	};
+	// const logoutHandler = async () => {
+	// 	const isUserLoggedOut = await authService.logout();
+	// 	if (!isUserLoggedOut)
+	// 		return new ApiResponse(false, "Failed to logout user");
+	// 	dispatch(logout());
+	// 	setTimeout(() => navigate("/signin"), 500);
+	// 	return new ApiResponse(true, "User logged out successfully");
+	// };
+	// const toastHandler = () => {
+	// 	setOpenMobile(false);
+	// 	const toastPromise = new Promise((resolve, reject) => {
+	// 		logoutHandler().then(({ isSuccess, message }) => {
+	// 			if (isSuccess) resolve(message);
+	// 			else reject(message);
+	// 		});
+	// 	});
+
+	// 	toast.promise(toastPromise, {
+	// 		loading: "Logging out...",
+	// 		success: "Logged out successfully",
+	// 		error: "Failed to logout user",
+	// 		richColors: true,
+	// 	});
+	// };
+
 	const toastHandler = () => {
 		setOpenMobile(false);
-		const toastPromise = new Promise((resolve, reject) => {
-			logoutHandler().then(({ isSuccess, message }) => {
-				if (isSuccess) resolve(message);
-				else reject(message);
-			});
-		});
+		toastPromiseWrapper(logOutUser, toastOptions)
+	}
+	
+	const toastOptions = {
+		loading: "Logging out of the account",
+		success: `Successfully logged out of the account`,
+		error: (err) => `Something went wrong ( ${err} )`,
+		richColors: true,
+	}
+	
+	const logOutUser = asyncHandler(async (resolve, reject) => {
+		const result = await userService.logoutUser();
+		if (result.success) {
+			dispatch(logout())
+			navigate("/signin")
+			resolve()
+		} else {
+			reject(result.message)
+		}
+	})
 
-		toast.promise(toastPromise, {
-			loading: "Logging out...",
-			success: "Logged out successfully",
-			error: "Failed to logout user",
-			richColors: true,
-		});
-	};
 	const defaultUser = useMemo(
 		() => ({
 			name: "John Doe",
@@ -68,14 +94,14 @@ export default function SidebarFooterWrapper() {
 	useEffect(() => {
 		if (userData)
 			setUser({
-				name: userData.name || defaultUser.name,
+				name: userData.fullName || defaultUser.name,
 				email: userData.email || defaultUser.email,
 				avatar: databaseService.getUserAvatar(
-					userData.name || defaultUser.name,
+					userData.fullName || defaultUser.name,
 				),
 			});
 		else setUser(defaultUser);
-	}, [userData, defaultUser]);
+	}, [userData]);
 
 	return (
 		<SidebarMenu>

@@ -1,15 +1,12 @@
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { Link, useNavigate,useLocation } from "react-router-dom";
 import { userService } from "@/appwrite/userService";
 import { Toaster } from "@/components/ui/sonner";
-import { ApiResponse } from "@/lib/response";
-import { asyncHandler, cn } from "@/lib/utils";
-import authService from "../appwrite/authService";
+import { asyncHandler, toastPromiseWrapper } from "@/lib/utils";
 import { Button, Container, Input } from "../components";
-import { login, logout } from "../store/userSlice";
-import { toastPromiseWrapper } from "@/lib/utils";
+import { login } from "../store/userSlice";
+
 
 function SignIn() {
 	const {
@@ -24,15 +21,14 @@ function SignIn() {
 	const toastWrapper = ({ email, password }) => {
 		toastPromiseWrapper((resolve, reject) => {
 			loginUser(resolve, reject, email, password)
-		},toastOptions)
+		}, toastOptions)
 	}
 
 	const loginUser = asyncHandler(async (resolve, reject, email, password) => {
 		const result = await userService.loginUser({ email, password });
-		console.log(result);
 		if (result.success) {
-			dispatch(login({isLoggedIn: true, userData: result.data}))
 			navigate("/")
+			dispatch(login({ isLoggedIn: true, userData: result.data }))
 			resolve()
 		} else {
 			reject(result.message)

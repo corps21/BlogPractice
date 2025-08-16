@@ -36,7 +36,7 @@ export class UserService {
 	})
 
 	logoutUser = fetchWrapper(async () =>{
-		const result = await fetch("/user/logout")
+		const result = await fetch("/user/logout",{...postOptions})
 		return await result.json();
 	})
 }
