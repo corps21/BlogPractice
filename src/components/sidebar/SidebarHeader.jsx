@@ -9,13 +9,14 @@ import {
 
 export default function SidebarHeaderWrapper() {
 	const navigate = useNavigate();
-	const { setOpenMobile } = useSidebar();
+	const { isMobile, setOpen, setOpenMobile } = useSidebar();
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
 				<SidebarMenuButton
 					onClick={() => {
-						setOpenMobile(false);
+						if (isMobile) setOpenMobile(false);
+						setOpen(false);
 						navigate("/");
 					}}
 					size="lg"

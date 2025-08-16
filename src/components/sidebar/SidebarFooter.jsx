@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import authService from "@/appwrite/authService";
 import databaseService from "@/appwrite/databaseService";
+import { userService } from "@/appwrite/userService";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -21,65 +22,40 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-
+import { asyncHandler, toastPromiseWrapper } from "@/lib/utils";
 import { logout } from "@/store/userSlice";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/sonner";
-import { asyncHandler, toastPromiseWrapper } from "@/lib/utils";
-import { userService } from "@/appwrite/userService";
 
 export default function SidebarFooterWrapper() {
-	const userData = useSelector((state) => state.auth?.userData);
+	const userData = useSelector((state) => state.auth.userData);
+	const { isMobile, setOpenMobile, setOpen } = useSidebar();
 	const dispatch = useDispatch();
-	const { isMobile, setOpenMobile } = useSidebar();
 	const navigate = useNavigate();
-	// const logoutHandler = async () => {
-	// 	const isUserLoggedOut = await authService.logout();
-	// 	if (!isUserLoggedOut)
-	// 		return new ApiResponse(false, "Failed to logout user");
-	// 	dispatch(logout());
-	// 	setTimeout(() => navigate("/signin"), 500);
-	// 	return new ApiResponse(true, "User logged out successfully");
-	// };
-	// const toastHandler = () => {
-	// 	setOpenMobile(false);
-	// 	const toastPromise = new Promise((resolve, reject) => {
-	// 		logoutHandler().then(({ isSuccess, message }) => {
-	// 			if (isSuccess) resolve(message);
-	// 			else reject(message);
-	// 		});
-	// 	});
-
-	// 	toast.promise(toastPromise, {
-	// 		loading: "Logging out...",
-	// 		success: "Logged out successfully",
-	// 		error: "Failed to logout user",
-	// 		richColors: true,
-	// 	});
-	// };
 
 	const toastHandler = () => {
-		setOpenMobile(false);
-		toastPromiseWrapper(logOutUser, toastOptions)
-	}
-	
+		if (isMobile) setOpenMobile(false);
+		setOpen(false);
+		toastPromiseWrapper(logOutUser, toastOptions);
+	};
+
 	const toastOptions = {
 		loading: "Logging out of the account",
 		success: `Successfully logged out of the account`,
 		error: (err) => `Something went wrong ( ${err} )`,
 		richColors: true,
-	}
-	
+	};
+
 	const logOutUser = asyncHandler(async (resolve, reject) => {
 		const result = await userService.logoutUser();
 		if (result.success) {
-			dispatch(logout())
-			navigate("/signin")
-			resolve()
+			dispatch(logout());
+			navigate("/signin");
+			resolve();
 		} else {
-			reject(result.message)
+			reject(result.message);
 		}
-	})
+	});
 
 	const defaultUser = useMemo(
 		() => ({
@@ -164,7 +140,7 @@ export default function SidebarFooterWrapper() {
 							</Button>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
-					<Toaster richColors theme="light" />
+					<Toaster richColors />
 				</DropdownMenu>
 			</SidebarMenuItem>
 		</SidebarMenu>

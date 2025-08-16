@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { userService } from "@/appwrite/userService";
 import { Toaster } from "@/components/ui/sonner";
-import { asyncHandler } from "@/lib/utils";
+import { asyncHandler, toastPromiseWrapper } from "@/lib/utils";
 import authService from "../appwrite/authService";
 import { Button, Container, Input } from "../components";
 import { login, logout } from "../store/userSlice";
@@ -17,102 +17,54 @@ function SignUp() {
 	} = useForm();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const status = useSelector((state) => state.auth.isLoggedIn);
 
-	// 	if (status) {
-	// 		const result = await authService.logout();
-	// 		if (result) dispatch(logout());
-	// 		else return new Response(false, "Error while removing active session");
-	// 	}
-
-	// 	const isAccountCreated = await authService.createAccount({
-	// 		email,
-	// 		password,
-	// 		firstName,
-	// 		lastName,
-	// 	});
-
-	// 	if (!isAccountCreated)
-	// 		return new Response(false, "Error while creating account");
-
-	// 	const isAccountLoggedIn = await authService.login({ email, password });
-	// 	if (!isAccountLoggedIn)
-	// 		return new Response(false, "Error while logging in");
-
-	// 	const userData = await authService.getCurrentUser();
-	// 	if (userData) {
-	// 		dispatch(login(userData));
-	// 		setTimeout(() => navigate("/"), 500);
-	// 		return new Response(true, "Account created successfully");
-	// 	} else return new Response(false, "Error while fetching user data");
-	// };
-
-	// const toastWrapper = async ({ email, password, firstName, lastName }) => {
-	// 	const toastPromise = new Promise((resolve, reject) => {
-	// 		createAccount({ email, password, firstName, lastName }).then(
-	// 			({ isSuccess, message }) => {
-	// 				if (isSuccess) resolve(message);
-	// 				else reject(message);
-	// 			},
-	// 		);
-	// 	});
-
-	// 	toast.promise(toastPromise, {
-	// 		loading: "Creating account...",
-	// 		success: (message) => message,
-	// 		error: (error) => error,
-	// 		richColors: true,
-	// 	});
-	// };
-
-	// TODO: Make a toastWrapper function
 	const toastWrapper = ({ email, password, userName, firstName, lastName }) => {
-		const toastPromise = new Promise(
-			asyncHandler(async (resolve, reject) => {
-				const result = await userService.registerUser({
+		toastPromiseWrapper(async (resolve, reject) => {
+			await registerUser(
+				resolve,
+				reject,
+				email,
+				password,
+				userName,
+				firstName,
+				lastName,
+			);
+		}, toastOptions);
+	};
+
+	const toastOptions = {
+		loading: "Creating Account...",
+		success: "Created account successfully",
+		error: (err) => `Something went wrong ( ${err} )`,
+	};
+
+	const registerUser = asyncHandler(
+		async (resolve, reject, email, password, userName, firstName, lastName) => {
+			const result = await userService.registerUser({
+				email,
+				password,
+				userName,
+				fullName: `${firstName} ${lastName}`,
+			});
+			if (result.success) {
+				resolve();
+				const result = await userService.loginUser({
 					email,
 					password,
 					userName,
-					fullName: `${firstName} ${lastName}`,
 				});
-
 				if (result.success) {
-					resolve();
-					// login user
-					const toastPromise = new Promise(
-						asyncHandler(async (resolve, reject) => {
-							const result = await userService.loginUser({
-								email,
-								userName,
-								password,
-							});
-							console.log(result);
-							if (result.success) {
-								resolve();
-							} else {
-								reject(result.data);
-							}
-						}),
-					);
-
-					toast.promise(toastPromise, {
-						loading: "Logging into account...",
-						success: () => `Logged into the account`,
-						error: (err) => err,
-						richColors: true,
-					});
+					dispatch(login({ userData: result.data }));
+					setTimeout(() => navigate("/"), 500);
+					toast.success("Logged into the account");
 				} else {
-					reject(result.data);
+					toast.error("Something went wrong while logging into account");
 				}
-			}),
-		);
-		toast.promise(toastPromise, {
-			loading: "Creating account...",
-			success: () => `Created the account`,
-			error: (err) => err,
-			richColors: true,
-		});
-	};
+			} else {
+				reject(result.message);
+			}
+		},
+	);
 
 	return (
 		<section className="flex justify-center items-center my-[3rem] md:my-auto">

@@ -1,12 +1,11 @@
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate,useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { userService } from "@/appwrite/userService";
 import { Toaster } from "@/components/ui/sonner";
 import { asyncHandler, toastPromiseWrapper } from "@/lib/utils";
 import { Button, Container, Input } from "../components";
 import { login } from "../store/userSlice";
-
 
 function SignIn() {
 	const {
@@ -16,31 +15,30 @@ function SignIn() {
 	} = useForm();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const status = useSelector((state) => state.auth.isLoggedIn);
 
 	const toastWrapper = ({ email, password }) => {
-		toastPromiseWrapper((resolve, reject) => {
-			loginUser(resolve, reject, email, password)
-		}, toastOptions)
-	}
+		toastPromiseWrapper(async (resolve, reject) => {
+			loginUser(resolve, reject, email, password);
+		}, toastOptions);
+	};
 
 	const loginUser = asyncHandler(async (resolve, reject, email, password) => {
 		const result = await userService.loginUser({ email, password });
 		if (result.success) {
-			navigate("/")
-			dispatch(login({ isLoggedIn: true, userData: result.data }))
-			resolve()
+			setTimeout(() => navigate("/"), 500);
+			dispatch(login({ isLoggedIn: true, userData: result.data }));
+			resolve();
 		} else {
-			reject(result.message)
+			reject(result.message);
 		}
-	})
+	});
 
 	const toastOptions = {
 		loading: "Logging into your account",
 		success: `Succesfully Logged in`,
 		error: (err) => `Something went wrong ( ${err} )`,
 		richColors: true,
-	}
+	};
 
 	return (
 		<section className="my-[3rem] md:my-auto">

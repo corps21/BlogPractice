@@ -8,7 +8,6 @@ const postOptions = {
 };
 
 export class UserService {
-
 	registerUser = fetchWrapper(
 		async ({ fullName, email, userName, password }) => {
 			const options = {
@@ -31,14 +30,14 @@ export class UserService {
 	});
 
 	getCurrentUser = fetchWrapper(async () => {
-		const result = await fetch("/user/me")
+		const result = await fetch("/user/me");
 		return await result.json();
-	})
+	});
 
-	logoutUser = fetchWrapper(async () =>{
-		const result = await fetch("/user/logout",{...postOptions})
+	logoutUser = fetchWrapper(async () => {
+		const result = await fetch("/user/logout", { ...postOptions });
 		return await result.json();
-	})
+	});
 }
 
 export const userService = new UserService();
