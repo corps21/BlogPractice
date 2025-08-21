@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { userService } from "@/appwrite/userService";
 import { Toaster } from "@/components/ui/sonner";
-import { asyncHandler, toastPromiseWrapper } from "@/lib/utils";
+import { toastPromiseWrapper } from "@/lib/utils";
 import { Button, Container, Input } from "../components";
 import { login } from "../store/userSlice";
 
@@ -16,22 +16,18 @@ function SignIn() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const toastWrapper = ({ email, password }) => {
+	const handleUserLogin = ({ email, password }) => {
 		toastPromiseWrapper(async (resolve, reject) => {
-			loginUser(resolve, reject, email, password);
+			const result = await userService.loginUser({email,password});
+			if(result?.success) {
+				dispatch(login({ isLoggedIn: true, userData: result.data }))
+				setTimeout(() => navigate("/"))
+				resolve()
+			} else {
+				reject(result?.message)
+			}
 		}, toastOptions);
 	};
-
-	const loginUser = asyncHandler(async (resolve, reject, email, password) => {
-		const result = await userService.loginUser({ email, password });
-		if (result.success) {
-			setTimeout(() => navigate("/"), 500);
-			dispatch(login({ isLoggedIn: true, userData: result.data }));
-			resolve();
-		} else {
-			reject(result.message);
-		}
-	});
 
 	const toastOptions = {
 		loading: "Logging into your account",
@@ -51,7 +47,7 @@ function SignIn() {
 				</div>
 
 				<form
-					onSubmit={handleSubmit(toastWrapper)}
+					onSubmit={handleSubmit(handleUserLogin)}
 					className="flex flex-col gap-4"
 				>
 					<Input

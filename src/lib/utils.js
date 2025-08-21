@@ -7,25 +7,17 @@ export function cn(...inputs) {
 	return twMerge(clsx(inputs));
 }
 
-export function asyncHandler(fn) {
-	return async (...params) => {
-		return Promise.resolve(fn(...params)).catch((err) => {
-			console.log(err);
-		});
-	};
-}
-
 export function toastPromiseWrapper(
 	fn,
 	options = {
 		loading: "Loading...",
 		success: `Succesfull`,
-		error: "Something went wrong",
+		error: (err) => `Something went wrong ( ${err} )`,
 		richColors: true,
 	},
 ) {
 	const toastPromise = new Promise((resolve, reject) => {
-		Promise.resolve(fn(resolve, reject)).catch((err) => console.log(err));
+		Promise.resolve(fn(resolve, reject)).catch((err) => reject(err));
 	});
 	toast.promise(toastPromise, options);
 }

@@ -1,13 +1,12 @@
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { userService } from "@/appwrite/userService";
 import { Toaster } from "@/components/ui/sonner";
-import { asyncHandler, toastPromiseWrapper } from "@/lib/utils";
-import authService from "../appwrite/authService";
+import { toastPromiseWrapper } from "@/lib/utils";
 import { Button, Container, Input } from "../components";
-import { login, logout } from "../store/userSlice";
+import { login } from "../store/userSlice";
 
 function SignUp() {
 	const {
@@ -20,26 +19,7 @@ function SignUp() {
 
 	const toastWrapper = ({ email, password, userName, firstName, lastName }) => {
 		toastPromiseWrapper(async (resolve, reject) => {
-			await registerUser(
-				resolve,
-				reject,
-				email,
-				password,
-				userName,
-				firstName,
-				lastName,
-			);
-		}, toastOptions);
-	};
-
-	const toastOptions = {
-		loading: "Creating Account...",
-		success: "Created account successfully",
-		error: (err) => `Something went wrong ( ${err} )`,
-	};
-
-	const registerUser = asyncHandler(
-		async (resolve, reject, email, password, userName, firstName, lastName) => {
+			throw Error()
 			const result = await userService.registerUser({
 				email,
 				password,
@@ -55,7 +35,7 @@ function SignUp() {
 				});
 				if (result.success) {
 					dispatch(login({ userData: result.data }));
-					setTimeout(() => navigate("/"), 500);
+					setTimeout(() => navigate("/"));
 					toast.success("Logged into the account");
 				} else {
 					toast.error("Something went wrong while logging into account");
@@ -63,8 +43,14 @@ function SignUp() {
 			} else {
 				reject(result.message);
 			}
-		},
-	);
+		}, toastOptions);
+	};
+
+	const toastOptions = {
+		loading: "Creating Account...",
+		success: "Created account successfully",
+		error: (err) => `Something went wrong ( ${err} )`,
+	};
 
 	return (
 		<section className="flex justify-center items-center my-[3rem] md:my-auto">

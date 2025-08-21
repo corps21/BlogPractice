@@ -2,8 +2,6 @@ import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import authService from "@/appwrite/authService";
 import databaseService from "@/appwrite/databaseService";
 import { userService } from "@/appwrite/userService";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -22,7 +20,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { asyncHandler, toastPromiseWrapper } from "@/lib/utils";
+import { toastPromiseWrapper } from "@/lib/utils";
 import { logout } from "@/store/userSlice";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/sonner";
@@ -46,7 +44,7 @@ export default function SidebarFooterWrapper() {
 		richColors: true,
 	};
 
-	const logOutUser = asyncHandler(async (resolve, reject) => {
+	const logOutUser = async (resolve, reject) => {
 		const result = await userService.logoutUser();
 		if (result.success) {
 			dispatch(logout());
@@ -55,7 +53,7 @@ export default function SidebarFooterWrapper() {
 		} else {
 			reject(result.message);
 		}
-	});
+	};
 
 	const defaultUser = useMemo(
 		() => ({
