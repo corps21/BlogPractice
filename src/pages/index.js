@@ -5,5 +5,6 @@ import Home from "./Home";
 import PostPage from "./PostPage";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import NotFound from "./NotFound";
 
-export { Home, SignIn, SignUp, AllPosts, AddPost, EditPost, PostPage };
+export { Home, SignIn, SignUp, AllPosts, AddPost, EditPost, PostPage, NotFound };

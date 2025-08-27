@@ -19,12 +19,13 @@ import {
 	PostPage,
 	SignIn,
 	SignUp,
+	NotFound
 } from "./pages/index.js";
 import store from "./store/store.js";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
-		<Route path="/" element={<App />}>
+		<Route path="/" element={<App />} errorElement={<NotFound />}>
 			<Route path="" element={<Home />} />
 			<Route
 				path="/signin"

@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userService } from "@/appwrite/userService";
 import { AppSidebar } from "@/components/app-sidebar";
 import BreadcrumbsWrapper from "@/components/BreadcrumbsWrapper";
 import { Separator } from "@/components/ui/separator";
@@ -11,30 +10,18 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { login } from "../store/userSlice";
 import { ModeToggle } from ".";
+import { setCurrentUser } from "@/store/userSlice";
 
 export default function Layout({ children }) {
 	const status = useSelector((state) => state.auth.isLoggedIn);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (!status) {
-			userService
-				.getCurrentUser()
-				.then((res) => {
-					if (res.success) {
-						dispatch(login({ userData: res.data.user }));
-					} else {
-						throw Error("User logged out");
-					}
-				})
-				.catch((err) => {
-					console.log(err.message);
-				});
+		if(!status) {
+			dispatch(setCurrentUser())
 		}
-	}),
-		[dispatch, status];
+	},[])
 
 	return (
 		<SidebarProvider defaultOpen={false}>

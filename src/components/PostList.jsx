@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import storageService from "../appwrite/storageService";
 import { Loader, PostCard } from "../components";
 
