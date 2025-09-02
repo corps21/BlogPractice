@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import databaseService from "@/appwrite/databaseService";
+import databaseService from "@/microService/databaseService";
 import { AvatarCard } from ".";
 
 function PostCard({ href = "", title = "", authorName, url = "/" }) {

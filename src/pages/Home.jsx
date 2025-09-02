@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import databaseService from "../appwrite/databaseService";
+import databaseService from "../microService/databaseService";
 import { Container, CTA, Header, PostList } from "../components";
 
 function Home() {

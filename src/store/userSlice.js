@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { userService } from "@/appwrite/userService";
+import { userService } from "@/microService/userService";
 
 const initialState = {
 	isLoggedIn: false,
@@ -8,7 +8,7 @@ const initialState = {
 
 export const setCurrentUser = createAsyncThunk('setCurrentUser', async () => {
 	const response = await userService.getCurrentUser()
-	if(!response.success) {
+	if (!response.success) {
 		throw new Error(response.message)
 	}
 	return response.data
@@ -33,7 +33,7 @@ const userSlice = createSlice({
 			state.userData = null;
 		})
 
-		builder.addCase(setCurrentUser.fulfilled, (state,action) => {
+		builder.addCase(setCurrentUser.fulfilled, (state, action) => {
 			state.isLoggedIn = true;
 			state.userData = action.payload.user
 		})

@@ -1,4 +1,4 @@
-import storageService from "../appwrite/storageService";
+import storageService from "../microService/storageService";
 import { Loader, PostCard } from "../components";
 
 export default function PostList({ isLoading, files, className = "" }) {

@@ -2,8 +2,8 @@ import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import databaseService from "@/appwrite/databaseService";
-import { userService } from "@/appwrite/userService";
+import databaseService from "@/microService/databaseService";
+import { userService } from "@/microService/userService";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,

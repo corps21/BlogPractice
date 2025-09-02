@@ -1,11 +1,12 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { userService } from "@/appwrite/userService";
+import { Link } from "react-router-dom";
+import { userService } from "@/microService/userService";
 import { Toaster } from "@/components/ui/sonner";
 import { toastPromiseWrapper } from "@/lib/utils";
 import { Button, Container, Input } from "../components";
 import { login } from "../store/userSlice";
+import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
 
 function SignIn() {
 	const {
@@ -13,15 +14,14 @@ function SignIn() {
 		handleSubmit,
 		formState: { errors },
 	} = useForm();
-	const navigate = useNavigate();
+
 	const dispatch = useDispatch();
 
 	const handleUserLogin = ({ email, password }) => {
 		toastPromiseWrapper(async (resolve, reject) => {
-			const result = await userService.loginUser({email,password});
-			if(result?.success) {
-				dispatch(login({ isLoggedIn: true, userData: result.data }))
-				setTimeout(() => navigate("/"))
+			const result = await userService.loginUser({ email, password });
+			if (result?.success) {
+				dispatch(login({ userData: result.data.user }))
 				resolve()
 			} else {
 				reject(result?.message)
@@ -35,6 +35,8 @@ function SignIn() {
 		error: (err) => `Something went wrong ( ${err} )`,
 		richColors: true,
 	};
+
+	useAuthHomeRedirect()
 
 	return (
 		<section className="my-[3rem] md:my-auto">
@@ -92,7 +94,7 @@ function SignIn() {
 					</div>
 				</form>
 			</Container>
-			<Toaster richColors theme="light" />
+			<Toaster richColors />
 		</section>
 	);
 }

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import databaseService from "../appwrite/databaseService";
+import databaseService from "../microService/databaseService";
 import { Container, Header, PostList } from "../components";
 
 function AllPosts() {

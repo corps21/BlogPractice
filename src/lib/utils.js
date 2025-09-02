@@ -2,6 +2,7 @@ import { clsx } from "clsx";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { ApiResponse } from "./response";
+import axios from "axios";
 
 export function cn(...inputs) {
 	return twMerge(clsx(inputs));
@@ -22,18 +23,16 @@ export function toastPromiseWrapper(
 	toast.promise(toastPromise, options);
 }
 
-export function fetchWrapper(fn) {
+export function axiosWrapper(fn) {
 	return async (...params) => {
 		return Promise.resolve(fn(...params))
-			.then((data) => {
-				if (data.success) {
-					return new ApiResponse(true, data.message, data?.data);
-				} else {
-					return new ApiResponse(false, data.message, data?.data);
-				}
-			})
+			.then(({data: response}) => response)
 			.catch((err) => {
-				console.log(err);
+				console.log(err)
+				if(axios.isAxiosError(err)) {
+					const {response} = err 
+					return new ApiResponse(false, response.data.message)
+				}
 				return new ApiResponse(false, err.message);
 			});
 	};

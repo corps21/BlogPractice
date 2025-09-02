@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { userService } from "@/appwrite/userService";
+import { userService } from "@/microService/userService";
 import { Toaster } from "@/components/ui/sonner";
 import { toastPromiseWrapper } from "@/lib/utils";
 import { Button, Container, Input } from "../components";
 import { login } from "../store/userSlice";
+import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
 
 function SignUp() {
 	const {
@@ -14,12 +15,12 @@ function SignUp() {
 		handleSubmit,
 		formState: { errors },
 	} = useForm();
-	const navigate = useNavigate();
+
 	const dispatch = useDispatch();
 
 	const toastWrapper = ({ email, password, userName, firstName, lastName }) => {
 		toastPromiseWrapper(async (resolve, reject) => {
-			throw Error()
+
 			const result = await userService.registerUser({
 				email,
 				password,
@@ -34,8 +35,7 @@ function SignUp() {
 					userName,
 				});
 				if (result.success) {
-					dispatch(login({ userData: result.data }));
-					setTimeout(() => navigate("/"));
+					dispatch(login({ userData: result.data.user }));
 					toast.success("Logged into the account");
 				} else {
 					toast.error("Something went wrong while logging into account");
@@ -51,6 +51,8 @@ function SignUp() {
 		success: "Created account successfully",
 		error: (err) => `Something went wrong ( ${err} )`,
 	};
+
+	useAuthHomeRedirect()
 
 	return (
 		<section className="flex justify-center items-center my-[3rem] md:my-auto">
