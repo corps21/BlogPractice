@@ -5,7 +5,7 @@ import { Container, CTA, Header, PostList } from "../components";
 
 function Home() {
 	const [isLoading, setIsLoading] = useState(true);
-	const status = useSelector((state) => state.auth.isLoggedIn);
+	const status = useSelector((state) => state.user.isLoggedIn);
 	const [files, setFiles] = useState([]);
 
 	useEffect(() => {

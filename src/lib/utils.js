@@ -26,7 +26,7 @@ export function toastPromiseWrapper(
 export function axiosWrapper(fn) {
 	return async (...params) => {
 		return Promise.resolve(fn(...params))
-			.then(({data: response}) => response)
+			.then(res => res?.data )
 			.catch((err) => {
 				console.log(err)
 				if(axios.isAxiosError(err)) {

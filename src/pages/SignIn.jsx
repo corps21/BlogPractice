@@ -7,6 +7,7 @@ import { toastPromiseWrapper } from "@/lib/utils";
 import { Button, Container, Input } from "../components";
 import { login } from "../store/userSlice";
 import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
+import { addAccessToken } from "@/store/authSlice";
 
 function SignIn() {
 	const {
@@ -20,7 +21,8 @@ function SignIn() {
 	const handleUserLogin = ({ email, password }) => {
 		toastPromiseWrapper(async (resolve, reject) => {
 			const result = await userService.loginUser({ email, password });
-			if (result?.success) {
+			if (result.success) {
+				dispatch(addAccessToken(result.data.accessToken))
 				dispatch(login({ userData: result.data.user }))
 				resolve()
 			} else {

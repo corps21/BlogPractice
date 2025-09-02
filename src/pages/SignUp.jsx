@@ -8,6 +8,7 @@ import { toastPromiseWrapper } from "@/lib/utils";
 import { Button, Container, Input } from "../components";
 import { login } from "../store/userSlice";
 import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
+import { addAccessToken } from "@/store/authSlice";
 
 function SignUp() {
 	const {
@@ -35,6 +36,7 @@ function SignUp() {
 					userName,
 				});
 				if (result.success) {
+					dispatch(addAccessToken(result.data.accessToken))
 					dispatch(login({ userData: result.data.user }));
 					toast.success("Logged into the account");
 				} else {

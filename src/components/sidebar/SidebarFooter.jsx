@@ -26,7 +26,7 @@ import { Button } from "../ui/button";
 import { Toaster } from "../ui/sonner";
 
 export default function SidebarFooterWrapper() {
-	const userData = useSelector((state) => state.auth.userData);
+	const userData = useSelector((state) => state.user.userData);
 	const { isMobile, setOpenMobile, setOpen } = useSidebar();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -47,12 +47,12 @@ export default function SidebarFooterWrapper() {
 	const logOutUser = async (resolve, reject) => {
 		const result = await userService.logoutUser();
 		if (result.success) {
-			dispatch(logout());
-			navigate("/signin");
 			resolve();
 		} else {
 			reject(result.message);
 		}
+		dispatch(logout());
+		navigate("/signin");
 	};
 
 	const defaultUser = useMemo(
@@ -65,6 +65,7 @@ export default function SidebarFooterWrapper() {
 	);
 	const [user, setUser] = useState(defaultUser);
 
+	// TODO: IMPROVE THIS
 	useEffect(() => {
 		if (userData)
 			setUser({

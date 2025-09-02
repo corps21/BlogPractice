@@ -12,8 +12,8 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import SidebarFooterWrapper from "./sidebar/SidebarFooter";
-import SidebarHeaderWrapper from "./sidebar/SidebarHeader";
+import SidebarFooterWrapper from "./Sidebar/SidebarFooter";
+import SidebarHeaderWrapper from "./Sidebar/SidebarHeader";
 
 const items = [
 	{

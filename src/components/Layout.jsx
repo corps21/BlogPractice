@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
-
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppSidebar } from "@/components/app-sidebar";
 import BreadcrumbsWrapper from "@/components/BreadcrumbsWrapper";
@@ -11,16 +9,57 @@ import {
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { ModeToggle } from ".";
-import { setCurrentUser } from "@/store/userSlice";
+import { logout, setCurrentUser } from "@/store/userSlice";
+import api from "@/api/api";
+import { userService } from "@/microService/userService";
+import { addAccessToken } from "@/store/authSlice";
 
 export default function Layout({ children }) {
-	const status = useSelector((state) => state.auth.isLoggedIn);
+	const status = useSelector((state) => state.user.isLoggedIn);
+	const accessToken = useSelector(state => state.auth.accessToken)
+
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		if(!status) {
 			dispatch(setCurrentUser())
 		}
+	},[])
+
+	// TODO: generalize the axios instance with userService
+
+	useLayoutEffect(() => {
+		const interceptor = api.interceptors.request.use((config) => {
+			config.headers.Authorization = accessToken && !config?._newToken ? `Bearer ${accessToken}` : config.headers.Authorization
+			return config;
+		})
+
+		return () => api.interceptors.request.eject(interceptor)
+	},[accessToken])
+
+	useLayoutEffect(() => {
+		const interceptor = api.interceptors.response.use((response) => response, async (err) => {
+			const originalReq = err.config
+
+			if(err.response.status === 401 && err.response.data.message === "jwt expired") {
+				try {
+					const response = await userService.refreshAccessToken()
+					dispatch(addAccessToken(response.data.accessToken))
+					
+					originalReq.headers.Authorization = `Bearer ${response.data.accessToken}`
+					originalReq._newToken = true;
+
+					return api(originalReq)
+
+				} catch {
+					dispatch(logout())
+				}
+			} else {
+				return Promise.reject(err)
+			}
+		})
+
+		return () => api.interceptors.response.eject(interceptor)
 	},[])
 
 	return (
