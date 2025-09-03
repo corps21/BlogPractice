@@ -41,7 +41,7 @@ export default function Layout({ children }) {
 		const interceptor = api.interceptors.response.use((response) => response, async (err) => {
 			const originalReq = err.config
 
-			if(err.response.status === 401 && err.response.data.message === "jwt expired") {
+			if(err.response.status === 401 && (err.response.data.message === "jwt expired" || err.response.data.message === "Need access token for this request")) {
 				try {
 					const response = await userService.refreshAccessToken()
 					dispatch(addAccessToken(response.data.accessToken))

@@ -11,7 +11,7 @@ const authSlice = createSlice({
         addAccessToken: (state,action) => {
             state.accessToken = action.payload
         },
-        removeAccessToken: (state,action) => {
+        removeAccessToken: (state) => {
             state.accessToken = null
         }
     },

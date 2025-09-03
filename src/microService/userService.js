@@ -10,23 +10,23 @@ const postOptions = {
 
 export class UserService {
 
-	registerUser = axiosWrapper(({fullName, email, userName, password}) => {
+	registerUser = axiosWrapper(async ({fullName, email, userName, password}) => {
 		return api.post('/user/register', {fullName, email, userName, password})
 	})
 
-	loginUser = axiosWrapper(({email, userName, password}) => {
+	loginUser = axiosWrapper(async ({email, userName, password}) => {
 		return api.post("/user/login", {email, password, userName})
 	})
 
-	getCurrentUser = axiosWrapper(() => {
+	getCurrentUser = axiosWrapper(async () => {
 		return api.get("/user/me")
 	});
 
-	logoutUser = axiosWrapper(() => {
+	logoutUser = axiosWrapper(async () => {
 		return api.post("/user/logout")
 	});
 
-	refreshAccessToken = axiosWrapper(() => {
+	refreshAccessToken = axiosWrapper(async () => {
 		return api.post("/user/refresh-token")
 	})
 }
