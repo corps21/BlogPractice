@@ -28,7 +28,7 @@ const items = [
 	},
 	{
 		title: "Create Post",
-		url: "/all-post/add-post",
+		url: "/add-post",
 		icon: SquarePen,
 	},
 	{

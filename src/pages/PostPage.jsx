@@ -5,9 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { ApiResponse } from "@/lib/response";
+import { Button, Container, Loader } from "../components";
 import databaseService from "../microService/databaseService";
 import storageService from "../microService/storageService";
-import { Button, Container, Loader } from "../components";
 
 function PostPage() {
 	const { slug } = useParams();

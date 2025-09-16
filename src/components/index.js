@@ -13,6 +13,7 @@ import PostForm from "./PostForm";
 import PostList from "./PostList";
 import RTE from "./RTE";
 import SelectWrapper from "./SelectWrapper";
+import SettingsForm from "./SettingsForm";
 import { ModeToggle } from "./ToggleThemeBtn";
 import { ThemeProvider } from "./theme-provider";
 
@@ -34,4 +35,5 @@ export {
 	Message,
 	ThemeProvider,
 	ModeToggle,
+	SettingsForm,
 };

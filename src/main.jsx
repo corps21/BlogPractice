@@ -6,7 +6,6 @@ import { Provider } from "react-redux";
 import {
 	createBrowserRouter,
 	createRoutesFromElements,
-	Outlet,
 	Route,
 	RouterProvider,
 } from "react-router-dom";
@@ -16,11 +15,13 @@ import {
 	AllPosts,
 	EditPost,
 	Home,
+	NotFound,
 	PostPage,
+	Settings,
 	SignIn,
 	SignUp,
-	NotFound
 } from "./pages/index.js";
+import ProfileRoute from "./routes/ProfileRoute.jsx";
 import store from "./store/store.js";
 
 const router = createBrowserRouter(
@@ -43,32 +44,30 @@ const router = createBrowserRouter(
 					</AuthLayout>
 				}
 			/>
-			<Route path="/all-post" element={<Outlet />}>
-				<Route
-					path=""
-					element={
-						<AuthLayout authentication={true}>
-							<AllPosts />
-						</AuthLayout>
-					}
-				/>
-				<Route
-					path="add-post"
-					element={
-						<AuthLayout authentication={true}>
-							<AddPost />
-						</AuthLayout>
-					}
-				/>
-				<Route
-					path="edit-post/:slug"
-					element={
-						<AuthLayout authentication={true}>
-							<EditPost />
-						</AuthLayout>
-					}
-				/>
-			</Route>
+			<Route
+				path="all-post"
+				element={
+					<AuthLayout authentication={true}>
+						<AllPosts />
+					</AuthLayout>
+				}
+			/>
+			<Route
+				path="add-post"
+				element={
+					<AuthLayout authentication={true}>
+						<AddPost />
+					</AuthLayout>
+				}
+			/>
+			<Route
+				path="edit-post/:slug"
+				element={
+					<AuthLayout authentication={true}>
+						<EditPost />
+					</AuthLayout>
+				}
+			/>
 			<Route
 				path="post/:slug"
 				element={
@@ -77,6 +76,8 @@ const router = createBrowserRouter(
 					</AuthLayout>
 				}
 			/>
+			<Route path="profile/*" element={<ProfileRoute />}></Route>
+			<Route path="/settings" element={<Settings />} />
 		</Route>,
 	),
 );

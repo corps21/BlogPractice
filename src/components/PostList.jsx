@@ -1,5 +1,5 @@
-import storageService from "../microService/storageService";
 import { Loader, PostCard } from "../components";
+import storageService from "../microService/storageService";
 
 export default function PostList({ isLoading, files, className = "" }) {
 	return isLoading ? (

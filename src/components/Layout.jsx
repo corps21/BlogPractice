@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import api from "@/api/api";
 import { AppSidebar } from "@/components/app-sidebar";
 import BreadcrumbsWrapper from "@/components/BreadcrumbsWrapper";
 import { Separator } from "@/components/ui/separator";
@@ -8,59 +9,67 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { ModeToggle } from ".";
-import { logout, setCurrentUser } from "@/store/userSlice";
-import api from "@/api/api";
 import { userService } from "@/microService/userService";
 import { addAccessToken } from "@/store/authSlice";
+import { logout, setCurrentUser } from "@/store/userSlice";
+import { ModeToggle } from ".";
 
 export default function Layout({ children }) {
 	const status = useSelector((state) => state.user.isLoggedIn);
-	const accessToken = useSelector(state => state.auth.accessToken)
+	const accessToken = useSelector((state) => state.auth.accessToken);
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if(!status) {
-			dispatch(setCurrentUser())
+		if (!status) {
+			dispatch(setCurrentUser());
 		}
-	},[])
+	}, []);
 
 	// TODO: generalize the axios instance with userService
 
 	useLayoutEffect(() => {
 		const interceptor = api.interceptors.request.use((config) => {
-			config.headers.Authorization = accessToken && !config?._newToken ? `Bearer ${accessToken}` : config.headers.Authorization
+			config.headers.Authorization =
+				accessToken && !config?._newToken
+					? `Bearer ${accessToken}`
+					: config.headers.Authorization;
 			return config;
-		})
+		});
 
-		return () => api.interceptors.request.eject(interceptor)
-	},[accessToken])
+		return () => api.interceptors.request.eject(interceptor);
+	}, [accessToken]);
 
 	useLayoutEffect(() => {
-		const interceptor = api.interceptors.response.use((response) => response, async (err) => {
-			const originalReq = err.config
+		const interceptor = api.interceptors.response.use(
+			(response) => response,
+			async (err) => {
+				const originalReq = err.config;
 
-			if(err.response.status === 401 && (err.response.data.message === "jwt expired" || err.response.data.message === "Need access token for this request")) {
-				try {
-					const response = await userService.refreshAccessToken()
-					dispatch(addAccessToken(response.data.accessToken))
-					
-					originalReq.headers.Authorization = `Bearer ${response.data.accessToken}`
-					originalReq._newToken = true;
+				if (
+					err.response.status === 401 &&
+					(err.response.data.message === "jwt expired" ||
+						err.response.data.message === "Need access token for this request")
+				) {
+					try {
+						const response = await userService.refreshAccessToken();
+						dispatch(addAccessToken(response.data.accessToken));
 
-					return api(originalReq)
+						originalReq.headers.Authorization = `Bearer ${response.data.accessToken}`;
+						originalReq._newToken = true;
 
-				} catch {
-					dispatch(logout())
+						return api(originalReq);
+					} catch {
+						dispatch(logout());
+					}
+				} else {
+					return Promise.reject(err);
 				}
-			} else {
-				return Promise.reject(err)
-			}
-		})
+			},
+		);
 
-		return () => api.interceptors.response.eject(interceptor)
-	},[])
+		return () => api.interceptors.response.eject(interceptor);
+	}, []);
 
 	return (
 		<SidebarProvider defaultOpen={false}>

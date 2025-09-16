@@ -2,13 +2,13 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { userService } from "@/microService/userService";
 import { Toaster } from "@/components/ui/sonner";
+import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
 import { toastPromiseWrapper } from "@/lib/utils";
+import { userService } from "@/microService/userService";
+import { addAccessToken } from "@/store/authSlice";
 import { Button, Container, Input } from "../components";
 import { login } from "../store/userSlice";
-import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
-import { addAccessToken } from "@/store/authSlice";
 
 function SignUp() {
 	const {
@@ -21,7 +21,6 @@ function SignUp() {
 
 	const toastWrapper = ({ email, password, userName, firstName, lastName }) => {
 		toastPromiseWrapper(async (resolve, reject) => {
-
 			const result = await userService.registerUser({
 				email,
 				password,
@@ -36,8 +35,8 @@ function SignUp() {
 					userName,
 				});
 				if (result.success) {
-					dispatch(addAccessToken(result.data.accessToken))
 					dispatch(login({ userData: result.data.user }));
+					dispatch(addAccessToken(result.data.accessToken));
 					toast.success("Logged into the account");
 				} else {
 					toast.error("Something went wrong while logging into account");
@@ -54,7 +53,7 @@ function SignUp() {
 		error: (err) => `Something went wrong ( ${err} )`,
 	};
 
-	useAuthHomeRedirect()
+	useAuthHomeRedirect();
 
 	return (
 		<section className="flex justify-center items-center my-[3rem] md:my-auto">

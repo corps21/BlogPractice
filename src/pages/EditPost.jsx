@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import databaseService from "../microService/databaseService";
 import { Container, Header, Loader, PostForm } from "../components";
+import databaseService from "../microService/databaseService";
 
 function EditPost() {
 	const [post, setPost] = useState(null);

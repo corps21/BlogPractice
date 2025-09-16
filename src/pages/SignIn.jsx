@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { userService } from "@/microService/userService";
 import { Toaster } from "@/components/ui/sonner";
+import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
 import { toastPromiseWrapper } from "@/lib/utils";
+import { userService } from "@/microService/userService";
+import { addAccessToken } from "@/store/authSlice";
 import { Button, Container, Input } from "../components";
 import { login } from "../store/userSlice";
-import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
-import { addAccessToken } from "@/store/authSlice";
 
 function SignIn() {
 	const {
@@ -22,11 +22,11 @@ function SignIn() {
 		toastPromiseWrapper(async (resolve, reject) => {
 			const result = await userService.loginUser({ email, password });
 			if (result.success) {
-				dispatch(addAccessToken(result.data.accessToken))
-				dispatch(login({ userData: result.data.user }))
-				resolve()
+				dispatch(login({ userData: result.data.user }));
+				dispatch(addAccessToken(result.data.accessToken));
+				resolve();
 			} else {
-				reject(result?.message)
+				reject(result?.message);
 			}
 		}, toastOptions);
 	};
@@ -38,7 +38,7 @@ function SignIn() {
 		richColors: true,
 	};
 
-	useAuthHomeRedirect()
+	useAuthHomeRedirect();
 
 	return (
 		<section className="my-[3rem] md:my-auto">

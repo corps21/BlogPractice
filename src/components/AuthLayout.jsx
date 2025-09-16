@@ -1,15 +1,15 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Loader } from ".";
 import api from "@/api/api";
+import { Loader } from ".";
 
 function AuthLayout({ children, authentication = true }) {
 	const [isLoading, setIsLoading] = useState(true);
 	const status = useSelector((state) => state.user.isLoggedIn);
 	const navigate = useNavigate();
 	const location = useLocation();
-	
+
 	useEffect(() => {
 		setIsLoading(true);
 		if (authentication && authentication !== status) navigate("/");
@@ -17,7 +17,7 @@ function AuthLayout({ children, authentication = true }) {
 			navigate(location.pathname);
 		setIsLoading(false);
 	}, [status, authentication, navigate, location.pathname]);
-	
+
 	return isLoading ? <Loader /> : <>{children}</>;
 }
 

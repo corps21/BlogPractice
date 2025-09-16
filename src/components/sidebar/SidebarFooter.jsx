@@ -1,9 +1,7 @@
 import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import databaseService from "@/microService/databaseService";
-import { userService } from "@/microService/userService";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -21,6 +19,9 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { toastPromiseWrapper } from "@/lib/utils";
+import databaseService from "@/microService/databaseService";
+import { userService } from "@/microService/userService";
+import { removeAccessToken } from "@/store/authSlice";
 import { logout } from "@/store/userSlice";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/sonner";
@@ -52,6 +53,7 @@ export default function SidebarFooterWrapper() {
 			reject(result.message);
 		}
 		dispatch(logout());
+		dispatch(removeAccessToken());
 		navigate("/signin");
 	};
 
@@ -118,10 +120,12 @@ export default function SidebarFooterWrapper() {
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem className="cursor-pointer">
-								<BadgeCheck />
-								Account
-							</DropdownMenuItem>
+							<Link to={`/profile/${userData?._id}`}>
+								<DropdownMenuItem className="cursor-pointer">
+									<BadgeCheck />
+									Account
+								</DropdownMenuItem>
+							</Link>
 							<DropdownMenuItem className="cursor-pointer">
 								<Bell />
 								Notifications

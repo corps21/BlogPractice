@@ -10,12 +10,11 @@ export default defineConfig({
 				changeOrigin: true,
 				secure: false,
 				rewrite: (path) => {
-					console.log(path.replace(/^\/api/, "/api/v1"))
-					return path.replace(/^\/api/, "/api/v1")
+					console.log(path.replace(/^\/api/, "/api/v1"));
+					return path.replace(/^\/api/, "/api/v1");
 				},
 			},
-
-		}
+		},
 	},
 	plugins: [react()],
 	resolve: {
