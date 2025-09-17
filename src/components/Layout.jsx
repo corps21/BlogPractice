@@ -24,7 +24,7 @@ export default function Layout({ children }) {
 		if (!status) {
 			dispatch(setCurrentUser());
 		}
-	}, []);
+	}, [dispatch, status]);
 
 	// TODO: generalize the axios instance with userService
 
@@ -69,7 +69,7 @@ export default function Layout({ children }) {
 		);
 
 		return () => api.interceptors.response.eject(interceptor);
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<SidebarProvider defaultOpen={false}>

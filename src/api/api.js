@@ -10,7 +10,7 @@ api.interceptors.request.use(
 		console.log(config);
 		return config;
 	},
-	(err) => {},
+	(_err) => {},
 	{
 		synchronous: true,
 		runWhen: () => {

@@ -1,7 +1,6 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "@/api/api";
 import { Loader } from ".";
 
 function AuthLayout({ children, authentication = true }) {
@@ -18,7 +17,7 @@ function AuthLayout({ children, authentication = true }) {
 		setIsLoading(false);
 	}, [status, authentication, navigate, location.pathname]);
 
-	return isLoading ? <Loader /> : <>{children}</>;
+	return isLoading ? <Loader /> : { children };
 }
 
 export default AuthLayout;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { postService } from "@/microservice/postService";
 import {
 	Button,
 	ImagePreview,
@@ -10,7 +10,6 @@ import {
 	SelectWrapper,
 } from "../components/index";
 import storageService from "../microservice/storageService";
-import { postService } from "@/microservice/postService";
 import { Toaster } from "./ui/sonner";
 
 function PostForm({ post }) {

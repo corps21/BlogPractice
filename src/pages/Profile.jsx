@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Input } from "@/components";
 
 // TODO: fix breadcrumbs for profile page
 export default function Profile() {
