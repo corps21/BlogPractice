@@ -11,6 +11,7 @@ import {
 } from "../components/index";
 import storageService from "../microservice/storageService";
 import { Toaster } from "./ui/sonner";
+import { toastPromiseWrapper } from "@/lib/utils";
 
 function PostForm({ post }) {
 	const {
@@ -39,16 +40,14 @@ function PostForm({ post }) {
 	const submitHandler = ({ title, slug, editor, status, img }) => {
 		toastPromiseWrapper(async (resolve, reject) => {
 			if (post) {
-				const updatePost = async ({ title, editor, status }) => {
-					// get post id using react query
-					const postId;
+				const updatePost = async ({ title, editor, status, slug}) => {
 					const isPublic = status === "active"
-					const updateResponse = await postService.updatePost({ id: postId, title, body: editor, isPublic });
+					const updateResponse = await postService.updatePost({ slug, title, body: editor, isPublic });
 					if (!updateResponse.success) reject(updateResponse?.message)
 
 					if (img) {
 						const coverImage = img[0]
-						const updateCoverImageResponse = await postService.updateCoverImage({ id: postId, coverImage })
+						const updateCoverImageResponse = await postService.updateCoverImage({ slug, coverImage })
 						if (!updateCoverImageResponse.success) reject(updateCoverImageResponse?.message)
 					}
 
@@ -57,7 +56,7 @@ function PostForm({ post }) {
 
 				}
 
-				await updatePost({title, editor, status})
+				await updatePost({title, editor, status, slug})
 			} else {
 				const createPost = async ({ title, slug, editor, status, img }) => {
 					const isPublic = status === "active"
@@ -66,7 +65,7 @@ function PostForm({ post }) {
 
 					if (img) {
 						const coverImage = img[0]
-						const updateCoverImageResponse = await postService.updateCoverImage({ id: postResponse?.data?.post._id, coverImage })
+						const updateCoverImageResponse = await postService.updateCoverImage({ slug, coverImage })
 						if (!updateCoverImageResponse.success) reject(updateCoverImageResponse?.message)
 					}
 
@@ -78,6 +77,7 @@ function PostForm({ post }) {
 
 		}, toastOptions);
 	};
+
 	const toastOptions = {
 		loading: `${post ? "Updating the post" : "Creating the post"}`,
 		success: `${post ? "Successfully updated the post" : "Successfully created the post"}`,

@@ -17,7 +17,7 @@ function AuthLayout({ children, authentication = true }) {
 		setIsLoading(false);
 	}, [status, authentication, navigate, location.pathname]);
 
-	return isLoading ? <Loader /> : { children };
+	return isLoading ? <Loader /> : <>{ children }</>;
 }
 
 export default AuthLayout;

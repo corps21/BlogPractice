@@ -6,14 +6,14 @@ class PostService {
 		return api.post("/post", { title, slug, body, isPublic });
 	});
 
-	updatePost = axiosWrapper(async ({ id, title, body, isPublic }) => {
-		return api.put(`/post/${id}`, { title, body, isPublic });
+	updatePost = axiosWrapper(async ({ slug, title, body, isPublic }) => {
+		return api.put(`/post/${slug}`, { title, body, isPublic });
 	});
 
-	updateCoverImage = axiosWrapper(async ({ id, coverImage }) => {
+	updateCoverImage = axiosWrapper(async ({ slug, coverImage }) => {
 		const formData = new FormData();
 		formData.append("coverImage", coverImage);
-		return api.patch(`/post/${id}`, formData, {
+		return api.patch(`/post/${slug}`, formData, {
 			headers: {
 				"Content-Type": "multipart/form-data",
 			},
