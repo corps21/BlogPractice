@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Container, CTA, Header, PostList } from "../components";
-import databaseService from "../microService/databaseService";
+import databaseService from "../microservice/databaseService";
 
 function Home() {
 	const [isLoading, setIsLoading] = useState(true);

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
 import { toastPromiseWrapper } from "@/lib/utils";
-import { userService } from "@/microService/userService";
+import { userService } from "@/microservice/userService";
 import { addAccessToken } from "@/store/authSlice";
 import { Button, Container, Input } from "../components";
 import { login } from "../store/userSlice";

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Toaster } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toastPromiseWrapper } from "@/lib/utils";
-import { userService } from "@/microService/userService";
+import { userService } from "@/microservice/userService";
 import { Button, Input } from ".";
 
 export default function SettingsForm() {

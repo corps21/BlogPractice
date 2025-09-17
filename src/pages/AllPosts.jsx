@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Container, Header, PostList } from "../components";
-import databaseService from "../microService/databaseService";
+import databaseService from "../microservice/databaseService";
 
 function AllPosts() {
 	const [isLoading, setIsLoading] = useState(true);

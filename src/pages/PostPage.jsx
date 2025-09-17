@@ -6,8 +6,8 @@ import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { ApiResponse } from "@/lib/response";
 import { Button, Container, Loader } from "../components";
-import databaseService from "../microService/databaseService";
-import storageService from "../microService/storageService";
+import databaseService from "../microservice/databaseService";
+import storageService from "../microservice/storageService";
 
 function PostPage() {
 	const { slug } = useParams();

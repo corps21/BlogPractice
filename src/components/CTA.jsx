@@ -3,7 +3,7 @@
 import { LogInIcon, VenetianMaskIcon } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import authService from "@/microService/authService";
+import authService from "@/microservice/authService";
 import { login } from "@/store/userSlice";
 import { Container } from "../components";
 import { Button } from "./ui/button";

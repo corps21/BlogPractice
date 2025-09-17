@@ -2,8 +2,6 @@ import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { ApiResponse } from "@/lib/response";
 import {
 	Button,
 	ImagePreview,
@@ -11,8 +9,8 @@ import {
 	RTE,
 	SelectWrapper,
 } from "../components/index";
-import databaseService from "../microService/databaseService";
-import storageService from "../microService/storageService";
+import storageService from "../microservice/storageService";
+import { postService } from "@/microservice/postService";
 import { Toaster } from "./ui/sonner";
 
 function PostForm({ post }) {
@@ -38,88 +36,54 @@ function PostForm({ post }) {
 	}, [reset, post]);
 
 	const navigate = useNavigate();
-	const userData = useSelector((state) => state.auth?.userData);
 
-	const submitHandler = async (data) => {
-		if (post) {
-			// edit mode
-			const { title, slug, editor: content, featuredImage, status } = data;
+	const submitHandler = ({ title, slug, editor, status, img }) => {
+		toastPromiseWrapper(async (resolve, reject) => {
+			if (post) {
+				const updatePost = async ({ title, editor, status }) => {
+					// get post id using react query
+					const postId;
+					const isPublic = status === "active"
+					const updateResponse = await postService.updatePost({ id: postId, title, body: editor, isPublic });
+					if (!updateResponse.success) reject(updateResponse?.message)
 
-			let image = featuredImage;
+					if (img) {
+						const coverImage = img[0]
+						const updateCoverImageResponse = await postService.updateCoverImage({ id: postId, coverImage })
+						if (!updateCoverImageResponse.success) reject(updateCoverImageResponse?.message)
+					}
 
-			if (data.img && typeof data.img === "object" && data.img.length > 0) {
-				const imageStatus = await storageService.uploadImage(data.img[0]);
-				if (imageStatus) {
-					image = imageStatus.$id;
-					const isImageDeleted = await storageService.deleteImage(
-						post.featuredImage,
-					);
-					if (!isImageDeleted)
-						return new ApiResponse(false, "Image Delete Failed");
-				} else {
-					return new ApiResponse(false, "Image Upload Failed");
+					resolve()
+					navigate(`/post/${slug}`)
+
 				}
+
+				await updatePost({title, editor, status})
+			} else {
+				const createPost = async ({ title, slug, editor, status, img }) => {
+					const isPublic = status === "active"
+					const postResponse = await postService.createPost({ title, slug, body: editor, isPublic })
+					if (!postResponse.success) reject(postResponse?.message)
+
+					if (img) {
+						const coverImage = img[0]
+						const updateCoverImageResponse = await postService.updateCoverImage({ id: postResponse?.data?.post._id, coverImage })
+						if (!updateCoverImageResponse.success) reject(updateCoverImageResponse?.message)
+					}
+
+					resolve()
+					navigate(`/post/${slug}`)
+				}
+				await createPost({ title, slug, editor, status, img })
 			}
 
-			const updateStatus = await databaseService.updatePost(
-				{
-					title,
-					content,
-					featuredImage: image,
-					status: status,
-				},
-				slug,
-			);
-
-			if (updateStatus) {
-				setTimeout(() => navigate(`/post/${slug}`), 500);
-				return new ApiResponse(true, "Post Updated Successfully");
-			}
-			return new ApiResponse(false, "Post Update Failed");
-		} else {
-			// create mode
-			let image;
-			const { $id: userId, name: authorName } = userData;
-
-			const imageStatus = await storageService.uploadImage(data.img[0]);
-			if (imageStatus) image = imageStatus?.$id;
-			else return new ApiResponse(false, "Image Upload Failed");
-
-			const { title, slug, editor: content, status } = data;
-
-			const createStatus = await databaseService.createPost({
-				title,
-				slug,
-				content,
-				featuredImage: image,
-				status,
-				userId,
-				authorName,
-			});
-
-			if (createStatus) {
-				setTimeout(() => navigate(`/post/${slug}`), 500);
-				return new ApiResponse(true, "Post Created Successfully");
-			} else return new ApiResponse(false, "Post Creation Failed");
-		}
+		}, toastOptions);
 	};
-
-	const toastWrapper = (data) => {
-		const toastPromise = new Promise((resolve, reject) => {
-			submitHandler(data).then(({ isSuccess, message }) => {
-				if (isSuccess) {
-					resolve(message);
-				} else {
-					reject(message);
-				}
-			});
-		});
-		toast.promise(toastPromise, {
-			loading: post ? "Updating..." : "Creating...",
-			success: (message) => message,
-			error: (error) => error,
-			richColors: true,
-		});
+	const toastOptions = {
+		loading: `${post ? "Updating the post" : "Creating the post"}`,
+		success: `${post ? "Successfully updated the post" : "Successfully created the post"}`,
+		error: (err) => `Something went wrong ( ${err} )`,
+		richColors: true,
 	};
 
 	const slugTransform = useCallback((val) => {
@@ -142,7 +106,7 @@ function PostForm({ post }) {
 	return (
 		<form
 			className="grid gap-8 md:max-w-6xl md:grid-cols-2 bg-card p-8 rounded-lg"
-			onSubmit={handleSubmit(toastWrapper)}
+			onSubmit={handleSubmit(submitHandler)}
 		>
 			<section>
 				<Input
