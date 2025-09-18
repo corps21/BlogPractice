@@ -31,6 +31,10 @@ class PostService {
 	getPublicPosts = axiosWrapper(async () => {
 		return api.get("/post/public");
 	});
+
+	getPostBySlug = axiosWrapper(async ({slug}) => {
+		return api.get(`/post/${slug}`)
+	})
 }
 
 export const postService = new PostService();
