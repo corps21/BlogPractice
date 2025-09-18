@@ -1,22 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Header, Loader, PostForm } from "../components";
-import databaseService from "../microservice/databaseService";
+import { useQuery } from "@tanstack/react-query";
+import { postService } from "@/microservice/postService";
+import { Toaster, toast } from "sonner";
 
 function EditPost() {
-	const [post, setPost] = useState(null);
 	const { slug } = useParams();
 
-	useEffect(() => {
-		databaseService.getPost(slug).then((data) => {
-			if (data) setPost(data);
-		});
-	}, [slug]);
+	const {data, isLoading, isError, error} = useQuery({
+		queryKey: ["post",slug],
+		queryFn: () => postService.getPostBySlug({slug})
+	})
 
-	return post ? (
+	useEffect(() => {
+		if(isError) {
+			toast.error(`Something went wrong ${error.message}`)
+		}
+	},[isError, error])
+
+	return !isLoading ? (
 		<Container className="my-auto">
 			<Header pageTitle="Edit Post" />
-			<PostForm post={post} />
+			<PostForm post={data?.data?.post} />
+			<Toaster />
 		</Container>
 	) : (
 		<Loader />

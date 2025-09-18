@@ -9,19 +9,19 @@ import { Button, Container, Loader } from "../components";
 function PostPage() {
 	const { slug } = useParams();
 	const navigate = useNavigate();
-	const userId = useSelector((state) => state.auth.userData?.$id);
+	const userId = useSelector((state) => state.user.userData?._id);
 
 	const { isLoading, data } = useQuery({
 		queryKey: ["post", slug],
 		queryFn: () => postService.getPostBySlug({ slug }),
 	});
-	// TODO: fix data
+
 	return !isLoading ? (
 		<Container>
 			<div>
 				<div className="my-[6rem]">
 					<figure>
-						<img src={""} alt="" className="aspect-auto" />
+						<img src={data?.data?.post?.coverImageUrl} alt="" className="aspect-auto" />
 					</figure>
 				</div>
 				<div className="mb-[12rem]">
@@ -40,7 +40,7 @@ function PostPage() {
 							<Button
 								className="w-[48%] bg-green-600 hover:text-green-600"
 								text="Edit"
-								onClick={() => navigate(`/all-post/edit-post/${slug}`)}
+								onClick={() => navigate(`/edit-post/${slug}`)}
 							/>
 							<Button
 								className=" w-[48%] bg-red-600 hover:text-red-600"

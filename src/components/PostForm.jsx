@@ -10,7 +10,6 @@ import {
 	RTE,
 	SelectWrapper,
 } from "../components/index";
-import storageService from "../microservice/storageService";
 import { Toaster } from "./ui/sonner";
 
 function PostForm({ post }) {
@@ -28,10 +27,10 @@ function PostForm({ post }) {
 	useEffect(() => {
 		reset({
 			title: post?.title || "",
-			slug: post?.$id || "",
-			editor: post?.content || "",
-			img: post?.featuredImage || "",
-			status: post?.status || "active",
+			slug: post?.slug || "",
+			editor: post?.body || "",
+			coverImageUrl: post?.coverImageUrl || "",
+			status: post?.isPublic ? "active" : "inactive" || "active", // TODO better solution
 		});
 	}, [reset, post]);
 
@@ -50,7 +49,7 @@ function PostForm({ post }) {
 					});
 					if (!updateResponse.success) reject(updateResponse?.message);
 
-					if (img) {
+					if (img && img.length > 0 && post.coverImageUrl) {
 						const coverImage = img[0];
 						const updateCoverImageResponse = await postService.updateCoverImage(
 							{ slug, coverImage },
@@ -156,9 +155,9 @@ function PostForm({ post }) {
 			</section>
 
 			<section>
-				{post && post.featuredImage !== "" && (
+				{post && post.coverImageUrl !== "" && (
 					<ImagePreview
-						src={storageService.getImagePreview(post.featuredImage).href}
+						src={post.coverImageUrl}
 					/>
 				)}
 
@@ -175,7 +174,7 @@ function PostForm({ post }) {
 					autoFocus={getValues("status")}
 					label="Post Status"
 					{...register("status")}
-					defaultValue={post?.status || "active"}
+					defaultValue={post?.status}
 				/>
 
 				<Button
