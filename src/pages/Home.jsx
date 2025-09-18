@@ -1,26 +1,25 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
+import { postService } from "@/microservice/postService";
 import { Container, CTA, Header, PostList } from "../components";
-import databaseService from "../microservice/databaseService";
 
 function Home() {
-	const [isLoading, setIsLoading] = useState(true);
-	const status = useSelector((state) => state.user.isLoggedIn);
-	const [files, setFiles] = useState([]);
+	const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
-	useEffect(() => {
-		if (status) {
-			databaseService.getAllActivePosts().then((data) => {
-				if (data) setFiles(data.documents);
-				setIsLoading(false);
-			});
-		}
-	}, [status]);
+	const { isLoading, data } = useQuery({
+		enabled: isLoggedIn,
+		queryKey: ["posts", "public"],
+		queryFn: () => postService.getPublicPosts(),
+	});
 
-	return status ? (
+	return isLoggedIn ? (
 		<Container className="flex flex-col items-center">
 			<Header />
-			<PostList isLoading={isLoading} files={files} className="mt-6" />
+			<PostList
+				isLoading={isLoading}
+				files={data?.data?.posts}
+				className="mt-6"
+			/>
 		</Container>
 	) : (
 		<CTA />

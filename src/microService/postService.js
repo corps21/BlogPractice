@@ -32,9 +32,9 @@ class PostService {
 		return api.get("/post/public");
 	});
 
-	getPostBySlug = axiosWrapper(async ({slug}) => {
-		return api.get(`/post/${slug}`)
-	})
+	getPostBySlug = axiosWrapper(async ({ slug }) => {
+		return api.get(`/post/${slug}`);
+	});
 }
 
 export const postService = new PostService();

@@ -1,21 +1,21 @@
+import { useQuery } from "@tanstack/react-query";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
-import { Button, Container, Loader } from "../components";
-import { useQuery } from "@tanstack/react-query";
 import { postService } from "@/microservice/postService";
+import { Button, Container, Loader } from "../components";
 
 function PostPage() {
 	const { slug } = useParams();
 	const navigate = useNavigate();
 	const userId = useSelector((state) => state.auth.userData?.$id);
 
-	const {isLoading, data} = useQuery({
-		queryKey: ["posts", slug],
-		queryFn: () => postService.getPostBySlug({ slug })
-	})
-	// TODO: fix data 
+	const { isLoading, data } = useQuery({
+		queryKey: ["post", slug],
+		queryFn: () => postService.getPostBySlug({ slug }),
+	});
+	// TODO: fix data
 	return !isLoading ? (
 		<Container>
 			<div>

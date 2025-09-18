@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toastPromiseWrapper } from "@/lib/utils";
 import { postService } from "@/microservice/postService";
 import {
 	Button,
@@ -11,7 +12,6 @@ import {
 } from "../components/index";
 import storageService from "../microservice/storageService";
 import { Toaster } from "./ui/sonner";
-import { toastPromiseWrapper } from "@/lib/utils";
 
 function PostForm({ post }) {
 	const {
@@ -40,41 +40,55 @@ function PostForm({ post }) {
 	const submitHandler = ({ title, slug, editor, status, img }) => {
 		toastPromiseWrapper(async (resolve, reject) => {
 			if (post) {
-				const updatePost = async ({ title, editor, status, slug}) => {
-					const isPublic = status === "active"
-					const updateResponse = await postService.updatePost({ slug, title, body: editor, isPublic });
-					if (!updateResponse.success) reject(updateResponse?.message)
+				const updatePost = async ({ title, editor, status, slug }) => {
+					const isPublic = status === "active";
+					const updateResponse = await postService.updatePost({
+						slug,
+						title,
+						body: editor,
+						isPublic,
+					});
+					if (!updateResponse.success) reject(updateResponse?.message);
 
 					if (img) {
-						const coverImage = img[0]
-						const updateCoverImageResponse = await postService.updateCoverImage({ slug, coverImage })
-						if (!updateCoverImageResponse.success) reject(updateCoverImageResponse?.message)
+						const coverImage = img[0];
+						const updateCoverImageResponse = await postService.updateCoverImage(
+							{ slug, coverImage },
+						);
+						if (!updateCoverImageResponse.success)
+							reject(updateCoverImageResponse?.message);
 					}
 
-					resolve()
-					navigate(`/post/${slug}`)
+					resolve();
+					navigate(`/post/${slug}`);
+				};
 
-				}
-
-				await updatePost({title, editor, status, slug})
+				await updatePost({ title, editor, status, slug });
 			} else {
 				const createPost = async ({ title, slug, editor, status, img }) => {
-					const isPublic = status === "active"
-					const postResponse = await postService.createPost({ title, slug, body: editor, isPublic })
-					if (!postResponse.success) reject(postResponse?.message)
+					const isPublic = status === "active";
+					const postResponse = await postService.createPost({
+						title,
+						slug,
+						body: editor,
+						isPublic,
+					});
+					if (!postResponse.success) reject(postResponse?.message);
 
 					if (img) {
-						const coverImage = img[0]
-						const updateCoverImageResponse = await postService.updateCoverImage({ slug, coverImage })
-						if (!updateCoverImageResponse.success) reject(updateCoverImageResponse?.message)
+						const coverImage = img[0];
+						const updateCoverImageResponse = await postService.updateCoverImage(
+							{ slug, coverImage },
+						);
+						if (!updateCoverImageResponse.success)
+							reject(updateCoverImageResponse?.message);
 					}
 
-					resolve()
-					navigate(`/post/${slug}`)
-				}
-				await createPost({ title, slug, editor, status, img })
+					resolve();
+					navigate(`/post/${slug}`);
+				};
+				await createPost({ title, slug, editor, status, img });
 			}
-
 		}, toastOptions);
 	};
 

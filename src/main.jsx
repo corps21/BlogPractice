@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider } from "react-redux";
 import {
 	createBrowserRouter,
@@ -9,6 +11,7 @@ import {
 	Route,
 	RouterProvider,
 } from "react-router-dom";
+import { queryClient } from "@/query/query.js";
 import { AuthLayout, ThemeProvider } from "./components";
 import {
 	AddPost,
@@ -23,9 +26,6 @@ import {
 } from "./pages/index.js";
 import ProfileRoute from "./routes/ProfileRoute.jsx";
 import store from "./store/store.js";
-import { queryClient } from "@/query/query.js"
-import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const router = createBrowserRouter(
 	createRoutesFromElements(

@@ -9,6 +9,11 @@ function PostCard({ href = "", title = "", authorName, url = "/" }) {
 			<figure
 				className="aspect-square min-w-[14rem] md:max-w-[18rem]"
 				onClick={() => navigate(url)}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" || e.key === " ") {
+						navigate(url);
+					}
+				}}
 			>
 				<img src={href} alt="coverimage" className="rounded-md" />
 			</figure>
