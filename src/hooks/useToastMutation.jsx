@@ -29,7 +29,7 @@ export default function useToastMutation(
 
 		onError: (...args) => {
 			toast.dismiss(toastId);
-			toast.error(errorText);
+			toast.error(`${errorText} ( ${args[0].message} )`);
 			onError?.(...args);
 		},
 

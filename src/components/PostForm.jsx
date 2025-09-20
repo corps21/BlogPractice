@@ -1,8 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import useToastMutation from "@/hooks/useToastMutation";
 import { postService } from "@/microservice/postService";
 import { queryClient } from "@/query/query";
@@ -24,23 +22,23 @@ function PostForm({ post }) {
 		setValue,
 		getValues,
 		formState: { errors },
-		reset,
-	} = useForm();
-
-	useEffect(() => {
-		reset({
+	} = useForm({
+		defaultValues: {
 			title: post?.title || "",
 			slug: post?.slug || "",
 			editor: post?.body || "",
 			coverImageUrl: post?.coverImageUrl || "",
-			status: post?.isPublic ? "active" : "inactive" || "active", // TODO better solution
-		});
-	}, [reset, post]);
+			status: post?.isPublic ? "active" : "inactive",
+		}
+	});
 
 	const navigate = useNavigate();
 
 	const mutation = useToastMutation(
-		{},
+		{
+			loadingText: `${post ? "Updating the post" : "Creating the post"}`,
+			successText: `${post ? "Successfully updated the post" : "Successfully created the post"}`,
+		},
 		{
 			mutationKey: ["post", "update"],
 			mutationFn: async ({ title, slug, editor, status, img }) => {
@@ -169,10 +167,9 @@ function PostForm({ post }) {
 				/>
 
 				<SelectWrapper
-					autoFocus={getValues("status")}
 					label="Post Status"
 					{...register("status")}
-					defaultValue={post?.status}
+					defaultValue={getValues("status")}
 				/>
 
 				<Button
