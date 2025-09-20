@@ -1,8 +1,11 @@
+import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toastPromiseWrapper } from "@/lib/utils";
+import { toast } from "sonner";
+import useToastMutation from "@/hooks/useToastMutation";
 import { postService } from "@/microservice/postService";
+import { queryClient } from "@/query/query";
 import {
 	Button,
 	ImagePreview,
@@ -36,67 +39,64 @@ function PostForm({ post }) {
 
 	const navigate = useNavigate();
 
-	const submitHandler = ({ title, slug, editor, status, img }) => {
-		toastPromiseWrapper(async (resolve, reject) => {
-			if (post) {
-				const updatePost = async ({ title, editor, status, slug }) => {
+	const mutation = useToastMutation(
+		{},
+		{
+			mutationKey: ["post", "update"],
+			mutationFn: async ({ title, slug, editor, status, img }) => {
+				try {
 					const isPublic = status === "active";
-					const updateResponse = await postService.updatePost({
-						slug,
-						title,
-						body: editor,
-						isPublic,
-					});
-					if (!updateResponse.success) reject(updateResponse?.message);
+					if (post) {
+						const updateResponse = await postService.updatePost({
+							slug,
+							title,
+							body: editor,
+							isPublic,
+						});
+						if (!updateResponse.success) throw new Error(postResponse.message);
+						if (img && img.length > 0) {
+							const coverImage = img[0];
+							const updateCoverImageResponse =
+								await postService.updateCoverImage({ slug, coverImage });
+							if (!updateCoverImageResponse.success)
+								throw new Error(postResponse.message);
+							updateResponse.data.post.coverImageUrl =
+								updateCoverImageResponse.data.url;
+						}
 
-					if (img && img.length > 0 && post.coverImageUrl) {
-						const coverImage = img[0];
-						const updateCoverImageResponse = await postService.updateCoverImage(
-							{ slug, coverImage },
-						);
-						if (!updateCoverImageResponse.success)
-							reject(updateCoverImageResponse?.message);
+						return updateResponse.data.post;
+					} else {
+						const postResponse = await postService.createPost({
+							title,
+							slug,
+							body: editor,
+							isPublic,
+						});
+						if (!postResponse.success) throw new Error(postResponse.message);
+
+						if (img && img.length > 0) {
+							const coverImage = img[0];
+							const updateCoverImageResponse =
+								await postService.updateCoverImage({ slug, coverImage });
+							if (!updateCoverImageResponse.success)
+								throw new Error(postResponse.message);
+
+							postResponse.data.post.coverImageUrl =
+								updateCoverImageResponse.data.url;
+						}
+
+						return postResponse.data.post;
 					}
-
-					resolve();
-					navigate(`/post/${slug}`);
-				};
-
-				await updatePost({ title, editor, status, slug });
-			} else {
-				const createPost = async ({ title, slug, editor, status, img }) => {
-					const isPublic = status === "active";
-					const postResponse = await postService.createPost({
-						title,
-						slug,
-						body: editor,
-						isPublic,
-					});
-					if (!postResponse.success) reject(postResponse?.message);
-
-					if (img) {
-						const coverImage = img[0];
-						const updateCoverImageResponse = await postService.updateCoverImage(
-							{ slug, coverImage },
-						);
-						if (!updateCoverImageResponse.success)
-							reject(updateCoverImageResponse?.message);
-					}
-
-					resolve();
-					navigate(`/post/${slug}`);
-				};
-				await createPost({ title, slug, editor, status, img });
-			}
-		}, toastOptions);
-	};
-
-	const toastOptions = {
-		loading: `${post ? "Updating the post" : "Creating the post"}`,
-		success: `${post ? "Successfully updated the post" : "Successfully created the post"}`,
-		error: (err) => `Something went wrong ( ${err} )`,
-		richColors: true,
-	};
+				} catch (err) {
+					console.log(err);
+				}
+			},
+			onSuccess: (newPost) => {
+				queryClient.setQueryData(["post", newPost.slug], newPost);
+				navigate(`/post/${newPost.slug}`);
+			},
+		},
+	);
 
 	const slugTransform = useCallback((val) => {
 		return val
@@ -118,7 +118,7 @@ function PostForm({ post }) {
 	return (
 		<form
 			className="grid gap-8 md:max-w-6xl md:grid-cols-2 bg-card p-8 rounded-lg"
-			onSubmit={handleSubmit(submitHandler)}
+			onSubmit={handleSubmit(mutation.mutate)}
 		>
 			<section>
 				<Input
@@ -156,9 +156,7 @@ function PostForm({ post }) {
 
 			<section>
 				{post && post.coverImageUrl !== "" && (
-					<ImagePreview
-						src={post.coverImageUrl}
-					/>
+					<ImagePreview src={post.coverImageUrl} />
 				)}
 
 				<Input

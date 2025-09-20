@@ -30,7 +30,7 @@ class PostService {
 
 	getAllPosts = axiosWrapper(async () => {
 		return api.get("/user/posts");
-	})
+	});
 
 	getPublicPosts = axiosWrapper(async () => {
 		return api.get("/post/public");

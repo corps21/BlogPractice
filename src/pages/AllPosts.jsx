@@ -1,29 +1,20 @@
 import { SquarePenIcon } from "lucide-react";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { Toaster } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Container, Header, PostList } from "../components";
-import { useQuery } from "@tanstack/react-query";
+import useToastQuery from "@/hooks/useToastQuery";
 import { postService } from "@/microservice/postService";
-import { Toaster, toast } from "sonner";
+import { Container, Header, PostList } from "../components";
 
 function AllPosts() {
 	const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-	const {isLoading, isSuccess, isError, error, data} = useQuery({
+	const { isLoading, data } = useToastQuery({
 		enabled: isLoggedIn,
 		queryKey: ["posts", "all"],
-		queryFn: () => postService.getAllPosts()
-	})
-
-	useEffect(() => {
-		if(isError) {
-			toast.error(`Something went wrong ${error.message}`)
-		} else if(isSuccess) {
-			toast.success("Succesfully fetched public posts")
-		}
-	},[isError,isSuccess, error])
+		queryFn: () => postService.getAllPosts(),
+	});
 
 	return (
 		<Container className="flex flex-col items-center">
@@ -36,7 +27,7 @@ function AllPosts() {
 					</Link>
 				</Button>
 			</div>
-			<PostList isLoading={isLoading} files={data?.data?.posts} />
+			<PostList isLoading={isLoading} files={data?.posts} />
 			<Toaster />
 		</Container>
 	);

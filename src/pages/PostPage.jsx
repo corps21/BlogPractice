@@ -21,7 +21,11 @@ function PostPage() {
 			<div>
 				<div className="my-[6rem]">
 					<figure>
-						<img src={data?.data?.post?.coverImageUrl} alt="" className="aspect-auto" />
+						<img
+							src={data?.data?.post?.coverImageUrl}
+							alt=""
+							className="aspect-auto"
+						/>
 					</figure>
 				</div>
 				<div className="mb-[12rem]">
@@ -32,7 +36,7 @@ function PostPage() {
 						By {data?.data?.post?.author}
 					</div>
 					<div className="text-2xl border-2 bg-gray-200 rounded-lg border-black min-h-[16rem] my-[5rem] p-[1rem]">
-						{parse(data?.data?.post?.body)}
+						{parse(data?.data?.post?.body ?? "")}
 					</div>
 
 					{userId === data?.data?.post?.author && (
