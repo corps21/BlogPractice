@@ -23,12 +23,12 @@ const items = [
 	},
 	{
 		title: "All Posts",
-		url: "/all-post",
+		url: "/posts",
 		icon: FolderLock,
 	},
 	{
 		title: "Create Post",
-		url: "/add-post",
+		url: "/posts/create",
 		icon: SquarePen,
 	},
 	{

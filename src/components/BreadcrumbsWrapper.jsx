@@ -50,29 +50,27 @@ export default function BreadcrumbsWrapper() {
 	}
 
 	return (
-		<>
-			<Breadcrumb>
-				<BreadcrumbList>
-					{parsePathIntoBreadCrumbs(routes).map(({ name, path }, idx, arr) => {
-						return (
-							<Fragment key={name}>
-								{idx !== 0 ? <BreadcrumbSeparator /> : null}
-								<BreadcrumbItem>
-									{idx < arr.length - 1 ? (
-										<BreadcrumbLink asChild={true}>
-											<Link to={path}>{name}</Link>
-										</BreadcrumbLink>
-									) : (
-										<BreadcrumbPage asChild={true}>
-											<Link to={path}>{name}</Link>
-										</BreadcrumbPage>
-									)}
-								</BreadcrumbItem>
-							</Fragment>
-						);
-					})}
-				</BreadcrumbList>
-			</Breadcrumb>
-		</>
+		<Breadcrumb>
+			<BreadcrumbList>
+				{parsePathIntoBreadCrumbs(routes).map(({ name, path }, idx, arr) => {
+					return (
+						<Fragment key={name}>
+							{idx !== 0 ? <BreadcrumbSeparator /> : null}
+							<BreadcrumbItem>
+								{idx < arr.length - 1 ? (
+									<BreadcrumbLink asChild={true}>
+										<Link to={path}>{name}</Link>
+									</BreadcrumbLink>
+								) : (
+									<BreadcrumbPage asChild={true}>
+										<Link to={path}>{name}</Link>
+									</BreadcrumbPage>
+								)}
+							</BreadcrumbItem>
+						</Fragment>
+					);
+				})}
+			</BreadcrumbList>
+		</Breadcrumb>
 	);
 }

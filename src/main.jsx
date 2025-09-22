@@ -30,58 +30,65 @@ import store from "./store/store.js";
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<App />} errorElement={<NotFound />}>
-			<Route path="" element={<Home />} />
+			<Route index element={<Home />} />
+
 			<Route
-				path="/signin"
+				path="login"
 				element={
 					<AuthLayout authentication={false}>
 						<SignIn />
 					</AuthLayout>
 				}
 			/>
+
 			<Route
-				path="/signup"
+				path="register"
 				element={
 					<AuthLayout authentication={false}>
 						<SignUp />
 					</AuthLayout>
 				}
 			/>
-			<Route
-				path="all-post"
-				element={
-					<AuthLayout authentication={true}>
-						<AllPosts />
-					</AuthLayout>
-				}
-			/>
-			<Route
-				path="add-post"
-				element={
-					<AuthLayout authentication={true}>
-						<AddPost />
-					</AuthLayout>
-				}
-			/>
-			<Route
-				path="edit-post/:slug"
-				element={
-					<AuthLayout authentication={true}>
-						<EditPost />
-					</AuthLayout>
-				}
-			/>
-			<Route
-				path="post/:slug"
-				element={
-					<AuthLayout authentication={true}>
-						<PostPage />
-					</AuthLayout>
-				}
-			/>
-			<Route path="profile/*" element={<ProfileRoute />}></Route>
-			<Route path="/settings" element={<Settings />} />
-		</Route>,
+
+			<Route path="posts">
+				<Route
+					index
+					element={
+						<AuthLayout authentication={true}>
+							<AllPosts />
+						</AuthLayout>
+					}
+				/>
+				<Route
+					path="create"
+					element={
+						<AuthLayout authentication={true}>
+							<AddPost />
+						</AuthLayout>
+					}
+				/>
+				<Route
+					path=":slug"
+					element={
+						<AuthLayout authentication={true}>
+							<PostPage />
+						</AuthLayout>
+					}
+				/>
+				<Route
+					path=":slug/edit"
+					element={
+						<AuthLayout authentication={true}>
+							<EditPost />
+						</AuthLayout>
+					}
+				/>
+			</Route>
+
+			<Route path="profile/*" element={<ProfileRoute />} />
+			<Route path="settings" element={<Settings />} />
+		</Route>
+		,
 	),
 );
 

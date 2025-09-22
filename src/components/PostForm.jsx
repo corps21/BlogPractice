@@ -70,6 +70,7 @@ function PostForm({ post }) {
 							body: editor,
 							isPublic,
 						});
+						console.log(postResponse)
 						if (!postResponse.success) throw new Error(postResponse.message);
 
 						if (img && img.length > 0) {
@@ -87,11 +88,12 @@ function PostForm({ post }) {
 					}
 				} catch (err) {
 					console.log(err);
+					throw Error(err.message)
 				}
 			},
 			onSuccess: (newPost) => {
 				queryClient.setQueryData(["post", newPost.slug], newPost);
-				navigate(`/post/${newPost.slug}`);
+				navigate(`/posts/${newPost.slug}`);
 			},
 		},
 	);

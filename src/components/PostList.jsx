@@ -12,7 +12,7 @@ export default function PostList({ isLoading, files, className = "" }) {
 				return (
 					<PostCard
 						key={_id}
-						url={`/post/${slug}`}
+						url={`/posts/${slug}`}
 						href={file.coverImageUrl ?? ""}
 						title={title}
 						authorName={author}
