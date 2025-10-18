@@ -48,9 +48,9 @@ export class UserService {
 		});
 	});
 
-	getUserFromId = axiosWrapper(async(userId) => {
+	getUserFromId = axiosWrapper(async (userId) => {
 		return api.get(`/user/${userId}`);
-	})
+	});
 }
 
 export const userService = new UserService();

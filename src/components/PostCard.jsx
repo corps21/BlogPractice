@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import useToastQuery from "@/hooks/useToastQuery";
 import databaseService from "@/microService/databaseService";
 import { userService } from "@/microService/userService";
 import { AvatarCard } from ".";
-import useToastQuery from "@/hooks/useToastQuery";
 
 function PostCard({ href, title, authorId, url }) {
 	const navigate = useNavigate();
-    
+
 	// TODO: clean user request
 	const { data } = useToastQuery({
 		queryKey: ["user", authorId],
@@ -30,7 +30,9 @@ function PostCard({ href, title, authorId, url }) {
 				<h2 className="text-xl font-medium">{title}</h2>
 				<AvatarCard
 					avatarName={data?.user?.userName ?? "John Doe"}
-					avatarImageHref={databaseService.getUserAvatar(data?.user?.userName ?? "John Doe")}
+					avatarImageHref={databaseService.getUserAvatar(
+						data?.user?.userName ?? "John Doe",
+					)}
 				/>
 			</div>
 		</article>

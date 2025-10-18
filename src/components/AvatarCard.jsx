@@ -8,7 +8,11 @@ export default function AvatarCard({
 	return (
 		<div className={`flex items-center gap-1 ${className}`}>
 			<figure className="w-6 h-6">
-				<img src={avatarImageHref} alt="Author avatar" className="rounded-full" />
+				<img
+					src={avatarImageHref}
+					alt="Author avatar"
+					className="rounded-full"
+				/>
 			</figure>
 			<p className="text-sm font-medium">{avatarName}</p>
 		</div>
