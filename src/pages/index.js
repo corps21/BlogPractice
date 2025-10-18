@@ -5,10 +5,10 @@ import Home from "./Home";
 import NotFound from "./NotFound";
 import PostPage from "./PostPage";
 import Profile from "./Profile";
+import Search from "./Search";
 import Settings from "./Settings";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import Search from "./Search";
 
 export {
 	Home,
@@ -21,5 +21,5 @@ export {
 	NotFound,
 	Profile,
 	Settings,
-	Search
+	Search,
 };

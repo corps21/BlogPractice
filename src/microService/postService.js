@@ -10,9 +10,9 @@ class PostService {
 		return api.put(`/post/${slug}`, { title, body, isPublic });
 	});
 
-	deletePost = axiosWrapper(async ({slug}) => {
-		return api.delete(`/post/${slug}`)
-	})
+	deletePost = axiosWrapper(async ({ slug }) => {
+		return api.delete(`/post/${slug}`);
+	});
 
 	updateCoverImage = axiosWrapper(async ({ slug, coverImage }) => {
 		const formData = new FormData();

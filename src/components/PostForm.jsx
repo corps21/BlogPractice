@@ -4,13 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useToastMutation from "@/hooks/useToastMutation";
 import { postService } from "@/microService/postService";
 import { queryClient } from "@/query/query";
-import {
-	Button,
-	ImagePreview,
-	Input,
-	RTE,
-	SelectWrapper,
-} from "../components";
+import { Button, ImagePreview, Input, RTE, SelectWrapper } from "../components";
 import { Toaster } from "./ui/sonner";
 
 function PostForm({ post }) {
@@ -29,7 +23,7 @@ function PostForm({ post }) {
 			editor: post?.body || "",
 			coverImageUrl: post?.coverImageUrl || "",
 			status: post?.isPublic ? "active" : "inactive",
-		}
+		},
 	});
 
 	const navigate = useNavigate();
@@ -51,7 +45,8 @@ function PostForm({ post }) {
 							body: editor,
 							isPublic,
 						});
-						if (!updateResponse.success) throw new Error(updateResponse.message);
+						if (!updateResponse.success)
+							throw new Error(updateResponse.message);
 						if (img && img.length > 0) {
 							const coverImage = img[0];
 							const updateCoverImageResponse =
@@ -70,7 +65,7 @@ function PostForm({ post }) {
 							body: editor,
 							isPublic,
 						});
-						console.log(postResponse)
+						console.log(postResponse);
 						if (!postResponse.success) throw new Error(postResponse.message);
 
 						if (img && img.length > 0) {
@@ -88,7 +83,7 @@ function PostForm({ post }) {
 					}
 				} catch (err) {
 					console.log(err);
-					throw Error(err.message)
+					throw Error(err.message);
 				}
 			},
 			onSuccess: (newPost) => {

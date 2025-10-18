@@ -12,6 +12,7 @@ import PostCard from "./PostCard";
 import PostForm from "./PostForm";
 import PostList from "./PostList";
 import RTE from "./RTE";
+import SearchBox from "./SearchBox";
 import SelectWrapper from "./SelectWrapper";
 import SettingsForm from "./SettingsForm";
 import { ModeToggle } from "./ToggleThemeBtn";
@@ -36,4 +37,5 @@ export {
 	ThemeProvider,
 	ModeToggle,
 	SettingsForm,
+	SearchBox,
 };
