@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Toaster, toast } from "sonner";
-import { postService } from "@/microservice/postService";
+import { postService } from "@/microService/postService";
 import { Container, Header, Loader, PostForm } from "../components";
 
 function EditPost() {

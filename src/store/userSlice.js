@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { userService } from "@/microservice/userService";
+import { userService } from "@/microService/userService";
 
 const initialState = {
 	isLoggedIn: false,

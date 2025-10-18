@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Toaster } from "sonner";
 import { Button } from "@/components/ui/button";
 import useToastQuery from "@/hooks/useToastQuery";
-import { postService } from "@/microservice/postService";
+import { postService } from "@/microService/postService";
 import { Container, Header, PostList } from "../components";
 
 function AllPosts() {

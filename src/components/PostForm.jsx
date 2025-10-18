@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import useToastMutation from "@/hooks/useToastMutation";
-import { postService } from "@/microservice/postService";
+import { postService } from "@/microService/postService";
 import { queryClient } from "@/query/query";
 import {
 	Button,

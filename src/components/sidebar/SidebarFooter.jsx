@@ -19,8 +19,8 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { toastPromiseWrapper } from "@/lib/utils";
-import databaseService from "@/microservice/databaseService";
-import { userService } from "@/microservice/userService";
+import databaseService from "@/microService/databaseService";
+import { userService } from "@/microService/userService";
 import { removeAccessToken } from "@/store/authSlice";
 import { logout } from "@/store/userSlice";
 import { Button } from "../ui/button";

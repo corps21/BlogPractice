@@ -9,7 +9,7 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { userService } from "@/microservice/userService";
+import { userService } from "@/microService/userService";
 import { addAccessToken } from "@/store/authSlice";
 import { logout, setCurrentUser } from "@/store/userSlice";
 import { ModeToggle } from ".";

@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Toaster } from "sonner";
 import useToastQuery from "@/hooks/useToastQuery";
-import { postService } from "@/microservice/postService";
+import { postService } from "@/microService/postService";
 import { Container, CTA, Header, PostList } from "../components";
 
 function Home() {
