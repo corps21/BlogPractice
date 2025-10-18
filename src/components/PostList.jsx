@@ -15,7 +15,7 @@ export default function PostList({ isLoading, files, className = "" }) {
 						url={`/posts/${slug}`}
 						href={file.coverImageUrl ?? ""}
 						title={title}
-						authorName={author}
+						authorId={author}
 					/>
 				);
 			})}
