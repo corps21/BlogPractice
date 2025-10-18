@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import { forwardRef, useId } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
