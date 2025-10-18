@@ -136,7 +136,7 @@ function SignUp() {
 					<div className="text-center text-muted-foreground text-sm">
 						Already have an account? <br />
 						<span className="hover:underline">
-							<Link to="/signin" className="underline font-semibold">
+							<Link to="/login" className="underline font-semibold">
 								Sign in
 							</Link>
 						</span>

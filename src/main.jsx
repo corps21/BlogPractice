@@ -23,6 +23,7 @@ import {
 	Settings,
 	SignIn,
 	SignUp,
+	Search
 } from "./pages/index.js";
 import ProfileRoute from "./routes/ProfileRoute.jsx";
 import store from "./store/store.js";
@@ -84,8 +85,13 @@ const router = createBrowserRouter(
 					}
 				/>
 			</Route>
-
+			
 			<Route path="profile/*" element={<ProfileRoute />} />
+			<Route path="search" element={
+				<AuthLayout authentication={true}>
+					<Search />
+				</AuthLayout>
+			}/>
 			<Route path="settings" element={<Settings />} />
 		</Route>
 		,

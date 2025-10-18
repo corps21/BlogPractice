@@ -8,6 +8,7 @@ import Profile from "./Profile";
 import Settings from "./Settings";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import Search from "./Search";
 
 export {
 	Home,
@@ -20,4 +21,5 @@ export {
 	NotFound,
 	Profile,
 	Settings,
+	Search
 };

@@ -89,7 +89,7 @@ function SignIn() {
 					<div className="text-center text-muted-foreground text-sm">
 						Don&apos;t have an account?{" "}
 						<span className="hover:underline hover:text-neutral-600 hover:font-medium">
-							<Link to="/signup" className="underline font-semibold">
+							<Link to="/register" className="underline font-semibold">
 								Sign up
 							</Link>
 						</span>
