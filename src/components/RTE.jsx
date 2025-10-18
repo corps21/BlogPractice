@@ -33,6 +33,7 @@ export default function RTE({
 							init={{
 								initialValue: defaultValue,
 								menubar: true,
+								resize: false,
 								plugins: [
 									"advlist",
 									"autolink",

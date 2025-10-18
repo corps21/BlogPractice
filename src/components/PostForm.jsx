@@ -10,7 +10,7 @@ import {
 	Input,
 	RTE,
 	SelectWrapper,
-} from "../components/index";
+} from "../components";
 import { Toaster } from "./ui/sonner";
 
 function PostForm({ post }) {
@@ -51,13 +51,13 @@ function PostForm({ post }) {
 							body: editor,
 							isPublic,
 						});
-						if (!updateResponse.success) throw new Error(postResponse.message);
+						if (!updateResponse.success) throw new Error(updateResponse.message);
 						if (img && img.length > 0) {
 							const coverImage = img[0];
 							const updateCoverImageResponse =
 								await postService.updateCoverImage({ slug, coverImage });
 							if (!updateCoverImageResponse.success)
-								throw new Error(postResponse.message);
+								throw new Error(updateCoverImageResponse.message);
 							updateResponse.data.post.coverImageUrl =
 								updateCoverImageResponse.data.url;
 						}
@@ -78,7 +78,7 @@ function PostForm({ post }) {
 							const updateCoverImageResponse =
 								await postService.updateCoverImage({ slug, coverImage });
 							if (!updateCoverImageResponse.success)
-								throw new Error(postResponse.message);
+								throw new Error(updateCoverImageResponse.message);
 
 							postResponse.data.post.coverImageUrl =
 								updateCoverImageResponse.data.url;
