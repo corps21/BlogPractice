@@ -18,7 +18,7 @@ export default function CTA({ text = "To See Posts" }) {
 				<div>{text}</div>
 			</div>
 			<Button asChild className="rounded-[4px] bg-blue-700 mb-2">
-				<Link className="" to="/register">
+				<Link to="/login">
 					<LogInIcon />
 					Sign In
 				</Link>
