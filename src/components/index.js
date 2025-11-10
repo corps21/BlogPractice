@@ -17,6 +17,7 @@ import SelectWrapper from "./SelectWrapper";
 import SettingsForm from "./SettingsForm";
 import { ModeToggle } from "./ToggleThemeBtn";
 import { ThemeProvider } from "./theme-provider";
+import SearchResultCard from "./SearchResultCard";
 
 export {
 	Header,
@@ -38,4 +39,5 @@ export {
 	ModeToggle,
 	SettingsForm,
 	SearchBox,
+	SearchResultCard
 };
