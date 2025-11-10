@@ -54,7 +54,7 @@ export default function SidebarFooterWrapper() {
 		}
 		dispatch(logout());
 		dispatch(removeAccessToken());
-		navigate("/signin");
+		navigate("/login");
 	};
 
 	const defaultUser = useMemo(
