@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { Toaster } from "sonner";
 import useToastQuery from "@/hooks/useToastQuery";
 import { postService } from "@/microService/postService";
 import { Container, CTA, Header, PostList } from "../components";
@@ -17,7 +16,6 @@ function Home() {
 		<Container className="flex flex-col items-center">
 			<Header />
 			<PostList isLoading={isLoading} files={data?.posts} className="mt-6" />
-			<Toaster />
 		</Container>
 	) : (
 		<CTA />

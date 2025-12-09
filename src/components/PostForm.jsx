@@ -5,7 +5,6 @@ import useToastMutation from "@/hooks/useToastMutation";
 import { postService } from "@/microService/postService";
 import { queryClient } from "@/query/query";
 import { Button, ImagePreview, Input, RTE, SelectWrapper } from "../components";
-import { Toaster } from "./ui/sonner";
 
 function PostForm({ post }) {
 	const {
@@ -174,7 +173,6 @@ function PostForm({ post }) {
 					text={post ? "Edit" : "Submit"}
 					className="w-full text-base px-3 py-2 rounded-[6px] font-medium mt-4"
 				/>
-				<Toaster richColors theme="light" />
 			</section>
 		</form>
 	);

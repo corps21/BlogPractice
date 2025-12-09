@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { Toaster } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toastPromiseWrapper } from "@/lib/utils";
 import { userService } from "@/microService/userService";
@@ -98,7 +97,6 @@ export default function SettingsForm() {
 					text={"Submit"}
 					className="w-full text-base px-3 py-2 rounded-[6px] font-medium mt-4"
 				/>
-				<Toaster richColors theme="light" />
 			</section>
 		</form>
 	);

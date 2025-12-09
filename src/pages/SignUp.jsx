@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
 import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
 import { toastPromiseWrapper } from "@/lib/utils";
 import { userService } from "@/microService/userService";
@@ -130,9 +129,6 @@ function SignUp() {
 						className="block text-base px-3 py-2 rounded-[6px] mt-2 font-medium"
 						text="Sign up"
 					/>
-
-					<Toaster richColors theme="light" />
-
 					<div className="text-center text-muted-foreground text-sm">
 						Already have an account? <br />
 						<span className="hover:underline">

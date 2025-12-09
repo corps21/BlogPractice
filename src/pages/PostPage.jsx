@@ -1,7 +1,6 @@
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { Toaster } from "@/components/ui/sonner";
 import useToastMutation from "@/hooks/useToastMutation";
 import useToastQuery from "@/hooks/useToastQuery";
 import { postService } from "@/microService/postService";
@@ -72,7 +71,6 @@ function PostPage() {
 					)}
 				</div>
 			</div>
-			<Toaster richColors theme="light" />
 		</Container>
 	) : (
 		<Loader />

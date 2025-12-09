@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { Toaster } from "@/components/ui/sonner";
 import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
 import { toastPromiseWrapper } from "@/lib/utils";
 import { userService } from "@/microService/userService";
@@ -96,7 +95,6 @@ function SignIn() {
 					</div>
 				</form>
 			</Container>
-			<Toaster richColors />
 		</section>
 	);
 }

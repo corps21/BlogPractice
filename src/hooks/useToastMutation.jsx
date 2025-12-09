@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { useRef } from "react";
 import { toast } from "sonner";
 
 export default function useToastMutation(
@@ -9,7 +10,7 @@ export default function useToastMutation(
 	} = {},
 	mutationOptions = {},
 ) {
-	let toastId;
+	const toastId = useRef(null);
 
 	const { onMutate, onSuccess, onError, onSettled, ...rest } = mutationOptions;
 
@@ -17,19 +18,21 @@ export default function useToastMutation(
 		...rest,
 
 		onMutate: (...args) => {
-			toastId = toast.loading(loadingText);
+			toastId.current = toast.loading(loadingText);
 			onMutate?.(...args);
 		},
 
 		onSuccess: (...args) => {
-			toast.dismiss(toastId);
-			toast.success(successText);
+			toast.success(successText, {
+				id: toastId.current
+			});
 			onSuccess?.(...args);
 		},
 
 		onError: (...args) => {
-			toast.dismiss(toastId);
-			toast.error(`${errorText} ( ${args[0].message} )`);
+			toast.error(`${errorText} ( ${args[0].message} )`,{
+				id: toastId.current
+			});
 			onError?.(...args);
 		},
 

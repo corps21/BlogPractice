@@ -13,6 +13,7 @@ import { userService } from "@/microService/userService";
 import { addAccessToken } from "@/store/authSlice";
 import { logout, setCurrentUser } from "@/store/userSlice";
 import { ModeToggle } from ".";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function Layout({ children }) {
 	const status = useSelector((state) => state.user.isLoggedIn);
@@ -87,6 +88,7 @@ export default function Layout({ children }) {
 				</header>
 				<div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
 			</SidebarInset>
+			<Toaster richColors/>
 		</SidebarProvider>
 	);
 }

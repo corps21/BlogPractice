@@ -24,7 +24,6 @@ import { userService } from "@/microService/userService";
 import { removeAccessToken } from "@/store/authSlice";
 import { logout } from "@/store/userSlice";
 import { Button } from "../ui/button";
-import { Toaster } from "../ui/sonner";
 
 export default function SidebarFooterWrapper() {
 	const userData = useSelector((state) => state.user.userData);
@@ -143,7 +142,6 @@ export default function SidebarFooterWrapper() {
 							</Button>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
-					<Toaster richColors />
 				</DropdownMenu>
 			</SidebarMenuItem>
 		</SidebarMenu>

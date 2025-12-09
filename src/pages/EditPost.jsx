@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { postService } from "@/microService/postService";
 import { Container, Header, Loader, PostForm } from "../components";
 
@@ -23,7 +23,6 @@ function EditPost() {
 		<Container className="my-auto">
 			<Header pageTitle="Edit Post" />
 			<PostForm post={data?.data?.post} />
-			<Toaster />
 		</Container>
 	) : (
 		<Loader />

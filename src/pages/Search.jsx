@@ -1,4 +1,4 @@
-import { Toaster } from "sonner";
+
 import { Container, Header, SearchBox, SearchResultCard } from "@/components";
 import { useState } from "react";
 import useToastQuery from "@/hooks/useToastQuery";
@@ -22,7 +22,6 @@ export default function Search() {
 				<SearchResultCard></SearchResultCard>
 				<SearchResultCard></SearchResultCard>
 			</div>
-			<Toaster />
 		</Container>
 	);
 }

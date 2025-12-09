@@ -1,7 +1,6 @@
 import { SquarePenIcon } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Toaster } from "sonner";
 import { Button } from "@/components/ui/button";
 import useToastQuery from "@/hooks/useToastQuery";
 import { postService } from "@/microService/postService";
@@ -28,7 +27,6 @@ function AllPosts() {
 				</Button>
 			</div>
 			<PostList isLoading={isLoading} files={data?.posts} />
-			<Toaster />
 		</Container>
 	);
 }
