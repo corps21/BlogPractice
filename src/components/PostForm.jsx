@@ -14,7 +14,7 @@ function PostForm({ post }) {
 		watch,
 		setValue,
 		getValues,
-		formState: { errors, isDirty, dirtyFields },
+		formState: { errors, dirtyFields },
 	} = useForm({
 		defaultValues: {
 			title: post?.title ?? "",
@@ -38,8 +38,12 @@ function PostForm({ post }) {
 				try {
 					const isPublic = status === "active";
 					if (post) {
-						console.log(isDirty, dirtyFields);
-						if (isDirty) {
+						let newPost = post;
+						if (
+							dirtyFields?.title ||
+							dirtyFields?.status ||
+							dirtyFields?.editor
+						) {
 							const updateResponse = await postService.updatePost({
 								slug,
 								title: dirtyFields?.title ? title : null,
@@ -48,20 +52,17 @@ function PostForm({ post }) {
 							});
 							if (!updateResponse.success)
 								throw new Error(updateResponse.message);
-							if (img && img.length > 0) {
-								const coverImage = img[0];
-								const updateCoverImageResponse =
-									await postService.updateCoverImage({ slug, coverImage });
-								if (!updateCoverImageResponse.success)
-									throw new Error(updateCoverImageResponse.message);
-								updateResponse.data.post.coverImageUrl =
-									updateCoverImageResponse.data.url;
-							}
-
-							return updateResponse.data.post;
-						} else {
-							return post;
+							newPost = updateResponse.data.post;
 						}
+						if (img && img.length > 0) {
+							const coverImage = img[0];
+							const updateCoverImageResponse =
+								await postService.updateCoverImage({ slug, coverImage });
+							if (!updateCoverImageResponse.success)
+								throw new Error(updateCoverImageResponse.message);
+							newPost.coverImageUrl = updateCoverImageResponse.data.url;
+						}
+						return newPost;
 					} else {
 						const postResponse = await postService.createPost({
 							title,
@@ -157,17 +158,15 @@ function PostForm({ post }) {
 				{post && post.coverImageUrl !== "" && (
 					<ImagePreview src={post.coverImageUrl} />
 				)}
-
-				{/* <Input
+				{/* TODO: File input is flagged as dirty even if not touched by user */}
+				<Input
 					errors={errors}
 					registerId={"img"}
 					label="Featured Image"
 					type="file"
 					{...register("img")}
 					className="hover:cursor-pointer file:hover:cursor-pointer text-sm"
-				/> */}
-
-				{/* TODO: not being flagged as dirtyField even after touched by user */}
+				/>
 
 				<SelectWrapper
 					label="Post Status"

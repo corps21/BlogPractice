@@ -20,13 +20,12 @@ const SelectWrapper = ({
 	label = "",
 	className = "",
 	containerClass = "",
-	defaultValue,
 	name,
+	defaultValue,
 	control,
 	...props
 }) => {
 	const id = useId();
-	// const [value, setValue] = useState(defaultValue)
 	return (
 		<Controller
 			control={control}

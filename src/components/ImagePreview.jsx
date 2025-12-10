@@ -8,7 +8,7 @@ function ImagePreview({ src = "", className = "", ...props }) {
 			<img
 				src={src}
 				alt=""
-				className={`rounded-[8px] min-w-[14rem] md:max-w-[20.5rem] aspect-square ${className}`}
+				className={`rounded-[8px] min-w-[14rem] md:max-w-[20.5rem] aspect-square object-cover ${className}`}
 				{...props}
 			/>
 		</div>
