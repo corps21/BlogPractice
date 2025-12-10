@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import useToastQuery from "@/hooks/useToastQuery";
+import { getDefaultAvatarUrl } from "@/lib/utils";
 import { userService } from "@/microService/userService";
 import { AvatarCard } from ".";
-import { getDefaultAvatarUrl } from "@/lib/utils";
 
 function PostCard({ href, title, authorId, url }) {
 	const navigate = useNavigate();
@@ -29,7 +29,9 @@ function PostCard({ href, title, authorId, url }) {
 				<h2 className="text-xl font-medium">{title}</h2>
 				<AvatarCard
 					avatarName={data?.user?.fullName ?? "John Doe"}
-					avatarImageHref={getDefaultAvatarUrl(data?.user?.fullName ?? "John Doe")}
+					avatarImageHref={getDefaultAvatarUrl(
+						data?.user?.fullName ?? "John Doe",
+					)}
 				/>
 			</div>
 		</article>

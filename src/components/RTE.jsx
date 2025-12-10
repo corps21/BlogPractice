@@ -7,12 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import conf from "../conf/conf";
 import { Label } from "./ui/label";
 
-export default function RTE({
-	name,
-	control,
-	label,
-	...props
-}) {
+export default function RTE({ name, control, label, ...props }) {
 	const [isLoading, setIsLoading] = useState(true);
 	return (
 		<Controller

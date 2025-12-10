@@ -18,7 +18,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { toastPromiseWrapper, getDefaultAvatarUrl } from "@/lib/utils";
+import { getDefaultAvatarUrl, toastPromiseWrapper } from "@/lib/utils";
 import { userService } from "@/microService/userService";
 import { removeAccessToken } from "@/store/authSlice";
 import { logout } from "@/store/userSlice";
@@ -58,7 +58,7 @@ export default function SidebarFooterWrapper() {
 	const defaultUser = useMemo(
 		() => ({
 			name: "John Doe",
-			email: "johndoe.com"
+			email: "johndoe.com",
 		}),
 		[],
 	);
@@ -73,7 +73,7 @@ export default function SidebarFooterWrapper() {
 				avatar: userData?.avatar ?? getDefaultAvatarUrl(userData.fullName),
 			});
 		else setUser(defaultUser);
-	}, [userData,defaultUser]);
+	}, [userData, defaultUser]);
 
 	return (
 		<SidebarMenu>

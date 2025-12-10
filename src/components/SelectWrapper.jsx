@@ -30,27 +30,34 @@ const SelectWrapper = ({
 		<Controller
 			control={control}
 			name={name}
-			render={({field: {onChange, onBlur, value, disabled}}) => {
+			render={({ field: { onChange, onBlur, value, disabled } }) => {
 				return (
-				<div className={`mt-4 ${containerClass}`}>
-					{label && <Label htmlFor={id}>{label}</Label>}
-					<Select id={id} defaultValue={defaultValue} disabled={disabled} onValueChange={onChange} onOpenChange={onBlur} value={value}>
-						<SelectTrigger
-							className={`px-3 py-2 rounded-md ${className}`}
-							{...props}
+					<div className={`mt-4 ${containerClass}`}>
+						{label && <Label htmlFor={id}>{label}</Label>}
+						<Select
+							id={id}
+							defaultValue={defaultValue}
+							disabled={disabled}
+							onValueChange={onChange}
+							onOpenChange={onBlur}
+							value={value}
 						>
-							<SelectValue placeholder="Select a status" />
-						</SelectTrigger>
-						<SelectContent>
-							{options.map((option) => (
-								<SelectItem key={option.name} value={option.value}>
-									{option.name}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-				</div>
-			)
+							<SelectTrigger
+								className={`px-3 py-2 rounded-md ${className}`}
+								{...props}
+							>
+								<SelectValue placeholder="Select a status" />
+							</SelectTrigger>
+							<SelectContent>
+								{options.map((option) => (
+									<SelectItem key={option.name} value={option.value}>
+										{option.name}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+				);
 			}}
 		/>
 	);

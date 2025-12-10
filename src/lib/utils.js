@@ -40,4 +40,5 @@ export function axiosWrapper(fn) {
 	};
 }
 
-export const getDefaultAvatarUrl = (name) => `https://api.dicebear.com/9.x/initials/svg?seed=${name}` 
+export const getDefaultAvatarUrl = (name) =>
+	`https://api.dicebear.com/9.x/initials/svg?seed=${name}`;
