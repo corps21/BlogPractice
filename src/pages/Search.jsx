@@ -1,6 +1,5 @@
-
-import { Container, Header, SearchBox, SearchResultCard } from "@/components";
 import { useState } from "react";
+import { Container, Header, SearchBox, SearchResultCard } from "@/components";
 import useToastQuery from "@/hooks/useToastQuery";
 import { postService } from "@/microService/postService";
 

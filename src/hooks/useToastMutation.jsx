@@ -24,14 +24,14 @@ export default function useToastMutation(
 
 		onSuccess: (...args) => {
 			toast.success(successText, {
-				id: toastId.current
+				id: toastId.current,
 			});
 			onSuccess?.(...args);
 		},
 
 		onError: (...args) => {
-			toast.error(`${errorText} ( ${args[0].message} )`,{
-				id: toastId.current
+			toast.error(`${errorText} ( ${args[0].message} )`, {
+				id: toastId.current,
 			});
 			onError?.(...args);
 		},

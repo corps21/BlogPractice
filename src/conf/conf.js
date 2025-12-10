@@ -6,7 +6,7 @@ const conf = {
 	appwriteStorageId: import.meta.env.VITE_APPWRITE_STORAGE_ID,
 	tinymceKey: import.meta.env.VITE_TINY_MCE_KEY,
 	appwriteUserCollectionId: import.meta.env.VITE_APPWRITE_USER_COLLECTION_ID,
-	geminiApiKey: import.meta.env.VITE_GEMINI_API_KEY
+	geminiApiKey: import.meta.env.VITE_GEMINI_API_KEY,
 };
 
 export default conf;

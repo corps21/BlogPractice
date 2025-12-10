@@ -11,7 +11,6 @@ export default function RTE({
 	name,
 	control,
 	label,
-	defaultValue = "Welcome to BlogSphere",
 	...props
 }) {
 	const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +18,7 @@ export default function RTE({
 		<Controller
 			control={control}
 			name={name}
-			render={({ field: { onChange } }) => (
+			render={({ field: { onChange, value } }) => (
 				<div className="mt-[1rem] w-full space-y-1">
 					{label && <Label>{label}</Label>}
 					{/* TODO: Remove skeleton */}
@@ -29,9 +28,8 @@ export default function RTE({
 						<Editor
 							onInit={() => setIsLoading(false)}
 							apiKey={conf.tinymceKey}
-							initialValue={defaultValue}
+							value={value}
 							init={{
-								initialValue: defaultValue,
 								menubar: true,
 								resize: false,
 								plugins: [

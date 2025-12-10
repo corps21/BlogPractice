@@ -14,13 +14,13 @@ function PostForm({ post }) {
 		watch,
 		setValue,
 		getValues,
-		formState: { errors },
+		formState: { errors, isDirty, dirtyFields },
 	} = useForm({
 		defaultValues: {
-			title: post?.title || "",
-			slug: post?.slug || "",
-			editor: post?.body || "",
-			coverImageUrl: post?.coverImageUrl || "",
+			title: post?.title ?? "",
+			slug: post?.slug ?? "",
+			editor: post?.body ?? "Welcome to BlogSphere",
+			coverImageUrl: post?.coverImageUrl ?? "",
 			status: post?.isPublic ? "active" : "inactive",
 		},
 	});
@@ -38,25 +38,30 @@ function PostForm({ post }) {
 				try {
 					const isPublic = status === "active";
 					if (post) {
-						const updateResponse = await postService.updatePost({
-							slug,
-							title,
-							body: editor,
-							isPublic,
-						});
-						if (!updateResponse.success)
-							throw new Error(updateResponse.message);
-						if (img && img.length > 0) {
-							const coverImage = img[0];
-							const updateCoverImageResponse =
-								await postService.updateCoverImage({ slug, coverImage });
-							if (!updateCoverImageResponse.success)
-								throw new Error(updateCoverImageResponse.message);
-							updateResponse.data.post.coverImageUrl =
-								updateCoverImageResponse.data.url;
-						}
+						console.log(isDirty, dirtyFields);
+						if (isDirty) {
+							const updateResponse = await postService.updatePost({
+								slug,
+								title: dirtyFields?.title ? title : null,
+								body: dirtyFields?.editor ? editor : null,
+								isPublic: dirtyFields?.status && isPublic,
+							});
+							if (!updateResponse.success)
+								throw new Error(updateResponse.message);
+							if (img && img.length > 0) {
+								const coverImage = img[0];
+								const updateCoverImageResponse =
+									await postService.updateCoverImage({ slug, coverImage });
+								if (!updateCoverImageResponse.success)
+									throw new Error(updateCoverImageResponse.message);
+								updateResponse.data.post.coverImageUrl =
+									updateCoverImageResponse.data.url;
+							}
 
-						return updateResponse.data.post;
+							return updateResponse.data.post;
+						} else {
+							return post;
+						}
 					} else {
 						const postResponse = await postService.createPost({
 							title,
@@ -64,7 +69,7 @@ function PostForm({ post }) {
 							body: editor,
 							isPublic,
 						});
-						console.log(postResponse);
+
 						if (!postResponse.success) throw new Error(postResponse.message);
 
 						if (img && img.length > 0) {
@@ -153,18 +158,21 @@ function PostForm({ post }) {
 					<ImagePreview src={post.coverImageUrl} />
 				)}
 
-				<Input
+				{/* <Input
 					errors={errors}
 					registerId={"img"}
 					label="Featured Image"
 					type="file"
 					{...register("img")}
 					className="hover:cursor-pointer file:hover:cursor-pointer text-sm"
-				/>
+				/> */}
+
+				{/* TODO: not being flagged as dirtyField even after touched by user */}
 
 				<SelectWrapper
 					label="Post Status"
-					{...register("status")}
+					name="status"
+					control={control}
 					defaultValue={getValues("status")}
 				/>
 

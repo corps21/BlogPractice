@@ -13,11 +13,11 @@ import PostForm from "./PostForm";
 import PostList from "./PostList";
 import RTE from "./RTE";
 import SearchBox from "./SearchBox";
+import SearchResultCard from "./SearchResultCard";
 import SelectWrapper from "./SelectWrapper";
 import SettingsForm from "./SettingsForm";
 import { ModeToggle } from "./ToggleThemeBtn";
 import { ThemeProvider } from "./theme-provider";
-import SearchResultCard from "./SearchResultCard";
 
 export {
 	Header,
@@ -39,5 +39,5 @@ export {
 	ModeToggle,
 	SettingsForm,
 	SearchBox,
-	SearchResultCard
+	SearchResultCard,
 };
