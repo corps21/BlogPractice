@@ -20,7 +20,7 @@ function AllPosts() {
 			<Header pageTitle="All Posts" />
 			<div className="flex justify-start w-full mb-6">
 				<Button variant="icon" className="pl-0" asChild>
-					<Link to="/add-post" className="dark:text-white ">
+					<Link to="/posts/create" className="dark:text-white ">
 						<SquarePenIcon className="dark:stroke-white" />
 						Create
 					</Link>

@@ -18,8 +18,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { toastPromiseWrapper } from "@/lib/utils";
-import databaseService from "@/microService/databaseService";
+import { toastPromiseWrapper, getDefaultAvatarUrl } from "@/lib/utils";
 import { userService } from "@/microService/userService";
 import { removeAccessToken } from "@/store/authSlice";
 import { logout } from "@/store/userSlice";
@@ -59,8 +58,7 @@ export default function SidebarFooterWrapper() {
 	const defaultUser = useMemo(
 		() => ({
 			name: "John Doe",
-			email: "johndoe.com",
-			avatar: databaseService.getUserAvatar("John Doe"),
+			email: "johndoe.com"
 		}),
 		[],
 	);
@@ -70,14 +68,12 @@ export default function SidebarFooterWrapper() {
 	useEffect(() => {
 		if (userData)
 			setUser({
-				name: userData.fullName || defaultUser.name,
-				email: userData.email || defaultUser.email,
-				avatar: databaseService.getUserAvatar(
-					userData.fullName || defaultUser.name,
-				),
+				name: userData.fullName ?? defaultUser.name,
+				email: userData.email ?? defaultUser.email,
+				avatar: userData?.avatar ?? getDefaultAvatarUrl(userData.fullName),
 			});
 		else setUser(defaultUser);
-	}, [userData]);
+	}, [userData,defaultUser]);
 
 	return (
 		<SidebarMenu>

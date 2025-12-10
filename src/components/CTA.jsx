@@ -3,7 +3,6 @@
 import { LogInIcon, VenetianMaskIcon } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import authService from "@/microService/authService";
 import { login } from "@/store/userSlice";
 import { Container } from "../components";
 import { Button } from "./ui/button";
@@ -23,7 +22,7 @@ export default function CTA({ text = "To See Posts" }) {
 					Sign In
 				</Link>
 			</Button>
-			<Button
+			{/* <Button
 				asChild
 				variant="secondary"
 				onClick={async () => {
@@ -38,7 +37,7 @@ export default function CTA({ text = "To See Posts" }) {
 					<VenetianMaskIcon />
 					Use Without Signing In
 				</Link>
-			</Button>
+			</Button> */}
 		</Container>
 	);
 }
