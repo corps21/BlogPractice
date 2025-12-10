@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { toastPromiseWrapper } from "@/lib/utils";
+import { getDefaultAvatarUrl, toastPromiseWrapper } from "@/lib/utils";
 import { userService } from "@/microService/userService";
 import { Button, Input } from ".";
 
@@ -75,8 +75,8 @@ export default function SettingsForm() {
 					<AvatarImage
 						className="object-cover object-top"
 						src={
-							userData?.avatarUrl ||
-							"https://testingbot.com/free-online-tools/random-avatar/900"
+							userData?.avatarUrl ??
+							getDefaultAvatarUrl(userData?.fullName ?? "John Doe")
 						}
 						alt={"Avatar of User"}
 					/>

@@ -70,7 +70,7 @@ export default function SidebarFooterWrapper() {
 			setUser({
 				name: userData.fullName ?? defaultUser.name,
 				email: userData.email ?? defaultUser.email,
-				avatar: userData?.avatar ?? getDefaultAvatarUrl(userData.fullName),
+				avatar: userData?.avatarUrl ?? getDefaultAvatarUrl(userData.fullName),
 			});
 		else setUser(defaultUser);
 	}, [userData, defaultUser]);
@@ -86,7 +86,7 @@ export default function SidebarFooterWrapper() {
 						>
 							<Avatar className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-full">
 								<AvatarImage src={user.avatar} alt={user.name} />
-								<AvatarFallback className="rounded-lg">CN</AvatarFallback>
+								<AvatarFallback className="rounded-lg">JD</AvatarFallback>
 							</Avatar>
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-semibold">{user.name}</span>
@@ -105,7 +105,7 @@ export default function SidebarFooterWrapper() {
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 								<Avatar className="h-8 w-8 rounded-full">
 									<AvatarImage src={user.avatar} alt={user.name} />
-									<AvatarFallback className="rounded-lg">CN</AvatarFallback>
+									<AvatarFallback className="rounded-lg">JD</AvatarFallback>
 								</Avatar>
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="truncate font-semibold">{user.name}</span>
