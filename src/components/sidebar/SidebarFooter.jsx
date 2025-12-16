@@ -1,5 +1,11 @@
-import { BadgeCheck, Bell, ChevronsUpDown, LogOut, UserRoundPlus } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import {
+	BadgeCheck,
+	Bell,
+	ChevronsUpDown,
+	LogOut,
+	UserRoundPlus,
+} from "lucide-react";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -55,27 +61,16 @@ export default function SidebarFooterWrapper() {
 		navigate("/login");
 	};
 
-	const defaultUser = useMemo(
+	const user = useMemo(
 		() => ({
-			name: "John Doe",
-			email: "johndoe.com",
+			name: userData?.fullName ?? "John Doe",
+			email: userData?.email ?? "johndoe.com",
+			avatar:
+				userData?.avatarUrl ??
+				getDefaultAvatarUrl(userData?.fullName ?? "John Doe"),
 		}),
-		[],
+		[userData],
 	);
-	const [user, setUser] = useState(defaultUser);
-
-	// TODO: IMPROVE THIS
-	useEffect(() => {
-		if (userData)
-			setUser({
-				name: userData.fullName ?? defaultUser.name,
-				email: userData.email ?? defaultUser.email,
-				avatar:
-					userData?.avatarUrl ??
-					getDefaultAvatarUrl(userData?.fullName ?? "John Doe"),
-			});
-		else setUser(defaultUser);
-	}, [userData, defaultUser]);
 
 	return (
 		<SidebarMenu>
