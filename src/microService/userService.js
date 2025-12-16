@@ -13,6 +13,10 @@ export class UserService {
 		},
 	);
 
+	registerAnonUser = axiosWrapper(async () => {
+		return api.post('/user/sessions');
+	})
+
 	loginUser = axiosWrapper(async ({ email, userName, password }) => {
 		return api.post("/user/login", { email, password, userName });
 	});

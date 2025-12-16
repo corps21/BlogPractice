@@ -16,7 +16,7 @@ export default function useToastQuery({
 			toast.success(successMessage);
 		} else if (query.isError) {
 			toast.error(
-				errorMessage ?? `Something went wrong ${query.error.message}`,
+				`${query.error.message || errorMessage }`
 			);
 		}
 	}, [

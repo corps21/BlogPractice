@@ -30,7 +30,7 @@ export default function useToastMutation(
 		},
 
 		onError: (...args) => {
-			toast.error(`${errorText} ( ${args[0].message} )`, {
+			toast.error(`${args[0].message || errorText} `, {
 				id: toastId.current,
 			});
 			onError?.(...args);

@@ -15,7 +15,7 @@ function EditPost() {
 
 	useEffect(() => {
 		if (isError) {
-			toast.error(`Something went wrong ${error.message}`);
+			toast.error(`${error.message}`);
 		}
 	}, [isError, error]);
 

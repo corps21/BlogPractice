@@ -49,7 +49,7 @@ function SignUp() {
 	const toastOptions = {
 		loading: "Creating Account...",
 		success: "Created account successfully",
-		error: (err) => `Something went wrong ( ${err} )`,
+		error: (err) => `${err || 'Something went wrong'}`,
 	};
 
 	useAuthHomeRedirect();
