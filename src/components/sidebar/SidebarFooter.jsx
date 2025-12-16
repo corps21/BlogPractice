@@ -1,4 +1,4 @@
-import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
+import { BadgeCheck, Bell, ChevronsUpDown, LogOut, UserRoundPlus } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -70,7 +70,9 @@ export default function SidebarFooterWrapper() {
 			setUser({
 				name: userData.fullName ?? defaultUser.name,
 				email: userData.email ?? defaultUser.email,
-				avatar: userData?.avatarUrl ?? getDefaultAvatarUrl(userData.fullName),
+				avatar:
+					userData?.avatarUrl ??
+					getDefaultAvatarUrl(userData?.fullName ?? "John Doe"),
 			});
 		else setUser(defaultUser);
 	}, [userData, defaultUser]);
@@ -115,6 +117,14 @@ export default function SidebarFooterWrapper() {
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
+							{userData?.kind === "AnonUser" && (
+								<Link to={`/register`}>
+									<DropdownMenuItem className="cursor-pointer">
+										<UserRoundPlus />
+										Register Now
+									</DropdownMenuItem>
+								</Link>
+							)}
 							<Link to={`/profile/${userData?._id}`}>
 								<DropdownMenuItem className="cursor-pointer">
 									<BadgeCheck />
