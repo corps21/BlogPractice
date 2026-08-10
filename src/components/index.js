@@ -1,15 +1,11 @@
 import AuthLayout from "./AuthLayout";
 import AvatarCard from "./AvatarCard";
-import Button from "./Button";
-import Container from "./Container";
 import CTA from "./CTA";
 import ImagePreview from "./ImagePreview";
 import { Loader } from "./Loader";
-import Message from "./Message";
 import PostCard from "./PostCard";
 import PostForm from "./PostForm";
 import PostList from "./PostList";
-import RTE from "./RTE";
 import SearchBox from "./SearchBox";
 import SearchResultCard from "./SearchResultCard";
 import SelectWrapper from "./SelectWrapper";
@@ -18,10 +14,7 @@ import { ModeToggle } from "./ToggleThemeBtn";
 import { ThemeProvider } from "./theme-provider";
 
 export {
-	Container,
-	Button,
 	SelectWrapper,
-	RTE,
 	PostForm,
 	PostCard,
 	Loader,
@@ -30,7 +23,6 @@ export {
 	PostList,
 	CTA,
 	AvatarCard,
-	Message,
 	ThemeProvider,
 	ModeToggle,
 	SettingsForm,

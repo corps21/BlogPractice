@@ -4,7 +4,6 @@ import { LogInIcon, VenetianMaskIcon } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { login } from "@/store/userSlice";
-import { Container } from "../components";
 import { Button } from "./ui/button";
 import { userService } from "@/service/userService";
 import { addAccessToken } from "@/store/authSlice";
@@ -37,7 +36,7 @@ export default function CTA({ text = "To See Posts" }) {
 	useAuthHomeRedirect();
 
 	return (
-		<Container className={`h-5/6 flex flex-col justify-center items-center`}>
+		<>
 			<div className=" text-center text-4xl font-bold uppercase leading-[1.125] mb-4 dark:text-white">
 				<div>Sign Up</div>
 				<div>{text}</div>
@@ -58,6 +57,6 @@ export default function CTA({ text = "To See Posts" }) {
 					Use Without Signing In
 				</Link>
 			</Button>
-		</Container>
+		</>
 	);
 }

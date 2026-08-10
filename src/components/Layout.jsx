@@ -1,14 +1,9 @@
 import { useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import api from "@/api/api";
-import { AppSidebar } from "@/components/app-sidebar";
 import BreadcrumbsWrapper from "@/components/BreadcrumbsWrapper";
 import { Separator } from "@/components/ui/separator";
-import {
-	SidebarInset,
-	SidebarProvider,
-	SidebarTrigger,
-} from "@/components/ui/sidebar";
+
 import { Toaster } from "@/components/ui/sonner";
 import { userService } from "@/service/userService";
 import { addAccessToken } from "@/store/authSlice";
@@ -76,6 +71,7 @@ export default function Layout({ children }) {
 		<main className="">
 		<Navbar />
 		{children}
+		<Toaster richColors />
 		</main>
 		// <SidebarProvider defaultOpen={false}>
 		// 	{/* <AppSidebar /> */}
@@ -92,7 +88,6 @@ export default function Layout({ children }) {
 		// 		</header> */}
 		// 		<div className="flex flex-1 flex-col gap-4">{children}</div>
 		// 	</SidebarInset>
-		// 	<Toaster richColors />
 		// </SidebarProvider>
 	);
 }

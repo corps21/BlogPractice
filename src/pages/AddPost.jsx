@@ -1,11 +1,8 @@
-import { Container, PostForm } from "../components/index";
+import { PostForm } from "../components/index";
 
 function AddPost() {
 	return (
-		<Container className="space-y-4">
-			{/* <Header pageTitle="Create Post" /> */}
-			<PostForm />
-		</Container>
+		<PostForm />
 	);
 }
 
