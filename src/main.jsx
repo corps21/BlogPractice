@@ -51,15 +51,15 @@ const router = createBrowserRouter(
 				}
 			/>
 
-			<Route path="posts">
-				<Route
-					index
+				<Route path="archive"
 					element={
 						<AuthLayout authentication={true}>
 							<AllPosts />
 						</AuthLayout>
 					}
 				/>
+
+			<Route path="posts">
 				<Route
 					path="create"
 					element={

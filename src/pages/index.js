@@ -1,5 +1,5 @@
 import AddPost from "./AddPost";
-import AllPosts from "./AllPosts";
+import AllPosts from "./Archive";
 import EditPost from "./EditPost";
 import Home from "./Home";
 import NotFound from "./NotFound";

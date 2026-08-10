@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { postService } from "@/service/postService";
-import { Container, Header, Loader, PostForm } from "../components";
+import { Loader, PostForm } from "../components";
 
 function EditPost() {
 	const { slug } = useParams();

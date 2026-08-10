@@ -1,9 +1,9 @@
+import axios from "axios";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge"
 import { toast } from "sonner";
 
 import { ApiResponse } from "./response";
-import axios from "axios";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));

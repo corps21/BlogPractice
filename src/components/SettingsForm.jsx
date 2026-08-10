@@ -3,13 +3,21 @@ import { useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getDefaultAvatarUrl, toastPromiseWrapper } from "@/lib/utils";
 import { userService } from "@/service/userService";
-import { Button, Input } from ".";
+import { Button } from "@/components/ui/button";
+import { ControlledInput } from "./custom/ControlledInput";
+
+const toastOptions = {
+	loading: "Uploading the avatar",
+	success: `Succesfully updated the avatar`,
+	error: (err) => `Something went wrong ( ${err} )`,
+	richColors: true,
+};
 
 export default function SettingsForm() {
 	const userData = useSelector((state) => state.user.userData);
 
 	const {
-		register,
+		control,
 		formState: { errors },
 		handleSubmit,
 	} = useForm();
@@ -29,13 +37,6 @@ export default function SettingsForm() {
 				reject(result?.message);
 			}
 		}, toastOptions);
-	};
-
-	const toastOptions = {
-		loading: "Uploading the avatar",
-		success: `Succesfully updated the avatar`,
-		error: (err) => `Something went wrong ( ${err} )`,
-		richColors: true,
 	};
 
 	return (
@@ -83,20 +84,20 @@ export default function SettingsForm() {
 					<AvatarFallback className="rounded-sm">JD</AvatarFallback>
 				</Avatar>
 
-				<Input
+				<ControlledInput
+					control={control}
 					errors={errors}
-					registerId={"avatar"}
-					label="Featured Image"
-					type="file"
-					{...register("avatar")}
+					name="avatar"
+					type="file"		
 					className="hover:cursor-pointer file:hover:cursor-pointer text-sm"
 				/>
 
 				<Button
 					type="submit"
-					text={"Submit"}
 					className="w-full text-base px-3 py-2 rounded-[6px] font-medium mt-4"
-				/>
+				>
+					Submit
+				</Button>
 			</section>
 		</form>
 	);

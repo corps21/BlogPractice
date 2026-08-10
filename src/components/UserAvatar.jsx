@@ -13,7 +13,7 @@ import {userService} from "@/service/userService";
 import {removeAccessToken} from "@/store/authSlice";
 import {logout} from "@/store/userSlice";
 
-import {SignOutIcon, SealCheckIcon, BellSimpleIcon} from "@phosphor-icons/react";
+import {SignOutIcon, SealCheckIcon, BellSimpleIcon, GearSixIcon} from "@phosphor-icons/react";
 
 const toastOptions = {
     loading: "Logging out of the account",
@@ -21,6 +21,24 @@ const toastOptions = {
     error: (err) => `Something went wrong ( ${err} )`,
     richColors: true,
 };
+
+const MenuItem = [
+    {
+        name: "Profile",
+        href: "/profile",
+        icon: SealCheckIcon,
+    },
+    {
+        name: "Notifications",
+        href: "/notifications",
+        icon: BellSimpleIcon,
+    },
+    {
+        name: "Settings",
+        href: "/settings",
+        icon: GearSixIcon,
+    }
+]
 
 export function UserAvatar() {
 
@@ -67,19 +85,22 @@ export function UserAvatar() {
             <DropdownMenuContent align="end">
 
                 <DropdownMenuGroup>
+
                     <DropdownMenuLabel>
                         My Account
                     </DropdownMenuLabel>
-                    <DropdownMenuItem className="cursor-pointer">
-                        <SealCheckIcon className="size-4" weight="bold" />
-                        Profile
+
+                    {MenuItem.map((item) => (
+                        <DropdownMenuItem key={item.name} className="cursor-pointer" onClick={() => navigate(item.href)}>
+                            <item.icon className="size-4" weight="bold" />
+                            {item.name}
                         </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">
-                        <BellSimpleIcon className="size-4" weight="bold" />
-                        Billing
-                    </DropdownMenuItem>
+                    ))}
+                    
                 </DropdownMenuGroup>
+
                 <DropdownMenuSeparator />
+                
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuItem onClick={() => toastPromiseWrapper(logOutUser, toastOptions)} className="cursor-pointer">
@@ -87,6 +108,7 @@ export function UserAvatar() {
                         <span className="">Sign out</span>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
+                
             </DropdownMenuContent>
         </DropdownMenu>
     )
