@@ -72,7 +72,7 @@ export function DeletePostModal() {
                     </DialogHeader>
                     <FieldGroup className="my-4">
                         <Field>
-                            <Label htmlFor="slug">{`Confirm "${slug}" deletion`}</Label>
+                            <Label htmlFor="slug" className="select-text cursor-text">{`Confirm "${slug}" deletion`}</Label>
 
                             <ControlledInput
                                 control={control}

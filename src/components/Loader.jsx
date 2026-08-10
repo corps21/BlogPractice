@@ -1,6 +1,4 @@
 import { cva } from "class-variance-authority";
-import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const spinnerVariants = cva(
 	"flex-col items-center justify-center absolute top-[35%]",
@@ -17,25 +15,12 @@ const spinnerVariants = cva(
 	},
 );
 
-const loaderVariants = cva("animate-spin text-primary", {
-	variants: {
-		size: {
-			small: "size-6",
-			medium: "size-8",
-			large: "size-12",
-		},
-	},
-	defaultVariants: {
-		size: "large",
-	},
-});
+
 
 export function Loader({ size, show, children, className }) {
 	return (
 		<span className={spinnerVariants({ show })}>
-			<Loader2
-				className={cn(loaderVariants({ size }), "stroke-blue-600", className)}
-			/>
+			<></>
 			{children}
 		</span>
 	);

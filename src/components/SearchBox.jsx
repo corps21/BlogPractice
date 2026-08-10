@@ -1,4 +1,4 @@
-import { SearchIcon } from "lucide-react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import useDebounce from "@/hooks/use-debounce";
@@ -36,7 +36,7 @@ function SearchBox({ onSearchChange }) {
 
 	return (
 		<div className="mt-2 flex w-full items-center rounded-md border border-border bg-transparent pl-3 focus:outline-0 focus-within:ring-1 focus-within:ring-ring dark:border-neutral-800 dark:bg-neutral dark:ring-offset-neutral-950 dark:focus-within:ring-neutral-300 shadow-sm dark:text-white">
-			<SearchIcon className="size-6 stroke-neutral-500" />
+			<MagnifyingGlassIcon className="size-6 stroke-neutral-500" />
 			<Input
 				value={input}
 				onChange={(e) =>

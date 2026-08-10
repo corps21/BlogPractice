@@ -1,4 +1,3 @@
-import { SquarePenIcon } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -17,14 +16,13 @@ function Archive() {
 
 	return (
 		<>
-			<div className="flex justify-start w-full mb-6">
+			{/* <div className="flex justify-start w-full mb-6">
 				<Button variant="icon" className="pl-0" asChild>
 					<Link to="/posts/create" className="dark:text-white ">
-						<SquarePenIcon className="dark:stroke-white" />
 						Create
 					</Link>
 				</Button>
-			</div>
+			</div> */}
 			<PostList isLoading={isLoading} files={data?.posts} />
 		</>
 	);

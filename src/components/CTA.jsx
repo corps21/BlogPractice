@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 
-import { LogInIcon, VenetianMaskIcon } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { login } from "@/store/userSlice";
@@ -43,7 +42,7 @@ export default function CTA({ text = "To See Posts" }) {
 			</div>
 			<Button asChild className="rounded-[4px] bg-blue-700 mb-2">
 				<Link to="/login">
-					<LogInIcon />
+					{/* <LogInIcon /> */}
 					Sign In
 				</Link>
 			</Button>
@@ -53,7 +52,7 @@ export default function CTA({ text = "To See Posts" }) {
 				onClick={handleAnonLogin}
 			>
 				<Link className="cursor-pointer hover:underline text-sm font-medium text-neutral-500">
-					<VenetianMaskIcon />
+					{/* <VenetianMaskIcon /> */}
 					Use Without Signing In
 				</Link>
 			</Button>
