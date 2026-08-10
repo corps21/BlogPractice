@@ -1,42 +1,34 @@
-import { Container } from "../components";
-import databaseService from "../appwrite/databaseService";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Header, PostList } from "../components";
 import { SquarePenIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import useToastQuery from "@/hooks/useToastQuery";
+import { postService } from "@/service/postService";
+import { Container, Header, PostList } from "../components";
 
 function AllPosts() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [files, setFiles] = useState([]);
-  const status = useSelector((state) => state.auth.isLoggedIn);
-  const userId = useSelector((state) => state.auth.userData)?.$id;
+	const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  useEffect(() => {
-    setIsLoading(true);
-    if (status) {
-      databaseService.getAllPosts(userId).then((data) => {
-        if (data) setFiles(data.documents);
-        setIsLoading(false);
-      });
-    } else setIsLoading(false)
-  }, [userId, status]);
+	const { isLoading, data } = useToastQuery({
+		enabled: isLoggedIn,
+		queryKey: ["posts", "all"],
+		queryFn: () => postService.getAllPosts(),
+	});
 
-  return (
-    <Container className="flex flex-col items-center">
-      <Header pageTitle="All Posts" />
-      <div className="flex justify-start w-full mb-6">
-        <Button variant="icon" className="pl-0" asChild>
-          <Link to="/all-post/add-post">
-            <SquarePenIcon />
-            Create
-          </Link>
-        </Button>
-      </div>
-      <PostList isLoading={isLoading} files={files} />
-    </Container>
-  );
+	return (
+		<Container className="flex flex-col items-center">
+			<Header pageTitle="All Posts" />
+			<div className="flex justify-start w-full mb-6">
+				<Button variant="icon" className="pl-0" asChild>
+					<Link to="/posts/create" className="dark:text-white ">
+						<SquarePenIcon className="dark:stroke-white" />
+						Create
+					</Link>
+				</Button>
+			</div>
+			<PostList isLoading={isLoading} files={data?.posts} />
+		</Container>
+	);
 }
 
 export default AllPosts;

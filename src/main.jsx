@@ -1,32 +1,115 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import {Home, SignIn, SignUp, AddPost, AllPosts, EditPost, PostPage} from "./pages/index.js"
-import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route, Outlet } from 'react-router-dom'
-import {AuthLayout} from './components';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./index.css";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Provider } from "react-redux";
+import {
+	createBrowserRouter,
+	createRoutesFromElements,
+	Route,
+	RouterProvider,
+} from "react-router-dom";
+import { queryClient } from "@/query/query.js";
+import { AuthLayout, ThemeProvider } from "./components";
+import {
+	AddPost,
+	AllPosts,
+	EditPost,
+	Home,
+	NotFound,
+	PostPage,
+	Search,
+	Settings,
+	SignIn,
+	SignUp,
+} from "./pages/index.js";
+import ProfileRoute from "./routes/ProfileRoute.jsx";
+import store from "./store/store.js";
 
-import store from './store/store.js'
-import { Provider } from 'react-redux'
+const router = createBrowserRouter(
+	createRoutesFromElements(
+		<Route path="/" element={<App />} errorElement={<NotFound />}>
+			<Route index element={<Home />} />
 
-const router = createBrowserRouter(createRoutesFromElements(
-  <Route path="/" element={<App/>}>
-      <Route path="" element={<Home/>} />
-      <Route path="/signin" element={<AuthLayout authentication={false}><SignIn/></AuthLayout>} />
-      <Route path="/signup" element={<AuthLayout authentication={false}><SignUp/></AuthLayout>}/>
-      <Route path='/all-post' element={<Outlet/>}>
-        <Route path="" element={<AuthLayout authentication={true}><AllPosts/></AuthLayout>}/>
-        <Route path='add-post' element={<AuthLayout authentication={true}><AddPost/></AuthLayout>}/>
-        <Route path='edit-post/:slug' element={<AuthLayout authentication={true}><EditPost/></AuthLayout>} />
-      </Route>
-        <Route path='post/:slug' element={<AuthLayout authentication={true}><PostPage/></AuthLayout>} />
-  </Route>
-))
+			<Route
+				path="login"
+				element={
+					<AuthLayout authentication={false}>
+						<SignIn />
+					</AuthLayout>
+				}
+			/>
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />    
-    </Provider>  
-  </React.StrictMode>,
-)
+			<Route
+				path="register"
+				element={
+					<AuthLayout authentication={false}>
+						<SignUp />
+					</AuthLayout>
+				}
+			/>
+
+			<Route path="posts">
+				<Route
+					index
+					element={
+						<AuthLayout authentication={true}>
+							<AllPosts />
+						</AuthLayout>
+					}
+				/>
+				<Route
+					path="create"
+					element={
+						<AuthLayout authentication={true}>
+							<AddPost />
+						</AuthLayout>
+					}
+				/>
+				<Route
+					path=":slug"
+					element={
+						<AuthLayout authentication={true}>
+							<PostPage />
+						</AuthLayout>
+					}
+				/>
+				<Route
+					path=":slug/edit"
+					element={
+						<AuthLayout authentication={true}>
+							<EditPost />
+						</AuthLayout>
+					}
+				/>
+			</Route>
+
+			<Route path="profile/*" element={<ProfileRoute />} />
+			<Route
+				path="search"
+				element={
+					<AuthLayout authentication={true}>
+						<Search />
+					</AuthLayout>
+				}
+			/>
+			<Route path="settings" element={<Settings />} />
+		</Route>,
+	),
+);
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+	// <React.StrictMode>
+		<QueryClientProvider client={queryClient}>
+			<Provider store={store}>
+				<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+					<RouterProvider router={router} />
+				</ThemeProvider>
+			</Provider>
+			<ReactQueryDevtools initialIsOpen={false} />
+		</QueryClientProvider>
+	// </React.StrictMode> 
+	,
+);

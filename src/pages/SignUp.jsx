@@ -1,140 +1,187 @@
-import { Container, Input, Button } from "../components";
-import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import authService from "../appwrite/authService";
-import { login, logout } from "../store/userSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { Response } from "@/lib/response";
-import { Toaster } from "@/components/ui/sonner";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
+import { toastPromiseWrapper } from "@/lib/utils";
+import { userService } from "@/service/userService";
+import { addAccessToken } from "@/store/authSlice";
+import { login } from "../store/userSlice";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, FieldGroup, FieldLabel, FieldError, FieldSet } from "@/components/ui/field";
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
+import { ArrowRightIcon, UserPlusIcon, UserCircleIcon } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
+import { ControlledInput } from "@/components/custom/ControlledInput";
+import { Button } from "@/components/ui/button"
+
 
 function SignUp() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const status = useSelector((state) => state.auth.isLoggedIn);
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
 
-  const createAccount = async ({ email, password, firstName, lastName }) => {
-    if (status) {
-      const result = await authService.logout();
-      if(result) dispatch(logout());
-      else return new Response(false, "Error while removing active session");
-    }
+	const dispatch = useDispatch();
 
-    const isAccountCreated = await authService.createAccount({
-      email,
-      password,
-      firstName,
-      lastName,
-    });
+	const toastWrapper = ({ email, password, userName, firstName, lastName }) => {
+		toastPromiseWrapper(async (resolve, reject) => {
+			const result = await userService.registerUser({
+				email,
+				password,
+				userName,
+				fullName: `${firstName} ${lastName ?? ""}`,
+			});
+			if (result.success) {
+				resolve();
+				const result = await userService.loginUser({
+					email,
+					password,
+					userName,
+				});
+				if (result.success) {
+					dispatch(login({ userData: result.data.user }));
+					dispatch(addAccessToken(result.data.accessToken));
+					toast.success("Logged into the account");
+				} else {
+					toast.error("Something went wrong while logging into account");
+				}
+			} else {
+				reject(result.message);
+			}
+		}, toastOptions);
+	};
 
-    if (!isAccountCreated) return new Response(false, "Error while creating account");
+	const toastOptions = {
+		loading: "Creating Account...",
+		success: "Created account successfully",
+		error: (err) => `${err || 'Something went wrong'}`,
+	};
 
-    const isAccountLoggedIn = await authService.login({ email, password });
-    if(!isAccountLoggedIn) return new Response(false, "Error while logging in");
+	useAuthHomeRedirect();
 
-    const userData = await authService.getCurrentUser();
-    if(userData) {
-      dispatch(login(userData));
-      setTimeout(() => navigate("/"), 500);
-      return new Response(true, "Account created successfully");
-    }
-    else return new Response(false, "Error while fetching user data");
-  };
+	return (
+	<form onSubmit={handleSubmit(toastWrapper)} className="w-full flex flex-col items-center">
+		<Card className="w-10/12 mx-auto my-18 md:w-7/12 md:my-40 lg:w-10/24 xl:w-7/24">
+			<CardHeader>
+				<CardTitle>Sign up to your account</CardTitle>
+				<CardDescription>
+					Enter your email and password to sign up to your account.
+				</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<FieldSet>
+				<FieldGroup className="flex flex-row gap-4">
+						<Field>
+						<FieldLabel htmlFor="firstName">First Name</FieldLabel>
 
-  const toastWrapper = async ({ email, password, firstName, lastName }) => {
-    const toastPromise = new Promise((resolve, reject) => {
-      createAccount({ email, password, firstName, lastName }).then(({ isSuccess, message }) => {
-        if(isSuccess) resolve(message);
-        else reject(message);
-      });
-    });
+						<ControlledInput
+							control={control}
+							name="firstName"
+							rules={{ required: "First Name is required" }}
+							className={cn(
+								errors.firstName && "border-red-500 focus:border-red-500 focus:ring-red-500",
+							)}
+							placeholder="John"
+							type="text"
+						/>
 
-    toast.promise(toastPromise, {
-      loading: "Creating account...",
-      success: (message) => message,
-      error: (error) => error,
-      richColors: true,
-    });
-  }
+						{errors.firstName && <FieldError>{errors.firstName.message}</FieldError>}
+						</Field>
+					<Field>
+						<FieldLabel htmlFor="lastName">Last Name</FieldLabel>
 
-  return (
-    <section className="flex justify-center items-center h-5/6">
-      <Container className="border-[1px] border-gray-700 p-10 rounded-xl md:w-[32rem] w-[24rem]">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold">Create your account</h2>
-          <h3 className="text-base text-gray-500 ">
-            Fill in your details to create your account.
-          </h3>
-        </div>
+						<ControlledInput
+							control={control}
+							name="lastName"
+							placeholder="Doe"
+							type="text"
+						/>
 
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={handleSubmit(toastWrapper)}
-        >
-          <div className="flex gap-4 md:flex-row flex-col">
-            <Input
-              errors={errors}
-              registerId="firstName"
-              placeholder="First Name"
-              label="First Name"
-              {...register("firstName", { required: true })}
-            />
-            <Input
-              errors={errors}
-              registerId="lastName"
-              placeholder="Last Name"
-              label="Last Name"
-              {...register("lastName", { required: true })}
-            />
-          </div>
+					</Field>
+				</FieldGroup>
 
-          <Input
-            errors={errors}
-            registerId="email"
-            placeholder="Enter your mail"
-            label="Email"
-            {...register("email", {
-              required: true,
-              validate: {
-                matchPattern: (value) =>
-                  /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                  "Email address must be a valid address",
-              },
-            })}
-          />
+					<Field>
+						<FieldLabel htmlFor="email-address">Email Address</FieldLabel>
 
-          <Input
-            errors={errors}
-            registerId="password"
-            placeholder="Enter your password"
-            label="Password"
-            type="password"
-            {...register("password", { required: true, minLength: 8 })}
-          />
+						<ControlledInput
+							control={control}
+							name="email"
+							rules={{ required: "Email is required", pattern: /^\S+@\S+$/i }}
+							className={cn(
+								errors.email && "border-red-500 focus:border-red-500 focus:ring-red-500",
+							)}
+							placeholder="blog@sphere.com"
+							type="email"
+						/>
 
-          <Button
-            type="submit"
-            className="block text-base px-3 py-2 rounded-[6px] mt-2 font-medium"
-            text="Sign up"
-          />
+						{errors.email && <FieldError>{errors.email.message}</FieldError>}
+					</Field>
 
-          <Toaster richColors theme="light"/>
+							<Field>
+								<FieldLabel htmlFor="user-name">Username</FieldLabel>
 
-          <div className="text-center text-neutral-500 font-normal text-base">
-            Already have an account?{" "}
-            <span className="hover:underline">
-              <Link to="/signin">Sign in</Link>
-            </span>
-          </div>
-        </form>
-      </Container>
-    </section>
-  );
+								<ControlledInput
+									control={control}
+									name="userName"
+									rules={{ required: "Username is required" }}
+									className={cn(
+										errors.userName && "border-red-500 focus:border-red-500 focus:ring-red-500",
+									)}
+									placeholder="john72"
+								/>
+
+								{errors.userName && <FieldError>{errors.userName.message}</FieldError>}
+							</Field>
+
+
+					<Field>
+						<div className="flex items-center justify-between">
+							<FieldLabel htmlFor="current-password">
+								Password
+							</FieldLabel>
+						</div>
+
+						<ControlledInput
+							control={control}
+							name="password"
+							rules={{ required: "Password is required", minLength: 8 }}
+							className={cn(
+								errors.password && "border-red-500 focus:border-red-500 focus:ring-red-500",
+							)}
+							placeholder="••••••••••••••••••••••••"
+							type="password"
+						/>
+
+						{errors.password && <FieldError>{errors.password.message}</FieldError>}
+
+					</Field>
+				</FieldSet>
+			</CardContent>
+			<CardFooter className="flex-col gap-4">
+				<Button type="submit" className="w-full py-5">
+					< UserPlusIcon className="size-4" strokeWidth={2} />
+					Sign up
+				</Button>
+				<Item variant="muted" asChild>
+					<Link to="/login">
+						<ItemMedia variant="icon">
+							<UserCircleIcon strokeWidth={2} />
+						</ItemMedia>
+						<ItemContent>
+							<ItemTitle>Login</ItemTitle>
+							<ItemDescription className="line-clamp-1">
+								Log in to your account
+							</ItemDescription>
+						</ItemContent>
+						<ArrowRightIcon className="size-4" strokeWidth={2} />
+					</Link>
+				</Item>
+			</CardFooter>
+		</Card>
+	</form>
+	);
 }
 
 export default SignUp;

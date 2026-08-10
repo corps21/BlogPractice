@@ -1,13 +1,9 @@
-/* eslint-disable react/prop-types */
-function Header({pageTitle="Home"}) {
-
-  return (
-    <header className="flex flex-col w-full gap-3">
-      <div className="flex justify-between items-center w-full">
-        <h1 className="text-2xl font-semibold">{pageTitle}</h1>
-      </div>
-    </header>
-  );
+function Header({ pageTitle = "Home" }) {
+	return (
+		<h1 className="w-full text-2xl font-semibold dark:text-white">
+			{pageTitle}
+		</h1>
+	);
 }
 
 export default Header;

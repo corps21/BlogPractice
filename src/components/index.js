@@ -1,18 +1,43 @@
-import Header from "./Header/Header";
-import Input from "./Input";
-import Container from "./Container";
-import Button from "./Button";
-import SelectWrapper from "./SelectWrapper";
-import RTE from "./RTE";
-import Label from "./Label"; 
-import PostForm from "./PostForm";
-import PostCard from "./PostCard";
-import Loader from "./Loader";
 import AuthLayout from "./AuthLayout";
-import ImagePreview from "./ImagePreview";
-import PostList from "./PostList";
-import CTA from "./CTA";
 import AvatarCard from "./AvatarCard";
+import Button from "./Button";
+import Container from "./Container";
+import CTA from "./CTA";
+import Header from "./Header/Header";
+import ImagePreview from "./ImagePreview";
+import InputWrapper from "./Input";
+import { Loader } from "./Loader";
 import Message from "./Message";
+import PostCard from "./PostCard";
+import PostForm from "./PostForm";
+import PostList from "./PostList";
+import RTE from "./RTE";
+import SearchBox from "./SearchBox";
+import SearchResultCard from "./SearchResultCard";
+import SelectWrapper from "./SelectWrapper";
+import SettingsForm from "./SettingsForm";
+import { ModeToggle } from "./ToggleThemeBtn";
+import { ThemeProvider } from "./theme-provider";
 
-export {Header,Input, Container, Button, SelectWrapper, RTE, Label, PostForm, PostCard, Loader, AuthLayout, ImagePreview, PostList,CTA,AvatarCard,Message}
+export {
+	Header,
+	InputWrapper as Input,
+	Container,
+	Button,
+	SelectWrapper,
+	RTE,
+	PostForm,
+	PostCard,
+	Loader,
+	AuthLayout,
+	ImagePreview,
+	PostList,
+	CTA,
+	AvatarCard,
+	Message,
+	ThemeProvider,
+	ModeToggle,
+	SettingsForm,
+	SearchBox,
+	SearchResultCard,
+};

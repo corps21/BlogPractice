@@ -1,123 +1,132 @@
-import { Container, Input, Button } from "../components";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import authService from "../appwrite/authService";
-import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "../store/userSlice";
-import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
-import { Response } from "@/lib/response";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
+import { toastPromiseWrapper } from "@/lib/utils";
+import { userService } from "@/service/userService";
+import { addAccessToken } from "@/store/authSlice";
+import { Button } from "@/components/ui/button"
+import { login } from "../store/userSlice";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, FieldGroup, FieldLabel, FieldError } from "@/components/ui/field";
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
+import { ArrowRightIcon, UserCirclePlusIcon, SignInIcon } from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
+import { ControlledInput } from "@/components/custom/ControlledInput";
+
+const toastOptions = {
+	loading: "Logging into your account",
+	success: `Logged in`,
+	error: (err) => `Something went wrong ( ${err} )`,
+	richColors: true,
+};
 
 function SignIn() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const status = useSelector((state) => state.auth.isLoggedIn);
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
 
-  const onSubmitHandler = async ({ email, password }) => {
-    if (status) {
-      const result = await authService.logout();
-      if (result) {
-        dispatch(logout());
-      } else {
-        return new Response(false, "Error while removing active session");
-      }
-    }
+	const dispatch = useDispatch();
 
-    const result = await authService.login({ email, password });
+	const handleUserLogin = ({ email, password }) => {
+		toastPromiseWrapper(async (resolve, reject) => {
+			const result = await userService.loginUser({ email, password });
 
-    if (!result) {
-      return new Response(false, "Invalid credentials or user not found");
-    } else {
-      const userData = await authService.getCurrentUser();
-      if (userData) {
-        dispatch(login({ userData }));
-        setTimeout(() => navigate("/"), 500);
-        return new Response(true, "Login successful");
-      } else {
-        return new Response(false, "Error while fetching user data");
-      }
-    }
-  };
+			if (result.success) {
+				dispatch(login({ userData: result.data.user }));
+				dispatch(addAccessToken(result.data.accessToken));
+				resolve();
+			} else {
+				reject(result?.message);
+			}
 
-  const toastWrapper = async ({ email, password }) => {
-    const toastPromise = new Promise((resolve, reject) => {
-      onSubmitHandler({ email, password }).then(({ isSuccess, message }) => {
-        if (isSuccess) {
-          resolve(message);
-        } else {
-          reject(message);
-        }
-      });
-    });
-    toast.promise(toastPromise, {
-      loading: "Logging in...",
-      success: (message) => message,
-      error: (error) => error,
-    });
-  };
+		}, toastOptions);
+	};
 
-  return (
-    <section className="flex justify-center items-center h-5/6">
-      <Container className="border-[1px] border-gray-700 p-8 rounded-xl w-[24rem]">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold">Login</h2>
-          <h3 className="text-base text-gray-500 ">
-            Enter your email to login to your account
-          </h3>
-        </div>
 
-        <form
-          onSubmit={handleSubmit(toastWrapper)}
-          className="flex flex-col gap-4"
-        >
-          <Input
-            label="Email"
-            errors={errors}
-            registerId="email"
-            placeholder="Enter your mail"
-            {...register("email", {
-              required: true,
-              validate: {
-                matchPattern: (value) =>
-                  /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                  "Email address must be a valid address",
-              },
-            })}
-          />
-          <div className="relative">
-            <a className="cursor-pointer hover:underline absolute right-0 top-0 mt-1 text-sm text-neutral-500 font-medium hover:underline-offset-1 hover:text-neutral-600 hover:font-medium">
-              Forgot your password?
-            </a>
-            <Input
-              errors={errors}
-              registerId="password"
-              label="Password"
-              type="password"
-              placeholder="Enter your password"
-              {...register("password", { required: true, minLength: 8 })}
-            />
-          </div>
-          <Button
-            type="submit"
-            className="block text-base px-3 py-2 rounded-[6px] mt-2 font-medium"
-            text="Login"
-          />
-          <Toaster richColors theme="light" />
-          <div className="text-center text-neutral-500 font-normal text-base">
-            Don&apos;t have an account?{" "}
-            <span className="hover:underline hover:text-neutral-600 hover:font-medium">
-              <Link to="/signup">Sign up</Link>
-            </span>
-          </div>
-        </form>
-      </Container>
-    </section>
-  );
+	useAuthHomeRedirect();
+
+	return (
+		<form onSubmit={handleSubmit(handleUserLogin)} className="w-full flex flex-col items-center">
+			<Card className="w-11/12 mx-auto my-18 md:w-6/12 md:my-40 lg:w-9/24 xl:w-6/24">
+				<CardHeader className="mb-1.5">
+					<CardTitle>Login to your account</CardTitle>
+					<CardDescription>
+						Enter your email and password to login to your account.
+					</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<FieldGroup>
+						<Field>
+							<FieldLabel htmlFor="email-address">Email Address</FieldLabel>
+
+							<ControlledInput 
+								control={control} 
+								name="email" 
+								rules={{ required: "Email is required", pattern: /^\S+@\S+$/i }} 
+								className={cn(
+									errors.email && "border-red-500 focus:border-red-500 focus:ring-red-500",
+								)} 
+								placeholder="blog@sphere.com"
+								type="email" 
+							/>
+
+							{errors.email && <FieldError>{errors.email.message}</FieldError>}
+						</Field>
+
+						<Field>
+							<div className="flex items-center justify-between">
+								<FieldLabel htmlFor="current-password">
+									Password
+								</FieldLabel>
+								<Link
+									className="text-xs font-medium tracking-wider text-muted-foreground uppercase hover:text-foreground"
+								>
+									Forgot?
+								</Link>
+							</div>
+
+							<ControlledInput 
+								control={control}
+								name="password"
+								rules={{ required: "Password is required", minLength: 8 }}
+								className={cn(
+								errors.password && "border-red-500 focus:border-red-500 focus:ring-red-500",
+								)}
+								placeholder="••••••••••••••••••••••••"
+								type="password"
+							/>
+
+							{errors.password && <FieldError>{errors.password.message}</FieldError>}
+		
+						</Field>
+					</FieldGroup>
+				</CardContent>
+				<CardFooter className="flex-col gap-4">
+					<Button type="submit" className="w-full py-5">
+						<SignInIcon className="size-4" strokeWidth={2} />
+						Log in
+					</Button>
+					<Item variant="muted" asChild>
+						<Link to="/register">
+							<ItemMedia variant="icon">
+								<UserCirclePlusIcon strokeWidth={2} />
+							</ItemMedia>
+							<ItemContent>
+								<ItemTitle>Sign up</ItemTitle>
+								<ItemDescription className="line-clamp-1">
+									Create a new account
+								</ItemDescription>
+							</ItemContent>
+							<ArrowRightIcon className="size-4" strokeWidth={2} />
+						</Link>
+					</Item>
+				</CardFooter>
+			</Card>
+		</form>
+	);
 }
 
 export default SignIn;

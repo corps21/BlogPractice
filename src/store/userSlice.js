@@ -1,25 +1,51 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { userService } from "@/service/userService";
 
 const initialState = {
-    isLoggedIn:false,
-    userData: null,
-}
+	isLoggedIn: false,
+	userData: null,
+};
+
+export const setCurrentUser = createAsyncThunk("setCurrentUser", async () => {
+	// console.log("on load call")
+	const response = await userService.getCurrentUser();
+	if (!response.success) {
+		throw new Error(response.message);
+	}
+	return response.data;
+});
 
 const userSlice = createSlice({
-    name:"auth",
-    initialState,
-    reducers: {
-        login: (state,action) => {
-            state.isLoggedIn = true;
-            state.userData = action.payload.userData;
-        },
-        logout: (state) => {
-            state.isLoggedIn = false;
-            state.userData = null;
-        }
-    }
-})
+	name: "user",
+	initialState,
+	reducers: {
+		login: (state, action) => {
+			state.isLoggedIn = true;
+			state.userData = action.payload.userData;
+		},
+		logout: (state) => {
+			state.isLoggedIn = false;
+			state.userData = null;
+		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(setCurrentUser.pending, (state) => {
+			state.isLoggedIn = false;
+			state.userData = null;
+		});
 
-export const {login,logout } = userSlice.actions
+		builder.addCase(setCurrentUser.fulfilled, (state, action) => {
+			state.isLoggedIn = true;
+			state.userData = action.payload.user;
+		});
 
-export default userSlice.reducer
+		builder.addCase(setCurrentUser.rejected, (state) => {
+			state.isLoggedIn = false;
+			state.userData = null;
+		});
+	},
+});
+
+export const { login, logout } = userSlice.actions;
+
+export default userSlice.reducer;

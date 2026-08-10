@@ -1,11 +1,42 @@
-function Loader() {
-  return (
-    <article className=" flex h-[12rem] items-end justify-center">
-      <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce"></div>
-      <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:-.3s]"></div>
-      <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:-.5s]"></div>
-    </article>
-  );
-}
+import { cva } from "class-variance-authority";
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export default Loader;
+const spinnerVariants = cva(
+	"flex-col items-center justify-center absolute top-[35%]",
+	{
+		variants: {
+			show: {
+				true: "flex",
+				false: "hidden",
+			},
+		},
+		defaultVariants: {
+			show: true,
+		},
+	},
+);
+
+const loaderVariants = cva("animate-spin text-primary", {
+	variants: {
+		size: {
+			small: "size-6",
+			medium: "size-8",
+			large: "size-12",
+		},
+	},
+	defaultVariants: {
+		size: "large",
+	},
+});
+
+export function Loader({ size, show, children, className }) {
+	return (
+		<span className={spinnerVariants({ show })}>
+			<Loader2
+				className={cn(loaderVariants({ size }), "stroke-blue-600", className)}
+			/>
+			{children}
+		</span>
+	);
+}

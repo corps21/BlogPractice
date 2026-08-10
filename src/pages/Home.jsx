@@ -1,30 +1,25 @@
 import { useSelector } from "react-redux";
-import { PostList, CTA, Container, Header } from "../components";
-import { useEffect, useState } from "react";
-import databaseService from "../appwrite/databaseService";
+import useToastQuery from "@/hooks/useToastQuery";
+import { postService } from "@/service/postService";
+import { Container, CTA, Header, PostList } from "../components";
 
 function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-  const status = useSelector((state) => state.auth.isLoggedIn);
-  const [files, setFiles] = useState([]);
+	const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
-  useEffect(() => {
-    if (status) {
-      databaseService.getAllActivePosts().then((data) => {
-        if (data) setFiles(data.documents);
-        setIsLoading(false);
-      });
-    }
-  }, [status]);
+	const { isLoading, data } = useToastQuery({
+		enabled: isLoggedIn,
+		queryKey: ["posts", "public"],
+		queryFn: () => postService.getPublicPosts(),
+	});
 
-  return status ? (
-    <Container className="flex flex-col items-center">
-      <Header />
-      <PostList isLoading={isLoading} files={files} className="mt-6"/>
-    </Container>
-  ) : (
-    <CTA />
-  );
+	return isLoggedIn ? (
+		<Container className="flex flex-col items-center">
+			<Header />
+			<PostList isLoading={isLoading} files={data?.posts} className="mt-6" />
+		</Container>
+	) : (
+		<CTA />
+	);
 }
 
 export default Home;
