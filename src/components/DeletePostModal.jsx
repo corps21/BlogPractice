@@ -70,7 +70,7 @@ export function DeletePostModal() {
                             Are you sure you want to delete this post? This action cannot be undone.
                         </DialogDescription>
                     </DialogHeader>
-                    <FieldGroup>
+                    <FieldGroup className="my-4">
                         <Field>
                             <Label htmlFor="slug">{`Confirm "${slug}" deletion`}</Label>
 
@@ -79,7 +79,7 @@ export function DeletePostModal() {
                                 name="slug"
                                 rules={{ required: "Slug is required", validate: (value) => value === slug || 'Slug is not matching' }}
                                 className={cn(
-                                    errors.slug && "border-red-500 focus:border-red-500 focus:ring-red-500",
+                                    errors.slug && "border-red-500 focus:border-red-500 focus:ring-red-500", "mt-1"
                                 )}
                                 placeholder={`${slug}`}
                             />
