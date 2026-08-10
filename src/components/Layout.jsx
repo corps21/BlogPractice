@@ -74,7 +74,7 @@ export default function Layout({ children }) {
 
 	return (
 		<main className="">
-		{/* <Navbar /> */}
+		<Navbar />
 		{children}
 		</main>
 		// <SidebarProvider defaultOpen={false}>

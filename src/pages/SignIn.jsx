@@ -106,13 +106,13 @@ function SignIn() {
 				</CardContent>
 				<CardFooter className="flex-col gap-4">
 					<Button type="submit" className="w-full py-5">
-						<SignInIcon className="size-4" strokeWidth={2} />
+						<SignInIcon className="size-4" weight="bold" />
 						Log in
 					</Button>
 					<Item variant="muted" asChild>
 						<Link to="/register">
 							<ItemMedia variant="icon">
-								<UserCirclePlusIcon strokeWidth={2} />
+								<UserCirclePlusIcon  className="size-5" />
 							</ItemMedia>
 							<ItemContent>
 								<ItemTitle>Sign up</ItemTitle>
@@ -120,7 +120,7 @@ function SignIn() {
 									Create a new account
 								</ItemDescription>
 							</ItemContent>
-							<ArrowRightIcon className="size-4" strokeWidth={2} />
+							<ArrowRightIcon className="size-4" weight="bold" />
 						</Link>
 					</Item>
 				</CardFooter>

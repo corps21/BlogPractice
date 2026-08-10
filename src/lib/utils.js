@@ -2,18 +2,16 @@ import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge"
 import { toast } from "sonner";
 
+import { ApiResponse } from "./response";
+import axios from "axios";
+
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
 export function toastPromiseWrapper(
   fn,
-  options = {
-    loading: "Loading...",
-    success: `Succesfull`,
-    error: (err) => `Something went wrong ( ${err} )`,
-    richColors: true,
-  },
+  options,
 ) {
   const toastPromise = new Promise((resolve, reject) => {
     Promise.resolve(fn(resolve, reject)).catch((err) => reject(err));
