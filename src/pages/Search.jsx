@@ -1,20 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
+import useDebounce from "@/hooks/use-debounce";
 import { SearchBox, SearchResultCard } from "@/components";
 import useToastQuery from "@/hooks/useToastQuery";
 import { postService } from "@/service/postService";
 
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
-import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator} from "@/components/ui/command";
+import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
 
 export default function Search() {
-	// const [query, setQuery] = useState("");
-
+	const [query, setQuery] = useState("");
+	const deboundedQuery = useDebounce(query, 500);
+	const [suggestions, setSuggestions] = useState([]);
 	// const { isLoading, data } = useToastQuery({
 	// 	enabled: !!query,
 	// 	queryKey: ["search", query],
 	// 	queryFn: () => postService.searchPosts({ query }),
 	// });
+
+
+
+	const [loading, setLoading] = useState(false)
+	const [items, setItems] = useState([])
+
+	useEffect(() => {
+		async function getItems() {
+			setLoading(true)
+			const res = (await postService.suggestSearchPost({ query: deboundedQuery })).data?.suggestions ?? []
+			console.log(res)
+			setItems(res)
+			setLoading(false)
+		}
+
+		getItems()
+	}, [deboundedQuery])
 
 	return (
 		<>
@@ -27,20 +46,16 @@ export default function Search() {
 			</div>  */}
 
 			<Command>
-				<CommandInput placeholder="Type a command or search..." />
+				<CommandInput value={query} onValueChange={setQuery} placeholder="Search..." />
 				<CommandList>
-					<CommandEmpty>No results found.</CommandEmpty>
-					<CommandGroup heading="Suggestions">
-						<CommandItem>Calendar</CommandItem>
-						<CommandItem>Search Emoji</CommandItem>
-						<CommandItem>Calculator</CommandItem>
-					</CommandGroup>
-					<CommandSeparator />
-					<CommandGroup heading="Settings">
-						<CommandItem>Profile</CommandItem>
-						<CommandItem>Billing</CommandItem>
-						<CommandItem>Settings</CommandItem>
-					</CommandGroup>
+					{/* {loading && <CommandLoading>Fetching words…</CommandLoading>} */}
+					{items.map((item) => {
+						return (
+							<CommandItem key={`word-${item}`} value={item}>
+								{item}
+							</CommandItem>
+						)
+					})}
 				</CommandList>
 			</Command>
 		</>

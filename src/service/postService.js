@@ -32,6 +32,14 @@ class PostService {
 		});
 	});
 
+	suggestSearchPost = axiosWrapper(async ({ query }) => {
+		return api.get("/post/search-suggestions", {
+			params: {
+				search: query,
+			},
+		});
+	});
+
 	getAllPosts = axiosWrapper(async () => {
 		return api.get("/user/posts");
 	});
