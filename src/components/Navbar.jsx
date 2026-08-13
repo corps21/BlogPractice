@@ -35,7 +35,7 @@ export function Navbar() {
 
                 {/* Saved Sections */}
 
-            <Separator orientation="vertical" />
+            <Separator orientation="vertical" decoration />
             
             <span className="flex items-center cursor-pointer p-1 hover:bg-secondary rounded-md">
                 <PlusIcon weight="bold" className="size-4" />
@@ -48,7 +48,7 @@ export function Navbar() {
                 <MagnifyingGlassIcon className="size-5" weight="bold" />
             </Link>
             
-            <Separator orientation="vertical" />
+            <Separator orientation="vertical" decoration />
 
             <UserAvatar />
         </section>

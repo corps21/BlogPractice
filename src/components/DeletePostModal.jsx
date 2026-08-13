@@ -13,8 +13,7 @@ import {
     DialogDescription,
     DialogFooter,
     DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+    DialogTitle
 } from "@/components/ui/dialog"
 
 import { Field, FieldGroup, FieldError } from "@/components/ui/field"
@@ -24,7 +23,7 @@ import { ControlledInput } from "@/components/custom/ControlledInput";
 import { cn } from "@/lib/utils";
 
 
-export function DeletePostModal() {
+export function DeletePostModal({open, setOpen}) {
 
     const { slug } = useParams();
 
@@ -53,15 +52,13 @@ export function DeletePostModal() {
     );
 
     return (
-        <Dialog onOpenChange={(open) => {
+        <Dialog open={open} onOpenChange={(open) => {
+            setOpen(open);
             if (!open) {
                 setValue("slug", "");
                 clearErrors();
             }
         }}>
-            <DialogTrigger asChild>
-                <Button variant="destructive">Delete</Button>
-            </DialogTrigger>
             <DialogContent className="sm:max-w-sm">
                 <form onSubmit={handleSubmit(mutate)}>
                     <DialogHeader>
