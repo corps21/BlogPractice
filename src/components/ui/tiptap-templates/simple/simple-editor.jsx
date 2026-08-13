@@ -81,6 +81,7 @@ import "@/components/ui/tiptap-templates/simple/simple-editor.scss"
 import content from "@/components/ui/tiptap-templates/simple/data/content.json"
 
 import {PostDrawer} from "@/components/PostDrawer";
+import {BackButton} from "@/components/BackButton";
 
 const SEARCH_AND_REPLACE_SCROLL_OPTIONS = {
   block: "center",
@@ -105,10 +106,7 @@ const MainToolbarContent = ({
   return (
     <>
       <ToolbarGroup>
-        <Button variant="ghost" onClick={() => window.history.back()}>
-          <ArrowLeftIcon className="size-4" />
-          Back
-        </Button>
+        <BackButton />
       </ToolbarGroup>
 
       <Spacer />

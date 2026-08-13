@@ -20,11 +20,8 @@ function EditPost() {
 	}, [isError, error]);
 
 	return !isLoading ? (
-		// <Container className="my-auto">
-		// 	<Header pageTitle="Edit Post" />
-		// </Container>
 		<>
-		<PostForm post={data?.data?.post} />
+			<PostForm post={data?.data?.post} />
 		</>
 	) : (
 		<Loader />
