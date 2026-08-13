@@ -6,7 +6,6 @@ import { Loader } from "./Loader";
 import PostCard from "./PostCard";
 import PostForm from "./PostForm";
 import PostList from "./PostList";
-import SearchBox from "./SearchBox";
 import SearchResultCard from "./SearchResultCard";
 import SelectWrapper from "./SelectWrapper";
 import SettingsForm from "./SettingsForm";
@@ -26,6 +25,5 @@ export {
 	ThemeProvider,
 	ModeToggle,
 	SettingsForm,
-	SearchBox,
 	SearchResultCard,
 };
