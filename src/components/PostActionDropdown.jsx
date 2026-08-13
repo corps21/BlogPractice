@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { DeletePostModal } from "./DeletePostModal";
 import { useSelector } from "react-redux";
 
-export function PostActionDropdown({data, slug}) {
-    
+export function PostActionDropdown({ data, slug }) {
+
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const userId = useSelector((state) => state.user.userData?._id);
@@ -27,19 +27,15 @@ export function PostActionDropdown({data, slug}) {
                         <BookmarkSimpleIcon weight="bold" className="size-4" />
                         Save
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate(`/posts/${slug}/edit`)} className="cursor-pointer" disabled={userId !== data.post.author}>
+                        <EraserIcon weight="bold" className="size-4" />
+                        Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setOpen(true)} className="cursor-pointer" disabled={userId !== data.post.author}>
+                        <TrashIcon weight="bold" className="size-4" />
+                        Delete
+                    </DropdownMenuItem>
 
-                    {userId === data.post.author && (
-                        <>
-                            <DropdownMenuItem onClick={() => navigate(`/posts/${slug}/edit`)} className="cursor-pointer">
-                                <EraserIcon weight="bold" className="size-4" />
-                                Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setOpen(true)} className="cursor-pointer">
-                                <TrashIcon weight="bold" className="size-4" />
-                                Delete
-                            </DropdownMenuItem>
-                        </>
-                    )}
                 </DropdownMenuContent>
             </DropdownMenu>
 
