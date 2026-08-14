@@ -4,7 +4,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getDefaultAvatarUrl, toastPromiseWrapper } from "@/lib/utils";
 import { userService } from "@/service/userService";
 import { Button } from "@/components/ui/button";
-import { ControlledInput } from "./custom/ControlledInput";
+import { CustomFileInput } from "@/components/custom/CustomFileInput";
+import {ControlledInput} from "@/components/custom/ControlledInput";
+import {useEffect} from "react";
 
 const toastOptions = {
 	loading: "Uploading the avatar",
@@ -14,17 +16,37 @@ const toastOptions = {
 };
 
 export default function SettingsForm() {
-	const userData = useSelector((state) => state.user.userData);
+	const avatar = useSelector((state) => state?.user?.userData?.avatarUrl);
 
 	const {
 		control,
-		formState: { errors },
+		formState: {isSubmitSuccessful},
 		handleSubmit,
-	} = useForm();
+		setValue,
+		getValues,
+		reset,
+	} = useForm({
+		defaultValues: {
+			avatar: avatar?? getDefaultAvatarUrl(),
+		}
+	});
+
+	// console.log(userData)
 
 	const onSubmit = async (data) => {
-		handleUpdateAvatar(data.avatar[0]);
+		console.log(data)
+		// setValue("avatar", userData?.avatarUrl);
+		// handleUpdateAvatar(data.avatar[0]);
 	};
+	
+	useEffect(() => {
+		console.log(getValues("avatar"));
+		if (isSubmitSuccessful) {
+			reset({
+				avatar: avatar ?? "",
+			});
+		}
+	}, [isSubmitSuccessful,avatar, reset, getValues]);
 
 	const handleUpdateAvatar = (avatar) => {
 		console.log(avatar);
@@ -44,52 +66,11 @@ export default function SettingsForm() {
 			className="grid gap-8 md:max-w-6xl md:grid-cols-2 bg-card p-8 rounded-lg"
 			onSubmit={handleSubmit(onSubmit)}
 		>
-			{/* <section> */}
-			{/* <Input
-					errors={errors}
-					registerId="title"
-					label="Title"
-					{...register("title", {
-						required: true,
-					})}
-				/>
-
-				<Input
-					errors={errors}
-					registerId="slug"
-					label="Slug"
-					containerClass="mt-[1rem]"
-					{...register("slug", {
-						required: true,
-					})}
-					onInput={(e) => {
-						setValue("slug", slugTransform(e.currentTarget.value), {
-							shouldValidate: true,
-						});
-					}}
-				/> */}
-
-			{/* </section> */}
-
 			<section>
-				<Avatar className="rounded-sm text-white size-32 mb-2">
-					<AvatarImage
-						className="object-cover object-top"
-						src={
-							userData?.avatarUrl ??
-							getDefaultAvatarUrl(userData?.fullName ?? "John Doe")
-						}
-						alt={"Avatar of User"}
-					/>
-					<AvatarFallback className="rounded-sm">JD</AvatarFallback>
-				</Avatar>
-
-				<ControlledInput
+				<CustomFileInput
 					control={control}
-					errors={errors}
 					name="avatar"
-					type="file"		
-					className="hover:cursor-pointer file:hover:cursor-pointer text-sm"
+					type="file"
 				/>
 
 				<Button

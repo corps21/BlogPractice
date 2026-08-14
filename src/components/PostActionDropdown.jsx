@@ -14,7 +14,7 @@ export function PostActionDropdown({ data, slug }) {
     return (
         <>
             <DropdownMenu>
-                <DropdownMenuTrigger className="absolute right-156 top-42 m-0 p-0">
+                <DropdownMenuTrigger className="absolute right-156 top-43 m-0 p-0">
                     < DotsThreeOutlineVerticalIcon className="size-4.75 cursor-pointer" weight="fill" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

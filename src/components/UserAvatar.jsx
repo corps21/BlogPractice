@@ -32,6 +32,7 @@ const MenuItem = [
         name: "Notifications",
         href: "/notifications",
         icon: BellSimpleIcon,
+        disabled:true
     },
     {
         name: "Settings",
@@ -91,7 +92,7 @@ export function UserAvatar() {
                     </DropdownMenuLabel>
 
                     {MenuItem.map((item) => (
-                        <DropdownMenuItem key={item.name} className="cursor-pointer" onClick={() => navigate(item.href)}>
+                        <DropdownMenuItem key={item.name} className="cursor-pointer" onClick={() => navigate(item.href)} disabled={item?.disabled}>
                             <item.icon className="size-4" weight="bold" />
                             {item.name}
                         </DropdownMenuItem>
