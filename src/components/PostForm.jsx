@@ -20,7 +20,7 @@ function PostForm({ post }) {
 			slug: post?.slug ?? "",
 			editor: post?.body ?? "<h1 style=\"text-align: center;\">Welcome to BlogSphere</h1>",
 			coverImageUrl: post?.coverImageUrl ?? "",
-			status: post?.isPublic ? "active" : "inactive",
+			status: post?.isPublic ? "public" : "private"
 		},
 	});
 
@@ -35,7 +35,7 @@ function PostForm({ post }) {
 			mutationKey: ["post", "update"],
 			mutationFn: async ({ title, slug, editor, status, img }) => {
 				try {
-					const isPublic = status === "active";
+					const isPublic = status === "public";
 					if (post) {
 						let newPost = post;
 						if (

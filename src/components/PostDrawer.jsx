@@ -4,11 +4,12 @@ import {ControlledInput} from "@/components/custom/ControlledInput";
 import {Button} from "@/components/ui/button";
 import {Drawer, DrawerContent, DrawerHeader, DrawerTrigger} from "@/components/ui/drawer";
 import { FloppyDiskIcon, PaperPlaneTiltIcon } from "@phosphor-icons/react";
-import {ImagePreview, SelectWrapper} from "../components";
+import { PostStatusSelect } from "../components";
 import {cn} from "@/lib/utils";
+import {CustomFileInput} from "@/components/custom/CustomFileInput";
 
-export function PostDrawer({control, errors, post, setValue, getValues, slugTransform, handleSubmit, onSubmitHandler}) {
-
+export function PostDrawer({control, errors, setValue, getValues, slugTransform, handleSubmit, onSubmitHandler}) {
+    console.log(getValues("status"))
     return (
         <Drawer direction="right">
             <DrawerTrigger asChild>
@@ -68,28 +69,18 @@ export function PostDrawer({control, errors, post, setValue, getValues, slugTran
 
                                     <Field>
                                         <FieldLabel htmlFor="coverImage">Featured Image</FieldLabel>
-                                        {post && post.coverImageUrl !== "" && (
-                                            <ImagePreview src={post.coverImageUrl} className="" />
-                                        )}
-
-                                        <ControlledInput
-                                            control={control}
-                                            name="coverImage"
-                                            type="file"
-                                            className="hover:cursor-pointer file:hover:cursor-pointer text-sm"
-                                        />
+                                        <CustomFileInput control={control} name="coverImage" type="file" />
                                     </Field>
 
                                     <Field>
                                         <FieldLabel htmlFor="status">Post Status</FieldLabel>
 
-                                        <SelectWrapper
+                                        <PostStatusSelect
                                             name="status"
                                             control={control}
                                             defaultValue={getValues("status")}
                                         />
                                     </Field>
-
 
                                 </FieldGroup>
                             </CardContent>
