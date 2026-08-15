@@ -16,7 +16,7 @@ function Archive() {
 
 	return (
 		<>
-			<PostList isLoading={isLoading} files={data?.posts} />
+			<PostList isLoading={isLoading} files={data?.posts} className="mt-6"/>
 		</>
 	);
 }

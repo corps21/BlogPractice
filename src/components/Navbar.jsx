@@ -16,7 +16,7 @@ const sections = [
 
 export function Navbar() {
 
-    return <header className="flex items-center justify-between gap-4 p-6">
+    return <header className="flex items-center justify-between gap-4 p-6 max-w-4xl mx-auto">
 
         <section className="flex items-center gap-2">
             {sections.map((section) => (

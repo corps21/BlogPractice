@@ -14,7 +14,7 @@ function PostPage() {
 	});
 
 	return !isLoading ? (
-		<section className="">
+		<section className="mt-8">
 			<span className="flex justify-between mb-3 max-w-[37em] mx-auto px-4 md:px-4 lg:px-1">
 				<BackButton />
 				<PostActionDropdown data={data} slug={slug} />
