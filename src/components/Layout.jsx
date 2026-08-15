@@ -65,10 +65,10 @@ export default function Layout({ children }) {
 	}, [dispatch]);
 
 	return (
-		<main>
+		<>
 		<Navbar />
 		{children}
-		<Toaster richColors />
-		</main>
+		{/* <Toaster richColors /> */}
+		</>
 	);
 }

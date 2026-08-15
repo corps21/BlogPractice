@@ -1,8 +1,8 @@
-@import './styles/_variables.scss';
-@import './styles/_keyframe-animations.scss';
-
 @import "tailwindcss";
 @import "./typeset.css";
+
+@import './styles/_variables.scss';
+@import './styles/_keyframe-animations.scss';
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
@@ -136,11 +136,17 @@
     }
 }
 
-/* globals.css */
-@import "@fontsource-variable/geist";
-@import "@fontsource-variable/geist-mono";
-
 :root {
   --font-geist: 'Geist Variable', sans-serif;
   --font-geist-mono: 'Geist Mono Variable', monospace;
+}
+
+.typeset-article {
+  --typeset-font-body: var(--font-geist);
+  --typeset-font-heading: var(--font-geist);
+  --typeset-font-mono: var(--font-geist-mono);
+  --typeset-size: clamp(15px, 0.85rem + 0.25vw, 17px);
+  /* --typeset-size: 15px; */
+  --typeset-leading: 1.75;
+  --typeset-flow: 1.25em;
 }

@@ -26,7 +26,12 @@ function SignIn() {
 		control,
 		handleSubmit,
 		formState: { errors },
-	} = useForm();
+	} = useForm({
+		defaultValues: {
+			email: "test@test.com",
+			password: "test@1234",
+		}
+	});
 
 	const dispatch = useDispatch();
 
