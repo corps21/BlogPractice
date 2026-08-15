@@ -9,18 +9,13 @@ import { logout, setCurrentUser } from "@/store/userSlice";
 import {Navbar} from "./Navbar";
 
 export default function Layout({ children }) {
-	const status = useSelector((state) => state.user?.isLoggedIn);
 	const accessToken = useSelector((state) => state.auth?.accessToken);
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (!status) {
-			dispatch(setCurrentUser());
-		}
-	}, [dispatch, status]);
-
-	// TODO: generalize the axios instance with userService
+		dispatch(setCurrentUser());
+	}, [dispatch]);
 
 	useLayoutEffect(() => {
 		const interceptor = api.interceptors.request.use((config) => {
