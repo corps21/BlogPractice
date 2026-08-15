@@ -34,11 +34,11 @@ export class UserService {
 	});
 
 	changeUserPassword = axiosWrapper(async ({ oldPassword, newPassword }) => {
-		return api.post("/user/password", { oldPassword, newPassword });
+		return api.patch("/user/password", { oldPassword, newPassword });
 	});
 
 	updateUserDetails = axiosWrapper(async ({ email, fullName }) => {
-		return api.put("/me", { email, fullName });
+		return api.patch("/user/me", { email, fullName });
 	});
 
 	updateAvatar = axiosWrapper(async ({ avatar }) => {

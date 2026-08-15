@@ -35,7 +35,7 @@ function SignIn() {
 			const result = await userService.loginUser({ email, password });
 
 			if (result.success) {
-				dispatch(login({ userData: result.data.user }));
+				dispatch(login({ data: result.data.user }));
 				dispatch(addAccessToken(result.data.accessToken));
 				resolve();
 			} else {

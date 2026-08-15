@@ -46,6 +46,10 @@ export function CustomFileInput({ control, name, rules = {}, ...props }) {
                                     className="sr-only"
                                     {...field}
                                     {...props}
+                                    onChange={(e) => {
+                                        props.onChange();
+                                        onChange(e);
+                                    }}
                                 />
 
                             </CardContent>

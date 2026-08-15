@@ -1,14 +1,11 @@
 import { useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import api from "@/api/api";
-import BreadcrumbsWrapper from "@/components/BreadcrumbsWrapper";
-import { Separator } from "@/components/ui/separator";
 
 import { Toaster } from "@/components/ui/sonner";
 import { userService } from "@/service/userService";
 import { addAccessToken, removeAccessToken } from "@/store/authSlice";
 import { logout, setCurrentUser } from "@/store/userSlice";
-import { ModeToggle } from ".";
 import {Navbar} from "./Navbar";
 
 export default function Layout({ children }) {

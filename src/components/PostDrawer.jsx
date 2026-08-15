@@ -9,7 +9,6 @@ import {cn} from "@/lib/utils";
 import {CustomFileInput} from "@/components/custom/CustomFileInput";
 
 export function PostDrawer({control, errors, setValue, getValues, slugTransform, handleSubmit, onSubmitHandler}) {
-    console.log(getValues("status"))
     return (
         <Drawer direction="right">
             <DrawerTrigger asChild>
