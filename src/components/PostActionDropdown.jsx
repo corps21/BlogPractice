@@ -14,9 +14,11 @@ export function PostActionDropdown({ data, slug }) {
     return (
         <>
             <DropdownMenu>
+                
                 <DropdownMenuTrigger className="m-0 p-0">
                     < DotsThreeOutlineVerticalIcon className="size-4.75 cursor-pointer" weight="fill" />
                 </DropdownMenuTrigger>
+
                 <DropdownMenuContent>
 
                     <DropdownMenuLabel>
@@ -27,16 +29,19 @@ export function PostActionDropdown({ data, slug }) {
                         <BookmarkSimpleIcon weight="bold" className="size-4" />
                         Save
                     </DropdownMenuItem>
+
                     <DropdownMenuItem onClick={() => navigate(`/posts/${slug}/edit`)} className="cursor-pointer" disabled={userId !== data.post.author}>
                         <EraserIcon weight="bold" className="size-4" />
                         Edit
                     </DropdownMenuItem>
+                    
                     <DropdownMenuItem onClick={() => setOpen(true)} className="cursor-pointer" disabled={userId !== data.post.author}>
                         <TrashIcon weight="bold" className="size-4" />
                         Delete
                     </DropdownMenuItem>
 
                 </DropdownMenuContent>
+                
             </DropdownMenu>
 
             <DeletePostModal open={open} setOpen={setOpen} />

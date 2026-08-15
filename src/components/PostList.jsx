@@ -5,7 +5,7 @@ export default function PostList({ isLoading, files, className = "" }) {
 		<Loader />
 	) : (
 		<div
-			className={`grid gap-6 mx-6 pb-20 md:grid-cols-3 lg:max-w-5xl lg:grid-cols-3 xl:mx-auto ${className}`}
+			className={`max-w-4xl mx-auto grid gap-8 px-6 md:grid-cols-3 ${className}`}
 		>
 			{files?.map((file) => {
 				const { slug, title, _id, author } = file;
