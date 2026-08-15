@@ -95,7 +95,11 @@ const router = createBrowserRouter(
 					</AuthLayout>
 				}
 			/>
-			<Route path="settings" element={<Settings />} />
+			<Route path="settings" element={
+				<AuthLayout authentication={false}>
+					<Settings />
+				</AuthLayout>
+			} />
 		</Route>,
 	),
 );
@@ -108,7 +112,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 					<RouterProvider router={router} />
 				</ThemeProvider>
 			</Provider>
-			<ReactQueryDevtools initialIsOpen={false} />
+			{/* <ReactQueryDevtools initialIsOpen={false} /> */}
 		</QueryClientProvider>
 	// </React.StrictMode> 
 	,

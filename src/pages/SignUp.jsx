@@ -41,7 +41,7 @@ function SignUp() {
 					userName,
 				});
 				if (result.success) {
-					dispatch(login({ userData: result.data.user }));
+					dispatch(login({ data: result.data.user }));
 					dispatch(addAccessToken(result.data.accessToken));
 					toast.success("Logged into the account");
 				} else {

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 // TODO: fix breadcrumbs for profile page
 export default function Profile() {
-	const userIdFromStore = useSelector((state) => state.user.userData?._id);
+	const userIdFromStore = useSelector((state) => state.user.data?._id);
 	const { userId: userIdFromUrl } = useParams();
 
 	return (

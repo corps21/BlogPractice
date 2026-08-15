@@ -45,7 +45,7 @@ export class UserService {
 		const formData = new FormData();
 		formData.append("avatar", avatar);
 
-		return api.put("/user/avatar", formData, {
+		return api.patch("/user/avatar", formData, {
 			headers: {
 				"Content-Type": "multipart/form-data",
 			},

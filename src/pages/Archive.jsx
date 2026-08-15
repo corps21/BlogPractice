@@ -16,13 +16,6 @@ function Archive() {
 
 	return (
 		<>
-			{/* <div className="flex justify-start w-full mb-6">
-				<Button variant="icon" className="pl-0" asChild>
-					<Link to="/posts/create" className="dark:text-white ">
-						Create
-					</Link>
-				</Button>
-			</div> */}
 			<PostList isLoading={isLoading} files={data?.posts} />
 		</>
 	);

@@ -16,13 +16,13 @@ export function CustomFileInput({ control, name, rules = {}, ...props }) {
             render={({ field: { value, onChange, ...field } }) => {
                 return (
                     <>
-                        <Card>
+                        <Card className="">
                             <CardContent className="flex flex-col gap-3">
                                 <Label
                                     htmlFor={name}
                                     className="text-center text-xs font-normal tracking-wider text-muted-foreground uppercase"
                                 >
-                                    Cover Art
+                                    User Avatar
                                 </Label>
                                 <Item className="aspect-square" variant="outline">
                                     <label
@@ -46,12 +46,10 @@ export function CustomFileInput({ control, name, rules = {}, ...props }) {
                                     className="sr-only"
                                     {...field}
                                     {...props}
-                                    // onChange={(e) => {
-                                    //     field.onChange(e.target.files?.[0]);
-                                    // }}
                                 />
 
                             </CardContent>
+
                             <CardFooter className="flex-col gap-2">
                                 <Button variant="secondary" className="w-full" asChild>
                                     <label htmlFor={name} className="cursor-pointer">
@@ -59,7 +57,7 @@ export function CustomFileInput({ control, name, rules = {}, ...props }) {
                                     </label>
                                 </Button>
                                 <CardDescription className="text-center text-xs">
-                                    Minimum 3000 × 3000px
+                                    Maximum 3000 × 3000px
                                     <br />
                                     JPEG or PNG only
                                 </CardDescription>

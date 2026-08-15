@@ -18,7 +18,7 @@ function PostForm({ post }) {
 		defaultValues: {
 			title: post?.title ?? "",
 			slug: post?.slug ?? "",
-			editor: post?.body ?? "Welcome to BlogSphere",
+			editor: post?.body ?? "<h1 style=\"text-align: center;\">Welcome to BlogSphere</h1>",
 			coverImageUrl: post?.coverImageUrl ?? "",
 			status: post?.isPublic ? "active" : "inactive",
 		},

@@ -6,14 +6,14 @@ import { Separator } from "@/components/ui/separator";
 
 import { Toaster } from "@/components/ui/sonner";
 import { userService } from "@/service/userService";
-import { addAccessToken } from "@/store/authSlice";
+import { addAccessToken, removeAccessToken } from "@/store/authSlice";
 import { logout, setCurrentUser } from "@/store/userSlice";
 import { ModeToggle } from ".";
 import {Navbar} from "./Navbar";
 
 export default function Layout({ children }) {
-	const status = useSelector((state) => state.user.isLoggedIn);
-	const accessToken = useSelector((state) => state.auth.accessToken);
+	const status = useSelector((state) => state.user?.isLoggedIn);
+	const accessToken = useSelector((state) => state.auth?.accessToken);
 
 	const dispatch = useDispatch();
 
@@ -53,10 +53,10 @@ export default function Layout({ children }) {
 						dispatch(addAccessToken(response.data.accessToken));
 						originalReq.headers.Authorization = `Bearer ${response.data.accessToken}`;
 						originalReq._newToken = true;
-
 						return api(originalReq);
 					} catch {
 						dispatch(logout());
+						dispatch(removeAccessToken());
 					}
 				} else {
 					return Promise.reject(err);
@@ -68,26 +68,10 @@ export default function Layout({ children }) {
 	}, [dispatch]);
 
 	return (
-		<main className="">
+		<main>
 		<Navbar />
 		{children}
 		<Toaster richColors />
 		</main>
-		// <SidebarProvider defaultOpen={false}>
-		// 	{/* <AppSidebar /> */}
-		// 	<SidebarInset>
-		// 		{/* <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-		// 			<div className="flex justify-between w-5/6 lg:w-3/6 mx-auto">
-		// 				<div className="flex items-center">
-		// 					<SidebarTrigger className="-ml-1" />
-		// 					<Separator orientation="vertical" className="mr-2 h-4" />
-		// 					<BreadcrumbsWrapper />
-		// 				</div>
-		// 				<ModeToggle />
-		// 			</div>
-		// 		</header> */}
-		// 		<div className="flex flex-1 flex-col gap-4">{children}</div>
-		// 	</SidebarInset>
-		// </SidebarProvider>
 	);
 }

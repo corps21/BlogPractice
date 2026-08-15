@@ -4,7 +4,7 @@ import { AuthLayout } from "@/components";
 import { Profile } from "@/pages";
 
 export default function ProfileRoute() {
-	const userId = useSelector((state) => state.user.userData);
+	const userId = useSelector((state) => state.user.data._id);
 	return (
 		<Routes>
 			<Route

@@ -16,7 +16,7 @@ export default function CTA({ text = "To See Posts" }) {
 		toastPromiseWrapper(async (resolve, reject) => {
 			const result = await userService.registerAnonUser();
 			if (result.success) {
-				dispatch(login({ userData: result?.data?.user }));
+				dispatch(login({ data: result?.data?.user }));
 				dispatch(addAccessToken(result?.data?.accessToken));
 				resolve();
 			} else {

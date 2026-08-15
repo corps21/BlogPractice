@@ -9,7 +9,7 @@ export function PostActionDropdown({ data, slug }) {
 
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
-    const userId = useSelector((state) => state.user.userData?._id);
+    const userId = useSelector((state) => state.user.data?._id);
 
     return (
         <>

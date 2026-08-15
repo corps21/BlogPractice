@@ -3,16 +3,15 @@ import { userService } from "@/service/userService";
 
 const initialState = {
 	isLoggedIn: false,
-	userData: null,
+	data: null,
 };
 
 export const setCurrentUser = createAsyncThunk("setCurrentUser", async () => {
-	// console.log("on load call")
 	const response = await userService.getCurrentUser();
 	if (!response.success) {
 		throw new Error(response.message);
 	}
-	return response.data;
+	return response?.data;
 });
 
 const userSlice = createSlice({
@@ -21,27 +20,27 @@ const userSlice = createSlice({
 	reducers: {
 		login: (state, action) => {
 			state.isLoggedIn = true;
-			state.userData = action.payload.userData;
+			state.data = action.payload.data;
 		},
 		logout: (state) => {
 			state.isLoggedIn = false;
-			state.userData = null;
+			state.data = null;
 		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(setCurrentUser.pending, (state) => {
 			state.isLoggedIn = false;
-			state.userData = null;
+			state.data = null;
 		});
 
 		builder.addCase(setCurrentUser.fulfilled, (state, action) => {
 			state.isLoggedIn = true;
-			state.userData = action.payload.user;
+			state.data = action.payload?.user;
 		});
 
 		builder.addCase(setCurrentUser.rejected, (state) => {
 			state.isLoggedIn = false;
-			state.userData = null;
+			state.data = null;
 		});
 	},
 });

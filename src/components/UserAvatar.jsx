@@ -43,7 +43,7 @@ const MenuItem = [
 
 export function UserAvatar() {
 
-    const userData = useSelector((state) => state.user.userData);
+    const userData = useSelector((state) => state.user.data);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
