@@ -2,6 +2,8 @@ import { CustomSearchBox } from "@/components/custom/CustomSearchBox";
 import { postService } from "@/service/postService";
 import {PostList} from "../components";
 import { useState } from "react";
+import { queryClient } from "@/query/query";
+import { useSearchParams } from "react-router-dom";
 
 const onSuggestionsHandler = async (data) => {
 	const res = (await postService.suggestSearchPost(data)).data?.suggestions ?? []
@@ -9,14 +11,21 @@ const onSuggestionsHandler = async (data) => {
 	return res
 };
 
-// Add tanstack query;
 export default function Search() {
-	const [result, setResult] = useState([]);
+	const [searchParams] = useSearchParams();
+	const query = searchParams.get("q") ?? "";
+	
+	const [result, setResult] = useState(queryClient.getQueryData(["search", query]) ?? []);
 
 	const onSearchHandler = async (data) => {
-		const res = await postService.searchPosts(data);
-		setResult(res.data?.posts ?? [])
-		console.log(res)
+		const res = await queryClient.fetchQuery({
+			queryKey: ["search", data?.query],
+			queryFn: async () => {
+				return (await postService.searchPosts(data)).data?.posts ?? []
+			} 
+		});
+
+		setResult(res ?? [])
 	};
 
 	return (
