@@ -55,6 +55,14 @@ export class UserService {
 	getUserFromId = axiosWrapper(async (userId) => {
 		return api.get(`/user/${userId}`);
 	});
+
+	getUserPublicPosts = axiosWrapper(async ({userId}) => {
+		return api.get(`/user/${userId}/posts`);
+	});
+
+	getAllCurrentUserPosts = axiosWrapper(async () => {
+		return api.get("/user/posts");
+	});
 }
 
 export const userService = new UserService();

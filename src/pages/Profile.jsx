@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { userService } from "@/service/userService";
-import { postService } from "@/service/postService";
 import { PostList } from "@/components";
 import { getDefaultAvatarUrl } from "@/lib/utils";
 
@@ -24,9 +23,9 @@ export default function Profile() {
 		queryKey: ["posts", "profile", userIdFromUrl],
 		queryFn: () => {
 			if (profileUser?._id === userIdFromStore) {
-				return postService.getAllPosts()
+				return userService.getAllCurrentUserPosts()
 			} else {
-				return postService.getPublicPosts()
+				return userService.getUserPublicPosts({userId: userIdFromUrl})
 			}
 		},
 	})
