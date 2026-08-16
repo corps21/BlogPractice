@@ -23,8 +23,10 @@ export default function Profile() {
 		queryKey: ["posts", "profile", userIdFromUrl],
 		queryFn: () => {
 			if (profileUser?._id === userIdFromStore) {
+				console.log("current")
 				return userService.getAllCurrentUserPosts()
 			} else {
+				console.log("public")
 				return userService.getUserPublicPosts({userId: userIdFromUrl})
 			}
 		},
