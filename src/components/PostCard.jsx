@@ -1,25 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import useToastQuery from "@/hooks/useToastQuery";
 import { getDefaultAvatarUrl } from "@/lib/utils";
-import { userService } from "@/service/userService";
 
 import { Card, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-function PostCard({ href, title, authorId, url }) {
+function PostCard({ author, coverImage, title, url }) {
 	const navigate = useNavigate();
-
-	const { data } = useToastQuery({
-		queryKey: ["user", authorId],
-		queryFn: () => userService.getUserFromId(authorId),
-	});
 
 	return (
 
 		<Card className="relative w-full max-w-sm mx-auto overflow-hidden pt-0 cursor-pointer flex justify-between" onClick={() => navigate(url)}>
 
-			{href ? (
-				<img src={href} alt="coverimage" className="rounded-md" />
+			{coverImage ? (
+				<img src={coverImage} alt="coverimage" className="rounded-md" />
 			) : (
 				<>
 					<div className="absolute inset-0 z-30 aspect-video bg-primary opacity-50 mix-blend-color" />
@@ -37,10 +30,10 @@ function PostCard({ href, title, authorId, url }) {
 			</CardHeader>
 			<CardFooter className="gap-1">
 				<Avatar className="size-6">
-					<AvatarImage src={data?.user?.avatarUrl ?? getDefaultAvatarUrl("John Doe")} alt={data?.user?.name ?? "John Doe"} />
+					<AvatarImage src={author?.avatarUrl ?? getDefaultAvatarUrl("John Doe")} alt={author?.fullName ?? "John Doe"} />
 					<AvatarFallback className="">JD</AvatarFallback>
 				</Avatar>
-				<p>{data?.user?.fullName ?? "John Doe"}</p>
+				<p>{author?.fullName ?? "John Doe"}</p>
 			</CardFooter>
 		</Card>
 	);

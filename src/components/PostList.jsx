@@ -8,14 +8,14 @@ export default function PostList({ isLoading, files, className = "" }) {
 			className={`max-w-4xl mx-auto grid gap-8 px-6 md:grid-cols-3 ${className}`}
 		>
 			{files?.map((file) => {
-				const { slug, title, _id, author } = file;
+				const { slug, title, _id, author, coverImage } = file;
 				return (
 					<PostCard
 						key={_id}
 						url={`/posts/${slug}`}
-						href={file.coverImageUrl}
+						coverImage={coverImage}
 						title={title}
-						authorId={author}
+						author={author}
 					/>
 				);
 			})}
