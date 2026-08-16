@@ -19,7 +19,7 @@ export default function Profile() {
 
 	const profileUser = profileUserData?.data?.user
 
-	const { data: postData } = useQuery({
+	const { isLoading: postIsLoading, data: postData } = useQuery({
 		queryKey: ["posts", "profile", userIdFromUrl],
 		queryFn: () => {
 			if (profileUser?._id === userIdFromStore) {
@@ -29,7 +29,7 @@ export default function Profile() {
 				console.log("public")
 				return userService.getUserPublicPosts({userId: userIdFromUrl})
 			}
-		},
+		}
 	})
 
 	console.log(postData)
@@ -54,7 +54,7 @@ export default function Profile() {
 				<Separator className="mt-6 mb-10" />
 
 			</section>
-			<PostList isLoading={false} files={posts} className="mt-6 pb-20" />
+			<PostList isLoading={postIsLoading} files={posts} className="mt-6 pb-20" />
 		</>
 	);
 }
