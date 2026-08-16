@@ -15,17 +15,6 @@ export default defineConfig(({ mode }) => {
 	}
 
 	return {
-		server: {
-			host: "localhost",
-			proxy: {
-				"/api": {
-					target: apiEndpoint,
-					changeOrigin: true,
-					secure: false,
-					rewrite: (p) => p.replace(/^\/api/, "/api/v1"),
-				},
-			},
-		},
 		plugins: [react(), tailwindcss()],
 		resolve: {
 			alias: {
