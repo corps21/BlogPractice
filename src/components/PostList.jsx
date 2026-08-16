@@ -2,6 +2,7 @@ import { PostCard } from "../components";
 import { PostListSkeleton } from "./skeletons/PostList";
 
 export default function PostList({ isLoading, files, className = "" }) {
+	console.log(files)
 	return isLoading ? (
 		<PostListSkeleton count={12} />
 	) : (
@@ -9,14 +10,10 @@ export default function PostList({ isLoading, files, className = "" }) {
 			className={`max-w-4xl mx-auto grid gap-8 px-6 md:grid-cols-3 ${className}`}
 		>
 			{files?.map((file) => {
-				const { slug, title, _id, author, coverImage } = file;
 				return (
 					<PostCard
-						key={_id}
-						url={`/posts/${slug}`}
-						coverImage={coverImage}
-						title={title}
-						author={author}
+						key={file?._id}
+						post={file}
 					/>
 				);
 			})}

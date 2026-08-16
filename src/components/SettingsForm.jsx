@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 import { UpdateAvatarModal } from "@/components/UpdateAvatarModal";
 import {toast} from "sonner";
 
+import {useLogout} from "@/hooks/useLogout";
+
 function validateUserUpdateFields(data, userFirstName, userLastName) {
 	const {firstName, lastName, email} = data;
 	let fullName;
@@ -94,7 +96,7 @@ function validatePasswordUpdateFields(data, setError) {
 export default function SettingsForm() {
 	const userData = useSelector((state) => state?.user?.data);
 	const dispatch = useDispatch();
-
+	const logout = useLogout();
 	const [userFirstName, ...userRestName] = userData?.fullName?.split(" ") ?? [];
 	const userLastName = userRestName.join(" ");
 
@@ -166,8 +168,7 @@ export default function SettingsForm() {
 		}
 
 		if(result2?.success) {
-			dispatch(logout());
-			dispatch(setCurrentUser());
+			logout();
 		}
 
 		if(result3?.success) {

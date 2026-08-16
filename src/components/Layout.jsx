@@ -4,13 +4,15 @@ import api from "@/api/api";
 
 import { Toaster } from "@/components/ui/sonner";
 import { userService } from "@/service/userService";
-import { addAccessToken, removeAccessToken } from "@/store/authSlice";
-import { logout, setCurrentUser } from "@/store/userSlice";
+import { addAccessToken } from "@/store/authSlice";
+import { setCurrentUser } from "@/store/userSlice";
 import {Navbar} from "./Navbar";
+
+import {useLogout} from "@/hooks/useLogout";
 
 export default function Layout({ children }) {
 	const accessToken = useSelector((state) => state.auth?.accessToken);
-
+	const logout = useLogout();
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -47,8 +49,7 @@ export default function Layout({ children }) {
 						originalReq._newToken = true;
 						return api(originalReq);
 					} catch {
-						dispatch(logout());
-						dispatch(removeAccessToken());
+						logout();
 					}
 				} else {
 					return Promise.reject(err);
@@ -57,7 +58,7 @@ export default function Layout({ children }) {
 		);
 
 		return () => api.interceptors.response.eject(interceptor);
-	}, [dispatch]);
+	}, [dispatch, logout]);
 
 	return (
 		<>

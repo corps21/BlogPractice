@@ -95,6 +95,12 @@ const router = createBrowserRouter(
 						</AuthLayout>
 					}
 				/>
+
+				<Route path=":slug/private" element={
+					<AuthLayout authentication={true}>
+						{withSuspense(PostPage)}
+					</AuthLayout>
+				}/>
 			</Route>
 
 			<Route path="profile">

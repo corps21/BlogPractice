@@ -5,17 +5,17 @@ const api = axios.create({
 	withCredentials: true,
 });
 
-// api.interceptors.request.use(
-// 	(config) => {
-// 		return config;
-// 	},
-// 	(_err) => {},
-// 	{
-// 		synchronous: true,
-// 		runWhen: () => {
-// 			return false;
-// 		},
-// 	},
-// );
+api.interceptors.request.use(
+	(config) => {
+		return config;
+	},
+	(_err) => {},
+	{
+		synchronous: true,
+		runWhen: () => {
+			return false;
+		},
+	},
+);
 
 export default api;

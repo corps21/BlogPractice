@@ -6,13 +6,12 @@ import {DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, 
 import {Separator} from "@/components/ui/separator";
 import {getDefaultAvatarUrl} from "@/lib/utils";
 
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
 import {toastPromiseWrapper} from "@/lib/utils";
 import {userService} from "@/service/userService";
-import {removeAccessToken} from "@/store/authSlice";
-import {logout} from "@/store/userSlice";
+import {useLogout} from "@/hooks/useLogout";
 
 import {SignOutIcon, SealCheckIcon, BellSimpleIcon, GearSixIcon} from "@phosphor-icons/react";
 
@@ -26,8 +25,8 @@ const toastOptions = {
 export function UserAvatar() {
 
     const userData = useSelector((state) => state.user.data);
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const logout = useLogout();
 
     const logOutUser = async (resolve, reject) => {
         const result = await userService.logoutUser();
@@ -36,8 +35,8 @@ export function UserAvatar() {
         } else {
             reject(result.message);
         }
-        dispatch(logout());
-        dispatch(removeAccessToken());
+
+        logout(() => navigate("/"));
         navigate("/");
     };
 

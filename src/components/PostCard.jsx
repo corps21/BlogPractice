@@ -7,14 +7,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const FALLBACK_COVER =
 	"https://images.unsplash.com/photo-1604076850742-4c7221f3101b?q=80&fm=jpg&auto=format&fit=crop&w=1200&h=675";
 
-function PostCard({ author, coverImage, title, url }) {
+function PostCard({ post }) {
 	const navigate = useNavigate();
-	const imageSrc = coverImage || FALLBACK_COVER;
-	const avatarSrc = author?.avatarUrl ?? getDefaultAvatarUrl("John Doe");
+	const {author, title, slug, isPublic} = post;
+
+	const imageSrc = post?.coverImage || FALLBACK_COVER;
+	const avatarSrc = post?.author?.avatarUrl ?? getDefaultAvatarUrl("John Doe");
+
+	const url = isPublic ? `/posts/${slug}` : `/posts/${slug}/private`;
 
 	return (
 		<Card className="relative w-full max-w-sm mx-auto overflow-hidden pt-0 cursor-pointer flex justify-between" onClick={() => navigate(url)}>
-			{coverImage ? (
+			{post?.coverImage ? (
 				<img
 					src={imageSrc}
 					alt={title ?? "Post cover"}

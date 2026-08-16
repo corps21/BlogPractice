@@ -48,6 +48,10 @@ class PostService {
 		return api.get("/post/public");
 	});
 
+	getPrivatePostBySlug = axiosWrapper(async ({slug}) => {
+		return api.get(`/post/${slug}/private`)
+	})
+
 	getPostBySlug = axiosWrapper(async ({ slug }) => {
 		return api.get(`/post/${slug}`);
 	});

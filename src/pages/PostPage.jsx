@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useLocation} from "react-router-dom";
 import useToastQuery from "@/hooks/useToastQuery";
 import { postService } from "@/service/postService";
 import { Loader } from "../components";
@@ -9,10 +9,18 @@ import { PostRecommendation } from "../components/PostRecommendation";
 
 function PostPage() {
 	const { slug } = useParams();
+	const location = useLocation();
+	console.log(location.pathname.endsWith("/private"))
 
 	const { isLoading, data } = useToastQuery({
 		queryKey: ["post", slug],
-		queryFn: () => postService.getPostBySlug({ slug }),
+		queryFn: () => {
+			if(location.pathname.endsWith("/private")) {
+				return postService.getPrivatePostBySlug({ slug });
+			} else {
+				return postService.getPostBySlug({ slug });
+			}
+		},
 	});
 
 	const { isLoading: recommendationsIsLoading, data: recommendations } = useQuery({
