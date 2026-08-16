@@ -4,7 +4,6 @@ import { Loader } from "./Loader";
 import PostCard from "./PostCard";
 import PostForm from "./PostForm";
 import PostList from "./PostList";
-import SearchResultCard from "./SearchResultCard";
 import PostStatusSelect from "./PostStatusSelect";
 import SettingsForm from "./SettingsForm";
 import { ModeToggle } from "./ToggleThemeBtn";
@@ -20,6 +19,5 @@ export {
 	CTA,
 	ThemeProvider,
 	ModeToggle,
-	SettingsForm,
-	SearchResultCard,
+	SettingsForm
 };
