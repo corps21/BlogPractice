@@ -1,24 +1,16 @@
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getDefaultAvatarUrl, toastPromiseWrapper } from "@/lib/utils";
 import { userService } from "@/service/userService";
 import { Button } from "@/components/ui/button";
 import { ControlledInput } from "@/components/custom/ControlledInput";
-import { useEffect } from "react";
-import { setCurrentUser } from "@/store/userSlice";
+import { setCurrentUser, login, logout} from "@/store/userSlice";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel, FieldError, FieldSet } from "@/components/ui/field";
 import { EraserIcon} from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { UpdateAvatarModal } from "@/components/UpdateAvatarModal";
-
-const toastOptions = {
-	loading: "Uploading the avatar",
-	success: `Succesfully updated the avatar`,
-	error: (err) => `Something went wrong ( ${err} )`,
-	richColors: true,
-};
+import {toast} from "sonner";
 
 function validateUserUpdateFields(data, userFirstName, userLastName) {
 	const {firstName, lastName, email} = data;
@@ -110,10 +102,7 @@ export default function SettingsForm() {
 		control,
 		formState: { errors, dirtyFields, isDirty},
 		handleSubmit,
-		setError,
-		setValue,
-		getValues,
-		reset,
+		setError
 	} = useForm({
 		defaultValues: {
 			firstName: userFirstName ?? "",
@@ -134,6 +123,7 @@ export default function SettingsForm() {
 		}
 
 		const dataToSubmit = {};
+		const calls = []
 		const promises = []
 
 		for(const [key, value] of Object.entries(dirtyFields)) {
@@ -148,20 +138,43 @@ export default function SettingsForm() {
 		// update user details
 		const {fullName, email} = validateUserUpdateFields(dataToSubmit, userFirstName, userLastName);
 		if(fullName || email) {
-			promises[0] = userService.updateUserDetails({fullName, email});
+			calls[0] = [userService.updateUserDetails, {fullName, email}];
 		}
 
 		// update password
-		const {isValid, oldPassword, newPassword, _confirmNewPassword} = validatePasswordUpdateFields(dataToSubmit, setError);
+		const {isValid, oldPassword, newPassword} = validatePasswordUpdateFields(dataToSubmit, setError);
 		if(isValid) {
-			promises[1] = userService.changeUserPassword({oldPassword, newPassword});
+			calls[1] = [userService.changeUserPassword, {oldPassword, newPassword}];
 		}
 		
 		// update avatar
 		if(dataToSubmit.avatar) {
-			promises[2] = userService.updateAvatar({avatar: dataToSubmit.avatar[0]});
+			calls[2] = [userService.updateAvatar, {avatar: dataToSubmit.avatar[0]}];
 		}
+
+		calls.map(([fns, args], idx) => {
+			promises[idx] = fns(args);
+		})
+
 		const [result1, result2, result3] = await Promise.all(promises);
+		[result1, result2, result3].map((res) => {
+			if(res && !res?.success) {
+				toast.error(res?.message)
+			}
+		})
+
+		if(result1?.success) {
+			dispatch(login({data: result1?.data}));
+		}
+
+		if(result2?.success) {
+			dispatch(logout());
+			dispatch(setCurrentUser());
+		}
+
+		if(result3?.success) {
+			dispatch(setCurrentUser());
+		}
 
 		if(result2.message === "Invalid password") {
 			setError("oldPassword", {
@@ -169,35 +182,7 @@ export default function SettingsForm() {
 				message: "Invalid or expired password"
 			});
 		}
-		console.log(await Promise.all(promises))
 
-		// dispatch(setCurrentUser());
-	};
-
-	useEffect(() => {
-		console.log("errors", errors)
-	},[errors])
-
-	// useEffect(() => {
-	// 	console.log(getValues("avatar"));
-	// 	if (isSubmitSuccessful) {
-	// 		reset({
-	// 			avatar: avatar ?? "",
-	// 		});
-	// 	}
-	// }, [isSubmitSuccessful,avatar, reset, getValues]);
-
-	const handleUpdateAvatar = (avatar) => {
-		console.log(avatar);
-		toastPromiseWrapper(async (resolve, reject) => {
-			const result = await userService.updateAvatar({ avatar });
-			if (result.success) {
-				dispatch(setCurrentUser());
-				resolve();
-			} else {
-				reject(result?.message);
-			}
-		}, toastOptions);
 	};
 
 	return (
