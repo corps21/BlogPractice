@@ -32,6 +32,8 @@ export default function Profile() {
 		},
 	})
 
+	console.log(postData)
+
 	const posts = postData?.data?.posts
 
 	return (
