@@ -11,7 +11,7 @@ export default function useAuthHomeRedirect() {
 		if (isLoggedIn) {
 			navigate("/", { replace: true });
 		}
-	});
+	},[isLoggedIn, navigate]);
 
 	return status
 }

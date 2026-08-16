@@ -4,13 +4,12 @@ import { CanvasText } from "@/components/ui/canvas-text"
 import { ArrowRightIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
-import {cn} from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 export default function CTA() {
-
 	const isLoading = !useAuthHomeRedirect();
-	if(isLoading) {
-		return <h1>Loading...</h1>
+	if (isLoading) {
+		return <h1 className="container flex flex-col items-center justify-center text-center">Loading...</h1>;
 	}
 	return (
 		<section className="flex flex-col items-center gap-2 mt-12 md:mt-20">

@@ -1,9 +1,8 @@
-import React from "react";
+import { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider } from "react-redux";
 import {
 	createBrowserRouter,
@@ -13,31 +12,42 @@ import {
 } from "react-router-dom";
 import { queryClient } from "@/query/query.js";
 import { AuthLayout, ThemeProvider } from "./components";
-import {
-	AddPost,
-	AllPosts,
-	EditPost,
-	Home,
-	NotFound,
-	PostPage,
-	Search,
-	Settings,
-	SignIn,
-	SignUp,
-	Profile
-} from "./pages/index.js";
 import store from "./store/store.js";
+
+const Home = lazy(() => import("./pages/Home.jsx"));
+const SignIn = lazy(() => import("./pages/SignIn.jsx"));
+const SignUp = lazy(() => import("./pages/SignUp.jsx"));
+const AllPosts = lazy(() => import("./pages/Archive.jsx"));
+const AddPost = lazy(() => import("./pages/AddPost.jsx"));
+const PostPage = lazy(() => import("./pages/PostPage.jsx"));
+const EditPost = lazy(() => import("./pages/EditPost.jsx"));
+const Profile = lazy(() => import("./pages/Profile.jsx"));
+const Search = lazy(() => import("./pages/Search.jsx"));
+const Settings = lazy(() => import("./pages/Settings.jsx"));
+const NotFound = lazy(() => import("./pages/NotFound.jsx"));
+
+const routeFallback = (
+	<div className="flex min-h-[40vh] items-center justify-center text-sm text-muted-foreground">
+		Loading...
+	</div>
+);
+
+const withSuspense = (Component) => (
+	<Suspense fallback={routeFallback}>
+		<Component />
+	</Suspense>
+);
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
-		<Route path="/" element={<App />} errorElement={<NotFound />}>
-			<Route index element={<Home />} />
+		<Route path="/" element={<App />} errorElement={withSuspense(NotFound)}>
+			<Route index element={withSuspense(Home)} />
 
 			<Route
 				path="login"
 				element={
 					<AuthLayout authentication={false}>
-						<SignIn />
+						{withSuspense(SignIn)}
 					</AuthLayout>
 				}
 			/>
@@ -46,25 +56,26 @@ const router = createBrowserRouter(
 				path="register"
 				element={
 					<AuthLayout authentication={false}>
-						<SignUp />
+						{withSuspense(SignUp)}
 					</AuthLayout>
 				}
 			/>
 
-				<Route path="archive"
-					element={
-						<AuthLayout authentication={true}>
-							<AllPosts />
-						</AuthLayout>
-					}
-				/>
+			<Route
+				path="archive"
+				element={
+					<AuthLayout authentication={true}>
+						{withSuspense(AllPosts)}
+					</AuthLayout>
+				}
+			/>
 
 			<Route path="posts">
 				<Route
 					path="create"
 					element={
 						<AuthLayout authentication={true}>
-							<AddPost />
+							{withSuspense(AddPost)}
 						</AuthLayout>
 					}
 				/>
@@ -72,7 +83,7 @@ const router = createBrowserRouter(
 					path=":slug"
 					element={
 						<AuthLayout authentication={true}>
-							<PostPage />
+							{withSuspense(PostPage)}
 						</AuthLayout>
 					}
 				/>
@@ -80,47 +91,49 @@ const router = createBrowserRouter(
 					path=":slug/edit"
 					element={
 						<AuthLayout authentication={true}>
-							<EditPost />
+							{withSuspense(EditPost)}
 						</AuthLayout>
 					}
 				/>
 			</Route>
 
 			<Route path="profile">
-				<Route path=":userId" element={
-					<AuthLayout authentication={true}>
-						<Profile />
-					</AuthLayout>
-				} />
+				<Route
+					path=":userId"
+					element={
+						<AuthLayout authentication={true}>
+							{withSuspense(Profile)}
+						</AuthLayout>
+					}
+				/>
 			</Route>
 
 			<Route
 				path="search"
 				element={
 					<AuthLayout authentication={true}>
-						<Search />
+						{withSuspense(Search)}
 					</AuthLayout>
 				}
 			/>
-			<Route path="settings" element={
-				<AuthLayout authentication={true}>
-					<Settings />
-				</AuthLayout>
-			} />
+			<Route
+				path="settings"
+				element={
+					<AuthLayout authentication={true}>
+						{withSuspense(Settings)}
+					</AuthLayout>
+				}
+			/>
 		</Route>,
 	),
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-	// <React.StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<Provider store={store}>
-				<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-					<RouterProvider router={router} />
-				</ThemeProvider>
-			</Provider>
-			{/* <ReactQueryDevtools initialIsOpen={false} /> */}
-		</QueryClientProvider>
-	// </React.StrictMode> 
-	,
+	<QueryClientProvider client={queryClient}>
+		<Provider store={store}>
+			<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+				<RouterProvider router={router} />
+			</ThemeProvider>
+		</Provider>
+	</QueryClientProvider>,
 );

@@ -26,7 +26,7 @@ export function axiosWrapper(fn) {
         return { ...res.data, data: res.data.data };
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         if (axios.isAxiosError(err)) {
           const { response } = err;
           return new ApiResponse(false, response.data.message);

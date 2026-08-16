@@ -63,7 +63,7 @@ export default function Layout({ children }) {
 		<>
 		<Navbar />
 		{children}
-		{/* <Toaster richColors /> */}
+		<Toaster richColors />
 		</>
 	);
 }

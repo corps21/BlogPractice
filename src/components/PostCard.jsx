@@ -4,25 +4,42 @@ import { getDefaultAvatarUrl } from "@/lib/utils";
 import { Card, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+const FALLBACK_COVER =
+	"https://images.unsplash.com/photo-1604076850742-4c7221f3101b?q=80&fm=jpg&auto=format&fit=crop&w=1200&h=675";
+
 function PostCard({ author, coverImage, title, url }) {
 	const navigate = useNavigate();
+	const imageSrc = coverImage || FALLBACK_COVER;
+	const avatarSrc = author?.avatarUrl ?? getDefaultAvatarUrl("John Doe");
 
 	return (
-
 		<Card className="relative w-full max-w-sm mx-auto overflow-hidden pt-0 cursor-pointer flex justify-between" onClick={() => navigate(url)}>
-
 			{coverImage ? (
-				<img src={coverImage} alt="coverimage" className="rounded-md" />
+				<img
+					src={imageSrc}
+					alt={title ?? "Post cover"}
+					width={1200}
+					height={675}
+					loading="lazy"
+					decoding="async"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+					className="aspect-video w-full rounded-md object-cover"
+				/>
 			) : (
 				<>
 					<div className="absolute inset-0 z-30 aspect-video bg-primary opacity-50 mix-blend-color" />
 					<img
-						src="https://images.unsplash.com/photo-1604076850742-4c7221f3101b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+						src={imageSrc}
 						alt="Photo by mymind on Unsplash"
 						title="Photo by mymind on Unsplash"
-						className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale" />
+						width={1200}
+						height={675}
+						loading="lazy"
+						decoding="async"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+						className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale"
+					/>
 				</>
-
 			)}
 
 			<CardHeader>
@@ -34,7 +51,7 @@ function PostCard({ author, coverImage, title, url }) {
 					navigate(`/profile/${author?._id}`)
 				}}>
 					<Avatar className="size-6">
-						<AvatarImage src={author?.avatarUrl ?? getDefaultAvatarUrl("John Doe")} alt={author?.fullName ?? "John Doe"} />
+						<AvatarImage src={avatarSrc} alt={author?.fullName ?? "John Doe"} />
 						<AvatarFallback className="">JD</AvatarFallback>
 					</Avatar>
 					<p>{author?.fullName ?? "John Doe"}</p>

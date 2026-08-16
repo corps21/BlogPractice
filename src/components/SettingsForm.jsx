@@ -131,8 +131,6 @@ export default function SettingsForm() {
 				dataToSubmit[key] = data[key];
 			}
 		}
-
-		console.log(dataToSubmit)
 		
 
 		// update user details
@@ -186,7 +184,7 @@ export default function SettingsForm() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col items-center">
+		<form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col items-center pb-20">
 			<Card className="w-10/12 md:w-8/12 lg:w-6/12 xl:w-4/12 mx-auto">
 				<CardHeader>
 					<CardTitle>Update your account details</CardTitle>
