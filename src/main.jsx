@@ -24,8 +24,8 @@ import {
 	Settings,
 	SignIn,
 	SignUp,
+	Profile
 } from "./pages/index.js";
-import ProfileRoute from "./routes/ProfileRoute.jsx";
 import store from "./store/store.js";
 
 const router = createBrowserRouter(
@@ -86,7 +86,14 @@ const router = createBrowserRouter(
 				/>
 			</Route>
 
-			<Route path="profile/*" element={<ProfileRoute />} />
+			<Route path="profile">
+				<Route path=":userId" element={
+					<AuthLayout authentication={true}>
+						<Profile />
+					</AuthLayout>
+				} />
+			</Route>
+
 			<Route
 				path="search"
 				element={

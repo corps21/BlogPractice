@@ -29,11 +29,16 @@ function PostCard({ author, coverImage, title, url }) {
 				<CardTitle>{title}</CardTitle>
 			</CardHeader>
 			<CardFooter className="gap-1">
-				<Avatar className="size-6">
-					<AvatarImage src={author?.avatarUrl ?? getDefaultAvatarUrl("John Doe")} alt={author?.fullName ?? "John Doe"} />
-					<AvatarFallback className="">JD</AvatarFallback>
-				</Avatar>
-				<p>{author?.fullName ?? "John Doe"}</p>
+				<div className="flex gap-1 items-center" onClick={(e) => {
+					e.stopPropagation();
+					navigate(`/profile/${author?._id}`)
+				}}>
+					<Avatar className="size-6">
+						<AvatarImage src={author?.avatarUrl ?? getDefaultAvatarUrl("John Doe")} alt={author?.fullName ?? "John Doe"} />
+						<AvatarFallback className="">JD</AvatarFallback>
+					</Avatar>
+					<p>{author?.fullName ?? "John Doe"}</p>
+				</div>
 			</CardFooter>
 		</Card>
 	);

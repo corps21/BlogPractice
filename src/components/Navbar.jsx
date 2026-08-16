@@ -48,8 +48,6 @@ export function Navbar() {
                 <MagnifyingGlassIcon className="size-5" weight="bold" />
             </Link>
 
-            <Separator orientation="vertical" decoration />
-
             <UserAvatar />
         </section>
     </header>

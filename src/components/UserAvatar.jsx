@@ -3,6 +3,7 @@ import {useMemo} from "react";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Button} from "@/components/ui/button";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import {Separator} from "@/components/ui/separator";
 import {getDefaultAvatarUrl} from "@/lib/utils";
 
 import {useDispatch, useSelector} from "react-redux";
@@ -22,25 +23,6 @@ const toastOptions = {
     richColors: true,
 };
 
-const MenuItem = [
-    {
-        name: "Profile",
-        href: "/profile",
-        icon: SealCheckIcon,
-    },
-    {
-        name: "Notifications",
-        href: "/notifications",
-        icon: BellSimpleIcon,
-        disabled:true
-    },
-    {
-        name: "Settings",
-        href: "/settings",
-        icon: GearSixIcon,
-    }
-]
-
 export function UserAvatar() {
 
     const userData = useSelector((state) => state.user.data);
@@ -56,8 +38,27 @@ export function UserAvatar() {
         }
         dispatch(logout());
         dispatch(removeAccessToken());
-        navigate("/login");
+        navigate("/");
     };
+
+    const MenuItem = [
+        {
+            name: "Profile",
+            href: `/profile/${userData?._id}`,
+            icon: SealCheckIcon,
+        },
+        {
+            name: "Notifications",
+            href: "/notifications",
+            icon: BellSimpleIcon,
+            disabled: true
+        },
+        {
+            name: "Settings",
+            href: "/settings",
+            icon: GearSixIcon,
+        }
+    ]
 
     const user = useMemo(
         () => ({
@@ -72,45 +73,49 @@ export function UserAvatar() {
 
 
     return userData && (
-        <DropdownMenu>
-            <DropdownMenuTrigger className="rounded-full size-6">
-                <Button variant="ghost" className="size-6">
+        <>
+            <Separator orientation="vertical" decoration />
 
-                    <Avatar className="size-6">
-                        <AvatarImage src={user.avatar} alt={user.name ?? "John Doe"} />
-                        <AvatarFallback className="">JD</AvatarFallback>
-                    </Avatar>
+            <DropdownMenu>
+                <DropdownMenuTrigger className="rounded-full size-6">
+                    <Button variant="ghost" className="size-6">
 
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+                        <Avatar className="size-6">
+                            <AvatarImage src={user.avatar} alt={user.name ?? "John Doe"} />
+                            <AvatarFallback className="">JD</AvatarFallback>
+                        </Avatar>
 
-                <DropdownMenuGroup>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
 
-                    <DropdownMenuLabel>
-                        My Account
-                    </DropdownMenuLabel>
+                    <DropdownMenuGroup>
 
-                    {MenuItem.map((item) => (
-                        <DropdownMenuItem key={item.name} className="cursor-pointer" onClick={() => navigate(item.href)} disabled={item?.disabled}>
-                            <item.icon className="size-4" weight="bold" />
-                            {item.name}
+                        <DropdownMenuLabel>
+                            My Account
+                        </DropdownMenuLabel>
+
+                        {MenuItem.map((item) => (
+                            <DropdownMenuItem key={item.name} className="cursor-pointer" onClick={() => navigate(item.href)} disabled={item?.disabled}>
+                                <item.icon className="size-4" weight="bold" />
+                                {item.name}
+                            </DropdownMenuItem>
+                        ))}
+
+                    </DropdownMenuGroup>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuGroup>
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem onClick={() => toastPromiseWrapper(logOutUser, toastOptions)} className="cursor-pointer">
+                            <SignOutIcon className="size-4" weight="bold" />
+                            <span className="">Sign out</span>
                         </DropdownMenuItem>
-                    ))}
-                    
-                </DropdownMenuGroup>
+                    </DropdownMenuGroup>
 
-                <DropdownMenuSeparator />
-                
-                <DropdownMenuGroup>
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => toastPromiseWrapper(logOutUser, toastOptions)} className="cursor-pointer">
-                        <SignOutIcon className="size-4" weight="bold" />
-                        <span className="">Sign out</span>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-                
-            </DropdownMenuContent>
-        </DropdownMenu>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </>
     )
 }
