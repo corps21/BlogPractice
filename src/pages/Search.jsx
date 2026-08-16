@@ -7,7 +7,6 @@ import { useSearchParams } from "react-router-dom";
 
 const onSuggestionsHandler = async (data) => {
 	const res = (await postService.suggestSearchPost(data)).data?.suggestions ?? []
-	console.log(res)
 	return res
 };
 

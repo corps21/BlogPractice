@@ -15,7 +15,7 @@ function AuthLayout({ children, authentication = true }) {
 	if (authentication && !isLoggedIn) {
 		return (
 			<Navigate
-				to="/login"
+				to="/"
 				state={{ from: location }}
 				replace
 			/>

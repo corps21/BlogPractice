@@ -1,61 +1,52 @@
-/* eslint-disable react/prop-types */
-
-import { useDispatch } from "react-redux";
+import { LiveOrb } from "@/components/ui/live-orb"
+import { Button } from "@/components/ui/button"
+import { CanvasText } from "@/components/ui/canvas-text"
+import { ArrowRightIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
-import { login } from "@/store/userSlice";
-import { Button } from "./ui/button";
-import { userService } from "@/service/userService";
-import { addAccessToken } from "@/store/authSlice";
-import { toastPromiseWrapper } from "@/lib/utils";
 import useAuthHomeRedirect from "@/hooks/useAuthHomeRedirect";
+import {cn} from "@/lib/utils";
 
-export default function CTA({ text = "To See Posts" }) {
-	const dispatch = useDispatch();
-
-	const handleAnonLogin = () => {
-		toastPromiseWrapper(async (resolve, reject) => {
-			const result = await userService.registerAnonUser();
-			if (result.success) {
-				dispatch(login({ data: result?.data?.user }));
-				dispatch(addAccessToken(result?.data?.accessToken));
-				resolve();
-			} else {
-				reject(result?.message);
-			}
-		}, toastOptions);
-	};
-
-	const toastOptions = {
-		loading: "Logging into your account",
-		success: `Succesfully Logged in`,
-		error: (err) => `Something went wrong ( ${err} )`,
-		richColors: true,
-	};
+export default function CTA() {
 
 	useAuthHomeRedirect();
 
 	return (
-		<>
-			<div className=" text-center text-4xl font-bold uppercase leading-[1.125] mb-4 dark:text-white">
-				<div>Sign Up</div>
-				<div>{text}</div>
-			</div>
-			<Button asChild className="rounded-[4px] bg-blue-700 mb-2">
-				<Link to="/login">
-					{/* <LogInIcon /> */}
-					Sign In
-				</Link>
-			</Button>
-			<Button
-				asChild
-				variant="secondary"
-				onClick={handleAnonLogin}
+		<section className="flex flex-col items-center gap-2 mt-12 md:mt-20">
+			<h2
+				className={cn(
+					"group relative mx-auto text-center leading-20 font-bold tracking-tight text-balance text-neutral-600 dark:text-neutral-700 text-4xl md:text-5xl",
+				)}
 			>
-				<Link className="cursor-pointer hover:underline text-sm font-medium text-neutral-500">
-					{/* <VenetianMaskIcon /> */}
-					Use Without Signing In
-				</Link>
-			</Button>
-		</>
+				<CanvasText
+					text="BlogSphere"
+					backgroundClassName="bg-blue-600 dark:bg-blue-700 text-center"
+					colors={[
+						"rgba(46, 134, 171, 1)",
+						"rgba(46, 134, 171, 0.9)",
+						"rgba(46, 134, 171, 0.8)",
+						"rgba(46, 134, 171, 0.7)",
+						"rgba(46, 134, 171, 0.6)",
+						"rgba(46, 134, 171, 0.5)",
+						"rgba(46, 134, 171, 0.4)",
+						"rgba(46, 134, 171, 0.3)",
+						"rgba(46, 134, 171, 0.2)",
+						"rgba(46, 134, 171, 0.1)",
+					]}
+					lineGap={8}
+					animationDuration={10}
+				/>
+
+				<span className="block font-semibold text-neutral-500 dark:text-neutral-500 text-xl md:text-2xl">
+					where every post finds its orbit
+				</span>
+			</h2>
+			<LiveOrb variant="webgl" colors={["#1A5276", "#2ECC71", "#AED6F1"]} />
+			<Link to="/login">
+				<Button size="lg">
+					Get Started
+					<ArrowRightIcon weight="bold" className="size-4" />
+				</Button>
+			</Link>
+		</section>
 	);
 }

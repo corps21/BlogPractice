@@ -13,7 +13,7 @@ function Home() {
 	});
 
 	return isLoggedIn ? (
-			<PostList isLoading={isLoading} files={data?.posts} className="mt-6" />
+		<PostList isLoading={isLoading} files={data?.posts} className="mt-6 pb-20" />
 	) : (
 		<CTA />
 	);

@@ -51,6 +51,10 @@ class PostService {
 	getPostBySlug = axiosWrapper(async ({ slug }) => {
 		return api.get(`/post/${slug}`);
 	});
+
+	getRecommendations = axiosWrapper(async ({ slug }) => {
+		return api.get(`/post/${slug}/recommendations`);
+	})
 }
 
 export const postService = new PostService();
