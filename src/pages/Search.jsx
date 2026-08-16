@@ -11,12 +11,15 @@ const onSuggestionsHandler = async (data) => {
 };
 
 export default function Search() {
+	const [isLoading, setIsLoading] = useState(false);
+	
 	const [searchParams] = useSearchParams();
 	const query = searchParams.get("q") ?? "";
 	
 	const [result, setResult] = useState(queryClient.getQueryData(["search", query]) ?? []);
 
 	const onSearchHandler = async (data) => {
+		setIsLoading(true);
 		const res = await queryClient.fetchQuery({
 			queryKey: ["search", data?.query],
 			queryFn: async () => {
@@ -25,12 +28,13 @@ export default function Search() {
 		});
 
 		setResult(res ?? [])
+		setIsLoading(false);
 	};
 
 	return (
 		<section className="pb-10">
 			<CustomSearchBox onSearch={onSearchHandler} onSuggestions={onSuggestionsHandler} />
-			<PostList isLoading={false} files={result} className="mt-6"/>
+			<PostList isLoading={isLoading} files={result} className="mt-6"/>
 		</section>
 	);
 }

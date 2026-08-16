@@ -8,8 +8,10 @@ import {cn} from "@/lib/utils";
 
 export default function CTA() {
 
-	useAuthHomeRedirect();
-
+	const isLoading = !useAuthHomeRedirect();
+	if(isLoading) {
+		return <h1>Loading...</h1>
+	}
 	return (
 		<section className="flex flex-col items-center gap-2 mt-12 md:mt-20">
 			<h2
