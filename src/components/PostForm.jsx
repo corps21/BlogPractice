@@ -92,7 +92,8 @@ function PostForm({ post }) {
 			},
 			onSuccess: (newPost) => {
 				queryClient.setQueryData(["posts", newPost.slug], newPost);
-				navigate(`/posts/${newPost.slug}`);
+				if(newPost.isPublic) navigate(`/posts/${newPost.slug}`);
+				else navigate(`/posts/${newPost.slug}/private`);
 			},
 		},
 	);
