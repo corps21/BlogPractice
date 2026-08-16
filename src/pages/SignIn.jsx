@@ -28,8 +28,8 @@ function SignIn() {
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
-			email: "test@test.com",
-			password: "test@1234",
+			email: "guest@guest.com",
+			password: "password",
 		}
 	});
 
