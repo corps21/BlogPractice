@@ -30,12 +30,15 @@ export function PostActionDropdown({ data, slug }) {
                         Save
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem onClick={() => navigate(`/posts/${slug}/edit`)} className="cursor-pointer" disabled={userId !== data.post.author}>
+                    <DropdownMenuItem onClick={() => {
+                        if(data?.post?.isPublic) navigate(`/posts/${slug}/edit`)
+                        else navigate(`/posts/${slug}/private/edit`)
+                    }} className="cursor-pointer" disabled={userId !== data?.post?.author}>
                         <EraserIcon weight="bold" className="size-4" />
                         Edit
                     </DropdownMenuItem>
                     
-                    <DropdownMenuItem onClick={() => setOpen(true)} className="cursor-pointer" disabled={userId !== data.post.author}>
+                    <DropdownMenuItem onClick={() => setOpen(true)} className="cursor-pointer" disabled={userId !== data?.post?.author}>
                         <TrashIcon weight="bold" className="size-4" />
                         Delete
                     </DropdownMenuItem>

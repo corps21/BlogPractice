@@ -87,6 +87,12 @@ const router = createBrowserRouter(
 						</AuthLayout>
 					}
 				/>
+				<Route path=":slug/private" element={
+					<AuthLayout authentication={true}>
+						{withSuspense(PostPage)}
+					</AuthLayout>
+				} />
+
 				<Route
 					path=":slug/edit"
 					element={
@@ -96,11 +102,14 @@ const router = createBrowserRouter(
 					}
 				/>
 
-				<Route path=":slug/private" element={
-					<AuthLayout authentication={true}>
-						{withSuspense(PostPage)}
-					</AuthLayout>
-				}/>
+				<Route
+					path=":slug/private/edit"
+					element={
+						<AuthLayout authentication={true}>
+							{withSuspense(EditPost)}
+						</AuthLayout>
+					}
+				/>
 			</Route>
 
 			<Route path="profile">

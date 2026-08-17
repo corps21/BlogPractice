@@ -21,6 +21,7 @@ import { Label } from "@/components/ui/label"
 
 import { ControlledInput } from "@/components/custom/ControlledInput";
 import { cn } from "@/lib/utils";
+import { queryClient } from "@/query/query";
 
 
 export function DeletePostModal({open, setOpen}) {
@@ -44,6 +45,7 @@ export function DeletePostModal({open, setOpen}) {
             mutationKey: ["post", "delete"],
             mutationFn: async () => {
                 await postService.deletePost({ slug });
+                queryClient.setQueryData(["post", slug], null);
             },
             onSuccess: () => {
                 navigate("/");

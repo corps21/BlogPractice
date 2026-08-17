@@ -77,7 +77,7 @@ export function PostDrawer({control, errors, setValue, getValues, slugTransform,
                                         <PostStatusSelect
                                             name="status"
                                             control={control}
-                                            defaultValue={getValues("status")}
+                                            defaultValue={"public"}
                                         />
                                     </Field>
 

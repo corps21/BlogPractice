@@ -37,8 +37,6 @@ export default function Profile() {
 		})()
 	}, [profileUserData, userIdFromStore, userIdFromUrl])
 
-	console.log(postData)
-
 	return (
 		<>
 			<section className="max-w-4xl mx-auto px-6 mt-16">
