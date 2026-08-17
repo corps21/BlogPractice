@@ -10,7 +10,6 @@ import { PostRecommendation } from "../components/PostRecommendation";
 function PostPage() {
 	const { slug } = useParams();
 	const location = useLocation();
-	console.log(location.pathname.endsWith("/private"))
 
 	const { isLoading, data } = useToastQuery({
 		queryKey: ["post", slug],

@@ -2,7 +2,6 @@ import { PostCard } from "../components";
 import { PostListSkeleton } from "./skeletons/PostList";
 
 export default function PostList({ isLoading, files, className = "" }) {
-	console.log(files)
 	return isLoading ? (
 		<PostListSkeleton count={12} />
 	) : (

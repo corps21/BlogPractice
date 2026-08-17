@@ -6,55 +6,58 @@ import { PostList } from "@/components";
 import { getDefaultAvatarUrl } from "@/lib/utils";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/ui/separator"
+import { useState, useEffect} from "react";
 
 export default function Profile() {
 	const userIdFromStore = useSelector((state) => state.user.data?._id);
+	const [isLoading, setIsLoading] = useState(true);
+	const [postData, setPostData] = useState([]);
 	const { userId: userIdFromUrl } = useParams();
 
 	const { data: profileUserData } = useQuery({
 		queryKey: ["profile", userIdFromUrl],
-		queryFn: () => userService.getUserFromId(userIdFromUrl),
+		queryFn: async () => {
+			return (await userService.getUserFromId(userIdFromUrl))?.data?.user
+		},
 	})
 
-	const profileUser = profileUserData?.data?.user
-
-	const { isLoading: postIsLoading, data: postData } = useQuery({
-		queryKey: ["posts", "profile", userIdFromUrl],
-		queryFn: () => {
-			if (profileUser?._id === userIdFromStore) {
-				console.log("current")
-				return userService.getAllCurrentUserPosts()
+	useEffect(() => {
+		(async () => {
+			setIsLoading(true)
+			if (!profileUserData) return []
+			if (profileUserData?._id === userIdFromStore) {
+				const result = (await userService.getAllCurrentUserPosts())?.data?.posts
+				setPostData(result)
 			} else {
-				console.log("public")
-				return userService.getUserPublicPosts({userId: userIdFromUrl})
+				const result = (await userService.getUserPublicPosts({ userId: userIdFromUrl }))?.data?.posts
+				setPostData(result)
 			}
-		}
-	})
+			setIsLoading(false);
+		})()
+	}, [profileUserData, userIdFromStore, userIdFromUrl])
 
 	console.log(postData)
-
-	const posts = postData?.data?.posts
 
 	return (
 		<>
 			<section className="max-w-4xl mx-auto px-6 mt-16">
 				<div className="flex gap-4 items-center">
 					<Avatar className="size-20 ">
-						<AvatarImage src={profileUser?.avatarUrl ?? getDefaultAvatarUrl(profileUser?.fullName ?? "John Doe")} alt={profileUser?.fullName ?? "John Doe"} />
+						<AvatarImage src={profileUserData?.avatarUrl ?? getDefaultAvatarUrl(profileUserData?.fullName ?? "John Doe")} alt={profileUserData?.fullName ?? "John Doe"} />
 						<AvatarFallback className="">JD</AvatarFallback>
 					</Avatar>
 
 					<div>
-						<h1 className="text-2xl font-bold">{profileUser?.fullName ?? "John Doe"}</h1>
-						<p>{profileUser?.userName}</p>
+						<h1 className="text-2xl font-bold">{profileUserData?.fullName ?? "John Doe"}</h1>
+						<p>{profileUserData?.userName}</p>
 					</div>
 				</div>
 
 				<Separator className="mt-6 mb-10" />
 
 			</section>
-			<PostList isLoading={postIsLoading} files={posts} className="mt-6 pb-20" />
+			<PostList isLoading={isLoading} files={postData} className="mt-6 pb-20" />
 		</>
 	);
 }
